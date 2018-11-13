@@ -56,7 +56,7 @@ if [ "$skip_install" != 1 ]; then
 		exit 1
 	fi
 	sudo apt-get install -y git osmosis postgis pgadmin3 postgresql-contrib-9.6 postgresql-client-9.6 postgresql-9.6-postgis-2.3 postgresql-9.6 python-pip python3-venv
-	if [ $? == 1 ]; then
+	if [ $? == 100 ]; then
 		echo "apt-get had problems installing some packages"
 		echo "Please make sure that all of the following packages are installed"
 		echo "python3-venv"
