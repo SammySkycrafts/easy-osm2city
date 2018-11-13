@@ -24,4 +24,4 @@ done
 
 python3 -m venv venv/
 source venv/bin/activate
-pip install descartes matplotlib networkx munpy pillow pyproj scipy shapely psycopg2-binary
+pip install descartes matplotlib networkx numpy pillow pyproj scipy shapely psycopg2-binary
