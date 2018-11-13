@@ -129,7 +129,7 @@ if [ $? == 1 ]; then
 	echo "Please give the full path to the fgdata directory"
 	read fg_root
 	echo "FG_ROOT=$fg_root" >> general-settings
-	echo "export \$FG_ROOT" >> general-settings
+	echo "export FG_ROOT" >> general-settings
 fi
 
 # check if the fg_elev value is already in the general-settings
@@ -152,7 +152,7 @@ fi
 cat general-settings|grep ^PYTHONPATH > /dev/null
 if [ $? == 1 ]; then
 	echo "PYTHONPATH=$(pwd)/osm2city" >> general-settings
-	echo "export \$PYTHONPATH" >> general-settings
+	echo "export PYTHONPATH" >> general-settings
 fi
 
 # check if the db_host value is already in the general-settings
