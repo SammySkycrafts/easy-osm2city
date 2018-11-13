@@ -1,0 +1,37 @@
+#! /bin/bash
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+	-d|--database)
+		database="$2"
+		shift # past argument
+		shift # past value
+	;;
+
+	-h|--help)
+		echo "usage: create-db -d <database> [OPTIONS]"
+		echo "Creates and prepares the database for the use with osm2city"
+		echo ""
+		echo "OPTIONS"
+		echo "  -d, --database  Mandatory, database to create"
+		echo "  -h, --help      Shows this help and exit"
+		exit 0
+	;;
+
+	*)
+		echo "Unknown option $key"
+		exit 1
+	;;
+esac
+done
+
+# TODO read db user from general-settings file and make it overwriteable from the cmd line
+
+sudo -u postgres createdb --encoding=UTF8 --owner=$USER "$database"
+sudo -u postgres psql --dbname="$database" -c "CREATE EXTENSION postgis;"
+sudo -u postgres psql --dbname="$database" -c "CREATE EXTENSION hstore;"
+psql -d "$database" -f sql/pgsnapshot_schema_0.6.sql
+psql -d "$database" -f sql/pgsnapshot_schema_0.6_bbox.sql

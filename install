@@ -1,0 +1,76 @@
+#! /bin/bash
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+	--skip-install)
+		skip_install=1
+		shift # past argument
+		shift # past value
+	;;
+
+	--skip-git)
+		skip_git=1
+		shift # past argument
+		shift # past value
+	;;
+
+	-h|--help)
+		echo "usage: install [OPTIONS]..."
+		echo "Installs all needed packages and clones the osm2city and osm2city-data repository"
+		echo ""
+		echo "OPTIONS:"
+		echo "  -h, --help		Shows this help and exits"
+		echo "      --skip-install	Skips install of packages and continues with setup"
+		echo "      --skip-git		Skips git clones of the osm2city and osm2city-data repository"
+		exit
+	;;
+
+	*)
+		echo "Unknow option $key"
+		exit 1
+	;;
+esac
+done
+
+if [ "$skip_install" != 1 ]; then
+	which apt-get > /dev/null
+	if [ $? == 1 ]; then
+		echo "Currently apt is the only supported package manager but it seems that apt isn't installed."
+		echo "Please install the following packages manually"
+		echo "python3-venv"
+		echo "python-pip"
+		echo "postgresql-9.6"
+		echo "postgresql-9.6-postgis-2.3"
+		echo "postgresql-client-9.6"
+		echo "postgresql-contrib-9.6"
+		echo "pgadmin3"
+		echo "postgis"
+		echo "python3-psycopg2"
+		echo "osmosis"
+		echo "git"
+
+		echo "Then rerun this script with skip-install argument"
+		echo "./install --skip-install"
+		exit 1
+	fi
+	sudo apt-get install -y git osmosis postgis pgadmin3 postgresql-contrib-9.6 postgresql-client-9.6 postgresql-9.6-postgis-2.3 postgresql-9.6 python-pip python3-venv
+fi
+
+if [ "$skip_git" != 1 ]; then
+	which git > /dev/null
+	if [ $? == 1 ]; then
+		echo "Unable to find git. Please manually download the following two repositories:"
+		echo "https://gitlab.com/fg-radi/osm2city"
+		echo "https://gitlab.com/fg-radi/osm2city-data"
+		echo "Unzip them in this directory and make sure, the are named osm2city and osm2city-data"
+		exit 1
+	fi
+	git clone https://gitlab.com/fg-radi/osm2city.git
+	git clone https://gitlab.com/fg-radi/osm2city-data.git
+fi
+
+# Create directory for .pbf files
+mkdir pbf

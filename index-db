@@ -1,0 +1,33 @@
+#! /bin/bash
+
+while [[ "$#" -gt 0 ]]
+do
+key="$1"
+
+case $key in
+	-d|--database)
+		database="$2"
+		shift # past argument
+		shift # past value
+	;;
+
+	-h|--help)
+		echo "usage: index-db -d <database> [OPTIONS]"
+		echo "Create an index for the database to speed up further operations"
+		echo ""
+		echo "OPTIONS"
+		echo "  -d, --database	Mandatory, the database to index"
+		echo "  -h, --help	Shows this help and exit"
+		exit 0
+	;;
+
+	*)
+		echo "Unknown option $key"
+		exit 1
+	;;
+esac
+done
+
+time psql --dbname="$database" -c "CREATE INDEX idx_nodes_tags ON nodes USING gist(tags);"
+time psql --dbname="$database" -c "CREATE INDEX idx_ways_tags ON ways USING gist(tags);"
+time psql --dbname="$database" -c "CREATE INDEX idx_relations_tags ON relations USING gist(tags);"

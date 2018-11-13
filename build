@@ -1,0 +1,65 @@
+#! /bin/bash
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+	-p|--project)
+		project="$2"
+		shift # past argument
+		shift # past value
+	;;
+
+	-h|--help)
+		echo "usage: build -p <project> [OPTIONS]"
+		echo "Builds the tiles with osm2city"
+		echo ""
+		echo "OPTIONS"
+		echo "  -p, --project   Mandatory, project name which you want to clear of chache files."
+		echo "  -h, --help      Shows this help and exit"
+		echo "  -t, --threads	Number of threads used for building"
+		echo "			This will overwrite the value from the general-settings file"
+		exit 0
+	;;
+
+	*)
+		echo "Unknown option $key"
+		exit 1
+	;;
+esac
+done
+
+if [ -z "$project" ]; then
+	echo "Option -p <project> is mandatory"
+	exit 1
+fi
+
+
+source venv/bin/activate > /dev/null
+if [ $? == 1 ]; then
+	echo "Couldn't find the venv. Please run './create-venv' to create one"
+	exit
+fi
+source projects/$project/settings > /dev/null
+if [ $? == 1 ]; then
+	echo "Couldn't find the settings file for the given project."
+	echo "Please check if the project exsists and contains the 'settings' file."
+	echo "To create a new project run './create-project'"
+	exit
+fi
+source general-settings > /dev/null
+if [ $? == 1 ]; then
+	echo "Couldn't find the general settings. Please rename the 'general-settings-template'"
+	echo "file to 'general-setting' and edit it so the values match your setup."
+	exit
+fi
+
+if [ -z "$man_thread" ]; then
+	thread=$man_thread
+fi
+
+# change to the project dir and build
+cd projects/$project
+time ( python3 ../../osm2city/build_tiles.py -f params.ini -b "$bounds" -p "$threads" 2>&1 ) 2> exec-time
+cat exec-time | grep "real" | sed "s/real\t\([0-9]*\)m\([0-9]*\).*/Building $project took \1 minutes and \2 seconds./"

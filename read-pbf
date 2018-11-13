@@ -1,0 +1,40 @@
+#! /bin/bash
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+	-d|--database)
+		database="$2"
+		shift # past argument
+		shift # past value
+	;;
+
+	-f|--file)
+		file="$2"
+		shift # past argument
+		shift # past value
+	;;
+
+	-h|--help)
+		echo "usage: read-pbf -d <database> -f <pbf-file> [OPTIONS]"
+		echo "Reads the .pbf file and writes it to the database."
+		echo "NOTE this uses quite some space in the /tmp directory"
+		echo ""
+		echo "OPTIONS"
+		echo "  -d, --database	Mandatory, database to write to"
+		echo "  -f, --file	Mandatory, the .pbf file to read from"
+		echo "  -h, --help	Shows this help and exit"
+		exit 0
+	*)
+		echo "Unknown option $key"
+		exit 1
+	;;
+esac
+done
+
+source general-settings
+# TODO make password and that stuff overwrite able from cmd line
+
+time osmosis --read-pbf file="$file" --log-progress --write-pgsql database="$database" host="$db_host:$db_port" user="$db_user" password="$db_passwd"

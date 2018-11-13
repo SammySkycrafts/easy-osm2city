@@ -1,0 +1,13 @@
+# This file must be used with "source general-settings" *from bash*
+# you cannot run it directly
+
+# Absolute path to the osm2city directory
+PATHONPATH=/storage/scenery/osm2city/osm2city
+export PYTHONPATH
+
+# Absolute path to the fgdata directory
+FG_ROOT=/games/fg-linux/install/flightgear/fgdata
+export FG_ROOT
+
+# Threads used for osm2city
+threads=3

@@ -1,0 +1,27 @@
+#! /bin/bash
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+	-h|--help)
+		echo "usage: create-venv [OPTIONS]"
+		echo "Creates a python virtual environment and installs all needed packages in"
+		echo "the venv."
+		echo ""
+		echo "OPTIONS"
+		echo "  -h, --help      Shows this help and exit"
+		exit 0
+	;;
+
+	*)
+		echo "Unknown option $key"
+		exit 1
+	;;
+esac
+done
+
+python3 -m venv venv/
+source venv/bin/activate
+pip install descartes matplotlib networkx munpy pillow pyproj scipy shapely psycopg2-binary

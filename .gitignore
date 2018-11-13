@@ -1,0 +1,21 @@
+# vim swap files
+*.swp
+*.swo
+
+# temporary files from osm2city
+*.pkl
+
+# generated directories
+venv/
+
+# osm2city files
+osm2city*
+
+# pbf files
+pbf/*
+
+# add general-settings file since it contains passwords
+general-settings
+
+# Ignore the users projects
+projects/
