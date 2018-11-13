@@ -11,12 +11,20 @@ case $key in
 		shift # past value
 	;;
 
+	-u|--user)
+		man_user="$2"
+		shift # past argument
+		shift # past value
+	;;
+
 	-h|--help)
 		echo "usage: create-db -d <database> [OPTIONS]"
 		echo "Creates and prepares the database for the use with osm2city"
 		echo ""
 		echo "OPTIONS"
 		echo "  -d, --database  Mandatory, database to create"
+		echo "  -u, --user	User the database will be owned by."
+		echo "			NOTE: If not given, the one from the general-settings will be used"
 		echo "  -h, --help      Shows this help and exit"
 		exit 0
 	;;
@@ -28,9 +36,18 @@ case $key in
 esac
 done
 
-# TODO read db user from general-settings file and make it overwriteable from the cmd line
+if [ -z $database ]; then
+	echo "Option -d <database> is mandatory"
+	exit 1
+fi
 
-sudo -u postgres createdb --encoding=UTF8 --owner=$USER "$database"
+source general-settings > /dev/null
+
+if [ ! -z "$man_user" ]; then
+	db_user="$man_user"
+fi
+
+sudo -u postgres createdb --encoding=UTF8 --owner=$db_user "$database"
 sudo -u postgres psql --dbname="$database" -c "CREATE EXTENSION postgis;"
 sudo -u postgres psql --dbname="$database" -c "CREATE EXTENSION hstore;"
 psql -d "$database" -f sql/pgsnapshot_schema_0.6.sql
