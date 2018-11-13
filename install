@@ -132,11 +132,39 @@ if [ $? == 1 ]; then
 	echo "export \$FG_ROOT" >> general-settings
 fi
 
+# check if the fg_elev value is already in the general-settings
+cat general-settings|grep ^fg_elev > /dev/null
+if [ $? == 1 ]; then
+	echo "Please give the full path to the fgelev executable"
+	read fg_elev
+	echo "fg_elev=$fg_elev" >> general-settings
+fi
+
+# check if the fg_scenery value is already in the general-settings
+cat general-settings|grep ^fg_scenery > /dev/null
+if [ $? == 1 ]; then
+	echo "Please give the full path to the flightgear scenery"
+	read fg_scenery
+	echo "fg_elev=$fg_scnery" >> general-settings
+fi
+
 # check if the PYTHONPATH value is already in the general-settings
 cat general-settings|grep ^PYTHONPATH > /dev/null
 if [ $? == 1 ]; then
 	echo "PYTHONPATH=$(pwd)/osm2city" >> general-settings
 	echo "export \$PYTHONPATH" >> general-settings
+fi
+
+# check if the db_host value is already in the general-settings
+cat general-settings|grep ^db_host > /dev/null
+if [ $? == 1 ]; then
+	echo "db_host=localhost" >> general-settings
+fi
+
+# check if the db_port value is already in the general-settings
+cat general-settings|grep ^db_port > /dev/null
+if [ $? == 1 ]; then
+	echo "db_port=5432" >> general-settings
 fi
 
 # Create directory for .pbf files
