@@ -51,12 +51,29 @@ if [ "$skip_install" != 1 ]; then
 		echo "python3-psycopg2"
 		echo "osmosis"
 		echo "git"
-
 		echo "Then rerun this script with skip-install argument"
 		echo "./install --skip-install"
 		exit 1
 	fi
 	sudo apt-get install -y git osmosis postgis pgadmin3 postgresql-contrib-9.6 postgresql-client-9.6 postgresql-9.6-postgis-2.3 postgresql-9.6 python-pip python3-venv
+	if [ $? == 1 ]; then
+		echo "apt-get had problems installing some packages"
+		echo "Please make sure that all of the following packages are installed"
+		echo "python3-venv"
+		echo "python-pip"
+		echo "postgresql-9.6"
+		echo "postgresql-9.6-postgis-2.3"
+		echo "postgresql-client-9.6"
+		echo "postgresql-contrib-9.6"
+		echo "pgadmin3"
+		echo "postgis"
+		echo "python3-psycopg2"
+		echo "osmosis"
+		echo "git"
+		echo "Then rerun this script with skip-install argument"
+		echo "./install --skip-install"
+		exit 1
+	fi
 fi
 
 if [ "$skip_git" != 1 ]; then
@@ -73,4 +90,4 @@ if [ "$skip_git" != 1 ]; then
 fi
 
 # Create directory for .pbf files
-mkdir pbf
+mkdir -p pbf
