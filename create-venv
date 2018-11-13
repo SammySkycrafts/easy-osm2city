@@ -25,3 +25,17 @@ done
 python3 -m venv venv/
 source venv/bin/activate
 pip install descartes matplotlib networkx numpy pillow pyproj scipy shapely psycopg2-binary
+if [ $? == 1 ]; then
+	echo "pip had problems installing some packages"
+	echo "Please make sure that all of the following packages are installed in the venv"
+	echo "descartes"
+	echo "matplotlib"
+	echo "networkx"
+	echo "numpy"
+	echo "pillow"
+	echo "pyproj"
+	echo "scipy"
+	echo "shapely"
+	echo "psycopg2-binary"
+	echo "NOTE: use 'source venv/bin/activate' before you install the packages"
+fi
