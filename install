@@ -91,3 +91,4 @@ fi
 
 # Create directory for .pbf files
 mkdir -p pbf
+mkdir -p projects
