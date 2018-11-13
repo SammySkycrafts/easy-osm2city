@@ -145,7 +145,7 @@ cat general-settings|grep ^fg_scenery > /dev/null
 if [ $? == 1 ]; then
 	echo "Please give the full path to the flightgear scenery"
 	read fg_scenery
-	echo "fg_cenery$fg_scenery" >> general-settings
+	echo "fg_scenery=$fg_scenery" >> general-settings
 fi
 
 # check if the PYTHONPATH value is already in the general-settings
