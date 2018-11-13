@@ -42,10 +42,10 @@ if [ "$skip_install" != 1 ]; then
 		echo "Please install the following packages manually"
 		echo "python3-venv"
 		echo "python-pip"
-		echo "postgresql-9.6"
-		echo "postgresql-9.6-postgis-2.3"
-		echo "postgresql-client-9.6"
-		echo "postgresql-contrib-9.6"
+		echo "postgresql"
+		echo "postgresql-postgis"
+		echo "postgresql-client"
+		echo "postgresql-contrib"
 		echo "pgadmin3"
 		echo "postgis"
 		echo "python3-psycopg2"
@@ -55,16 +55,16 @@ if [ "$skip_install" != 1 ]; then
 		echo "./install --skip-install"
 		exit 1
 	fi
-	sudo apt-get install -y git osmosis postgis pgadmin3 postgresql-contrib-9.6 postgresql-client-9.6 postgresql-9.6-postgis-2.3 postgresql-9.6 python-pip python3-venv
+	sudo apt-get install -y git osmosis postgis pgadmin3 postgresql-contrib postgresql-client postgresql-postgis postgresql python-pip python3-venv
 	if [ $? == 100 ]; then
 		echo "apt-get had problems installing some packages"
 		echo "Please make sure that all of the following packages are installed"
 		echo "python3-venv"
 		echo "python-pip"
-		echo "postgresql-9.6"
-		echo "postgresql-9.6-postgis-2.3"
-		echo "postgresql-client-9.6"
-		echo "postgresql-contrib-9.6"
+		echo "postgresql"
+		echo "postgresql-postgis"
+		echo "postgresql-client"
+		echo "postgresql-contrib"
 		echo "pgadmin3"
 		echo "postgis"
 		echo "python3-psycopg2"
