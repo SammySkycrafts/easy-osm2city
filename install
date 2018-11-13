@@ -8,13 +8,16 @@ case $key in
 	--skip-install)
 		skip_install=1
 		shift # past argument
-		shift # past value
 	;;
 
 	--skip-git)
 		skip_git=1
 		shift # past argument
-		shift # past value
+	;;
+
+	--skip-sql)
+		skip_sql=1
+		shift # past argument
 	;;
 
 	-h|--help)
@@ -25,6 +28,7 @@ case $key in
 		echo "  -h, --help		Shows this help and exits"
 		echo "      --skip-install	Skips install of packages and continues with setup"
 		echo "      --skip-git		Skips git clones of the osm2city and osm2city-data repository"
+		echo "      --skip-sql		Skips setup of the sql user"
 		exit
 	;;
 
@@ -87,6 +91,52 @@ if [ "$skip_git" != 1 ]; then
 	fi
 	git clone https://gitlab.com/fg-radi/osm2city.git
 	git clone https://gitlab.com/fg-radi/osm2city-data.git
+fi
+
+if [ "$skip_sql" != 1 ]; then
+	echo "Do you want to create a database user[y/n]? "
+	read ret
+	if [ "$ret" == "y" ]; then
+		echo "Please enter the username: "
+		read db_user
+		echo "Please enter a password: "
+		read db_passwd
+		sudo -u postgres psql -c "CREATE USER $db_user WITH PASSWORD '$db_passwd';"
+		echo "db_user=$db_user" >> general-settings
+		echo "db_passwd=$db_passwd" >> general-settings
+	fi
+fi
+
+if [ ! -f general-settings ]; then
+	echo "# This file must be used with "source general-settings" *from bash*" > general-settings
+	echo "# you cannot run it directly" >> general-settings
+	echo "" >> general-settings
+fi
+
+
+# check if the threads value is already in the general-settings
+cat general-settings|grep ^threads > /dev/null
+if [ $? == 1 ]; then
+	echo "What is the default number of threads you want to use for scenery generation?"
+	read threads
+	echo "threads=$threads" >> general-settings
+fi
+
+
+# check if the FG_ROOT value is already in the general-settings
+cat general-settings|grep ^FG_ROOT > /dev/null
+if [ $? == 1 ]; then
+	echo "Please give the full path to the fgdata directory"
+	read fg_root
+	echo "FG_ROOT=$fg_root" >> general-settings
+	echo "export \$FG_ROOT" >> general-settings
+fi
+
+# check if the PYTHONPATH value is already in the general-settings
+cat general-settings|grep ^PYTHONPATH > /dev/null
+if [ $? == 1 ]; then
+	echo "PYTHONPATH=$(pwd)/osm2city" >> general-settings
+	echo "export \$PYTHONPATH" >> general-settings
 fi
 
 # Create directory for .pbf files
