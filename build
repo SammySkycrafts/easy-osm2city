@@ -11,6 +11,12 @@ case $key in
 		shift # past value
 	;;
 
+	-t|--threads)
+		man_thread="$2"
+		shift # past argument
+		shift # past value
+	;;
+
 	-h|--help)
 		echo "usage: build -p <project> [OPTIONS]"
 		echo "Builds the tiles with osm2city"
@@ -18,8 +24,8 @@ case $key in
 		echo "OPTIONS"
 		echo "  -p, --project   Mandatory, project name which you want to clear of chache files."
 		echo "  -h, --help      Shows this help and exit"
-		echo "  -t, --threads	Number of threads used for building"
-		echo "			This will overwrite the value from the general-settings file"
+		echo "  -t, --threads   Number of threads used for building"
+		echo "                  This will overwrite the value from the general-settings file"
 		exit 0
 	;;
 
@@ -35,28 +41,33 @@ if [ -z "$project" ]; then
 	exit 1
 fi
 
+if [ ! -f "projects/$project" ]; then
+	echo "Project does not exsist. Please run ./create-project to create one"
+	exit 1
+fi
+
 
 source venv/bin/activate > /dev/null
 if [ $? == 1 ]; then
 	echo "Couldn't find the venv. Please run './create-venv' to create one"
-	exit
+	exit 1
 fi
 source projects/$project/settings > /dev/null
 if [ $? == 1 ]; then
 	echo "Couldn't find the settings file for the given project."
 	echo "Please check if the project exsists and contains the 'settings' file."
 	echo "To create a new project run './create-project'"
-	exit
+	exit 1
 fi
 source general-settings > /dev/null
 if [ $? == 1 ]; then
 	echo "Couldn't find the general settings. Please rename the 'general-settings-template'"
 	echo "file to 'general-setting' and edit it so the values match your setup."
-	exit
+	exit 1
 fi
 
-if [ -z "$man_thread" ]; then
-	thread=$man_thread
+if [ ! -z "$man_thread" ]; then
+	threads=$man_thread
 fi
 
 # change to the project dir and build
