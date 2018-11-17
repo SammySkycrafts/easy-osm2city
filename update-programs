@@ -1,6 +1,33 @@
 #! /bin/bash
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+        -h|--help)
+                echo "usage: update-programs [OPTIONS]"
+                echo "Updates easy-osm2city, osm2city and osm2city-data."
+                echo ""
+                echo "OPTIONS"
+                echo "  -h, --help      Shows this help and exit"
+                exit 0
+        ;;
+
+        *)
+                echo "Unknown option $key"
+                exit 1
+        ;;
+esac
+done
+
+echo "Updateing easy-osm2city..."
 git pull
+
+echo "Updateing osm2city..."
 cd osm2city
 git pull
+
+echo "Updating osm2city-data..."
 cd ../osm2city-data
 git pull
