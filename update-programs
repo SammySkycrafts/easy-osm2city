@@ -1,0 +1,6 @@
+#! /bin/bash
+git pull
+cd osm2city
+git pull
+cd ../osm2city-data
+git pull
