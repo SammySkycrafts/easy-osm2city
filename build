@@ -41,7 +41,7 @@ if [ -z "$project" ]; then
 	exit 1
 fi
 
-if [ ! -f "projects/$project" ]; then
+if [ ! -f "projects/$project/params.ini" ]; then
 	echo "Project does not exsist. Please run ./create-project to create one"
 	exit 1
 fi
@@ -61,9 +61,7 @@ if [ $? == 1 ]; then
 fi
 source general-settings > /dev/null
 if [ $? == 1 ]; then
-	echo "Couldn't find the general settings. Please rename the 'general-settings-template'"
-	echo "file to 'general-setting' and edit it so the values match your setup."
-	exit 1
+	echo "Couldn't find the general settings. Please run ./install first."
 fi
 
 if [ ! -z "$man_thread" ]; then
