@@ -1,0 +1,399 @@
+#! /usr/bin/python3
+import os
+import re
+import sys
+from time import sleep
+
+try:
+	import tty, termios
+except ImportError:
+	# Probably Windows.
+	try:
+		import msvcrt
+	except ImportError:
+		# Just give up here.
+		raise ImportError('getch not available')
+	else:
+		getch = msvcrt.getch
+else:
+	def getch():
+		fd = sys.stdin.fileno()
+		old_settings = termios.tcgetattr(fd)
+		try:
+			tty.setraw(fd)
+			ch = sys.stdin.read(1)
+		finally:
+			termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+		return ch
+
+project = ""
+argc = len(sys.argv)
+i = 1
+while i < argc:
+	if sys.argv[i] == "-p" or sys.argv[i] == "--project":
+		i += 1
+		project = sys.argv[i]
+	elif sys.argv[i] == "-h" or sys.argv[i] == "--help":
+		print("useage: edit-settings -p <project> [OPTIONS]")
+		print("You can edit your project settings\n")
+		print("OPTIONS")
+		print("  -p, --project   Mandatory, project you want to edit")
+		print("  -h, --help      Shows this help and exit")
+		sys.exit(0)
+	else:
+		print("Unknown option " + sys.argv[i])
+		sys.exit(1)
+	i += 1
+
+if project == "":
+	print("Option -p <project> is mandatory")
+	sys.exit(1)
+
+if os.path.isfile("projects/" + project + "/params.ini") == False:
+	print("Project '" + project + "' not found")
+	sys.exit(1)
+
+console_height, console_width = os.popen('stty size', 'r').read().split()
+
+def fill_space ( string, aim_length ):
+	length = len(string)
+	while length < aim_length:
+		string += " "
+		length += 1
+	return string
+
+options = [
+	{ "Group_Name": "Basics",
+	"Options": [
+			{ "Name": "PREFIX", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "PATH_TO_SCENERY", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "PATH_TO_SCENERY_OPT", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "PATH_TO_OUTPUT", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "PATH_TO_OSM2CITY_DATA", "default": "", "value": "", "type": "str", "description": "" }
+		]
+	},
+	{ "Group_Name": "FG",
+	"Options": [
+			{ "Name": "NO_ELEV", "default": False, "value": False, "type": "bool", "description": "" },
+			{ "Name": "FG_ELEV", "default": "", "value": "",  "type": "str"},
+			{ "Name": "PROBE_FOR_WATER", "default": False, "value": False, "type": "bool", "description": "" }
+		]
+	},
+	{ "Group_Name": "Database",
+	"Options": [
+			{ "Name": "DB_HOST", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "DB_PORT", "default": 5432, "value": 5432, "type": "int", "description": "" },
+			{ "Name": "DB_NAME", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "DB_USER", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "DB_USER_PASSWORD", "default": "", "value": "", "type": "str", "description": "" }
+		]
+	},
+	{ "Group_Name": "Buildings",
+	"Options": [
+			{ "Name": "BUILDING_USE_SHARED_WORSHIP", "default": False, "value": False, "type": "bool", "description": "" },
+			{ "Name": "BUILDING_MIN_HEIGHT", "default": 0.0, "value": 0.0, "type": "float", "description": "" },
+			{ "Name": "BUILDING_MIN_AREA", "default": "50.0", "value": 50.0, "type": "float", "description": "" },
+			{ "Name": "BUILDING_PART_MIN_AREA", "default": 10.0, "value": 10.0, "type": "float", "description": "" },
+			{ "Name": "BUILDING_REDUCE_THRESHOLD", "default": 200.0, "value": 200.0, "type": "float", "description": "" },
+			{ "Name": "BUILDING_REDUCE_RATE", "default": 0.5, "value": 0.5, "type": "float", "description": "" },
+			{ "Name": "BUILDING_REDUCE_CHECK_TOUCH", "default": False, "value": False, "type": "bool", "description": "" },
+			{ "Name": "BUILDING_NEVER_SKIP_LEVELS", "default": 6, "value": 6, "type": "int"  },
+			{ "Name": "BUILDING_SIMPLIFY_TOLERANCE_LINE", "default": 1.0, "value": 1.0, "type": "float", "description": "" },
+			{ "Name": "BUILDING_SIMPLIFY_TOLERANCE_AWAY", "default": 2.5, "value": 2.5, "type": "float", "description": "" },
+			{ "Name": "BUILDING_FORCE_EUROPEAN_INNER_CITY_STYLE", "default": False, "value": False, "type": "bool", "description": "" }
+		]
+	},
+	{ "Group_Name": "LOD",
+	"Options": [
+			{ "Name": "LOD_ALWAYS_DETAIL_BELOW_AREA", "default": 150, "value": 150, "type": "int", "description": "" },
+			{ "Name": "LOD_ALWAYS_DETAIL_ABOVE_AREA", "default": 500, "value": 500, "type": "int", "description": "" },
+			{ "Name": "LOD_ALWAYS_DETAIL_BELOW_LEVELS", "default": 6, "value": 6, "type": "int", "description": "" },
+			{ "Name": "LOD_ALWAYS_DETAIL_ABOVE_LEVELS", "default": 3, "value": 3, "type": "int", "description": "" },
+			{ "Name": "LOD_PERCENTAGE_DETAIL", "default": 0.5, "value": 0.5, "type": "float", "description": "" }
+		]
+	},
+	{ "Group_Name": "Roofs",
+	"Options": [
+			{ "Name": "BUILDING_COMPLEX_ROOFS", "default": True, "value": True, "type": "bool", "description": "" },
+			{ "Name": "BUILDING_COMPLEX_ROOFS_MIN_LEVELS", "default": 1, "value": 1, "type": "int", "description": "" },
+			{ "Name": "BUILDING_COMPLEX_ROOFS_MAX_LEVELS", "default": 5, "value": 5, "type": "int", "description": "" },
+			{ "Name": "BUILDING_COMPLEX_ROOFS_MAX_AREA", "default": 1600, "value": 1600, "type": "int", "description": "" },
+			{ "Name": "BUILDING_COMPLEX_ROOFS_MIN_RATIO_AREA", "default": 600, "value": 600, "type": "int", "description": "" },
+			{ "Name": "BUILDING_SKEL_MAX_NODES", "default": 10, "value": 10, "type": "int", "description": "" },
+			{ "Name": "BUILDING_ROOF_SHAPE_RATIO", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "BUILDING_ROOF_SIMPLIFY_TOLERANCE", "default": 0.5, "value": 0.5, "type": "float", "description": "" },
+			{ "Name": "BUILDING_SKEL_ROOFS_MIN_ANGLE", "default": 10, "value": 10, "type": "int", "description": "" },
+			{ "Name": "BUILDING_SKEL_ROOFS_MAX_ANGLE", "default": 50, "value": 50, "type": "int", "description": "" },
+			{ "Name": "BUILDING_SKILLION_ROOF_MAX_HEIGHT", "default": 2.0, "value": 2.0, "type": "float", "description": "" },
+			{ "Name": "BUILDING_SKEL_ROOF_MAX_HEIGHT", "default": 6.0, "value": 6.0, "type": "float", "description": "" }
+		]
+	},
+	{ "Group_Name": "Overlap Check",
+	"Options": [
+			{ "Name": "OVERLAP_CHECK_CONVEX_HULL", "default": True, "value": True, "type": "bool", "description": "" },
+			{ "Name": "OVERLAP_CHECK_CH_BUFFER_STATIC", "default": 0.0, "value": 0.0, "type": "float", "description": "" },
+			{ "Name": "OVERLAP_CHECK_CH_BUFFER_SHARED", "default": 0.0, "value": 0.0, "type": "float", "description": "" },
+			{ "Name": "OVERLAP_CHECK_CONSIDER_SHARED", "default": True, "value": True, "type": "bool", "description": "" },
+			{ "Name": "OVERLAP_CHECK_BRIDGE_MIN_REMAINING", "default": 10, "value": 10, "type": "int", "description": "" }
+		]
+	},
+	{ "Group_Name": "Rectify",
+	"Options": [
+			{ "Name": "RECTIFY_ENABLED", "default": True, "value": True, "type": "bool", "description": "" },
+			{ "Name": "RECTIFY_90_TOLERANCE", "default": 0.1, "value": 0.1, "type": "float", "description": "" },
+			{ "Name": "RECTIFY_MAX_90_DEVIATION", "default": 7.0, "value": 7.0, "type": "float", "description": "" },
+			{ "Name": "RECTIFY_MAX_DRAW_SAMPLE", "default": 20.0, "value": 20.0, "type": "float", "description": "" },
+			{ "Name": "RECTIFY_SEED_SAMPLE", "default": True, "value": True, "type": "bool", "description": "" }
+		]
+	},
+	{ "Group_Name": "Light Effects",
+	"Options": [
+			{ "Name": "OBSTRUCTION_LIGHT_MIN_LEVELS", "default": 15, "value": 15, "type": "int", "description": "" },
+			{ "Name": "BUILDING_FAKE_AMBIENT_OCCLUSION", "default": True, "value": True, "type": "bool", "description": "" },
+			{ "Name": "BUILDING_FAKE_AMBIENT_OCCLUSION_HEIGHT", "default": 6.0, "value": 6.0, "type": "float", "description": "" },
+			{ "Name": "BUILDING_FAKE_AMBIENT_OCCLUSION_VALUE", "default": 0.6, "value": 0.6, "type": "float", "description": "" }
+		]
+	},
+	{ "Group_Name": "Would Be Building",
+	"Options": []
+	},
+	{ "Group_Name": "Linear Objects",
+	"Options": [
+			{ "Name": "BRIDGE_MIN_LENGTH", "default": 20.0, "value": 20.0, "type": "float", "description": "" },
+			{ "Name": "MIN_ABOVE_GROUND_LEVEL", "default": 0.01, "value": 0.01, "type": "float", "description": "" },
+			{ "Name": "HIGHWAY_TYPE_MIN", "default": 4, "value": 4, "type": "int", "description": "" },
+			{ "Name": "POINTS_ON_LINE_DISTANCE_MAX", "default": 1000, "value": 1000, "type": "int", "description": "" },
+			{ "Name": "MAX_SLOPE_ROAD", "default": 0.08, "value": 0.08, "type": "float", "description": "" },
+			{ "Name": "MAX_SLOPE_*", "default": 0.08, "value": 0.08, "type": "float", "description": "" },
+			{ "Name": "USE_TRAM_LINE", "default": False, "value": False, "type": "bool", "description": "" }
+		]
+	},
+	{ "Group_Name": "Road Lighting",
+	"Options": [
+			{ "Name": "BUILT_UP_AREA_LIT_BUFFER", "default": 100.0, "value": 100.0, "type": "float", "description": "" },
+			{ "Name": "BUILT_UP_AREA_LIT_HOLES_MIN_AREA", "default": 100000.0, "value": 100000.0, "type": "float", "description": "" }
+		]
+	},
+	{ "Group_Name": "Textures",
+	"Options": [
+			{ "Name": "ATLAS_SUFFIX", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "TEXTURES_ROOFS_NAME_EXCLUDE", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "TEXTURES_FACADES_NAME_EXCLUDE", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "TEXTURES_ROOFS_PROVIDE_EXCLUDE", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "TEXTURES_FACADES_PROVIDE_EXCLUDE", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "TEXTURES_REGIONS_EXPLICIT", "default": "", "value": "", "type": "str", "description": "" },
+			{ "Name": "TEXTURES_EMPTY_LM_RGB_VALUE", "default": 35, "value": 35, "type": "int", "description": "" },
+		]
+	},
+	{ "Group_Name": "Details",
+	"Options": [
+			{ "Name": "C2P_PROCESS_POWERLINES", "default": True, "value": True, "type": "bool", "description": "" },
+			{ "Name": "C2P_PROCESS_WIND_TURBINES", "default": True, "value": True, "type": "bool", "description": "" },
+			{ "Name": "C2P_PROCESS_STORAGE_TANKS", "default": True, "value": True, "type": "bool", "description": "" },
+			{ "Name": "C2P_PROCESS_CHIMNEYS", "default": True, "value": True, "type": "bool", "description": "" },
+			{ "Name": "C2P_PROCESS_POWERLINES_MINOR", "default": False, "value": False, "type": "bool", "description": "" },
+			{ "Name": "C2P_PROCESS_AERIALWAYS", "default": False, "value": False, "type": "bool", "description": "" },
+			{ "Name": "C2P_PROCESS_OVERHEAD_LINES", "default": False, "value": False, "type": "bool", "description": "" },
+			{ "Name": "C2P_PROCESS_STREETLAMPS", "default": False, "value": False, "type": "bool", "description": "" },
+			{ "Name": "DETAILS_PROCESS_PIERS", "default": True, "value": True, "type": "bool", "description": "" },
+			{ "Name": "DETAILS_PROCESS_PLATFORMS", "default": True, "value": True, "type": "bool", "description": "" }
+		]
+	}
+]
+
+class colors:
+	SELECTED = '\033[30;42m'
+	HIGHLIGHT = '\033[30;46m'
+	ERR = '\033[37;41m'
+	HELP_HIGHLIGHT = '\033[96m'
+	ENDC = '\033[0m'
+
+try:
+	print("Reading ini file...")
+	ini_file = open("projects/" + project + "/params.ini", "r")
+	for line in ini_file:
+		for group in options:
+			for option in group["Options"]:
+				ret = re.search(option["Name"] + " = (.*)", line)
+				if ret:
+					value = ret.group(1).replace("'", "")
+					value = value.replace('"', "")
+					if option["type"] == "bool":
+						if value == "False":
+							option["value"] = False
+						else:
+							option["value"] = True
+					elif option["type"] == "str":
+						option["value"] = str(value)
+					elif option["type"] == "float":
+						option["value"] = float(value)
+					elif option["type"] == "int":
+						option["value"] = int(value)
+except:
+	print("A problem occured while reading the params.ini file...")
+	sys.exit(1)
+finally:
+	ini_file.close()
+
+try:
+	print("Reading descriptions file...")
+	# lines has to have following structure:
+	# <group-number>;<parameter-number>;description
+	# All lines not matching this format are considered comments and are ignored
+	# Group number is the number it has in the options array
+	# Parameter number is the number it has in the "Options" array
+	desc_file = open("descriptions", "r")
+	for line in desc_file:
+		ret = re.search("^(.*);(.*);(.*)$", line)
+		if ret:
+			options[int(ret.group(1))]["Options"][int(ret.group(2))]["description"] = ret.group(3).replace('\\n', '\n')
+except:
+	print("A problem occured while reading the descriptions file...")
+	ret = input("Do you want to continue without it (descriptions will not be available)? (y/n)")
+	if ret != "y":
+		sys.exit(0)
+finally:
+	desc_file.close()
+
+
+line_sel = 1
+mode = "group-select"
+selected_group = ""
+err_msg = ""
+saved = True
+
+while True:
+	os.system('clear')
+
+	print(colors.ERR + err_msg + colors.ENDC)
+	draw_line = 1
+	while draw_line < int(console_height) - 2:
+		line = " "
+
+		try:
+			if mode == "group-select":
+				line += options[draw_line - 1]["Group_Name"]
+				line = fill_space(line, 24)
+				opt_count = len(options[draw_line - 1]["Options"])
+				if opt_count < 10:
+					line += " "
+				line += str(opt_count)
+				
+			elif mode == "option-select":
+				line += options[selected_group]["Options"][draw_line - 1]["Name"]
+				line = fill_space(line, 46)
+				line += str(options[selected_group]["Options"][draw_line - 1]["value"])
+		except IndexError:
+			pass
+
+		if line_sel == draw_line:
+			line = colors.SELECTED + line + colors.ENDC
+
+		print(line)
+		draw_line += 1
+
+	# Status and help line
+	print("h" + colors.HIGHLIGHT + "Help  " + colors.ENDC + "j" + colors.HIGHLIGHT + "Down  " + colors.ENDC + "k" + colors.HIGHLIGHT + "Up    " + colors.ENDC + "Enter" + colors.HIGHLIGHT + "Select" + colors.ENDC + "q" + colors.HIGHLIGHT + "Quit  " + colors.ENDC + "s" + colors.HIGHLIGHT + "Save  " + colors.ENDC)
+
+	key = ord(getch())
+#	print(key)
+#	sleep(1)
+	if key == 27 or key == 113: # ESC or Q
+		if saved:
+			break
+		else:
+			ret = input("You have made changes but you haven't saved. Do you really want to quit? (y/n): ")
+			if ret == "y":
+				break
+	elif key == 13: # Enter
+		if mode == "group-select":
+			mode = "option-select"
+			selected_group = line_sel - 1
+			line_sel = 1
+		elif mode == "option-select":
+			if options[selected_group]["Options"][line_sel - 1]["type"] == "bool":
+				options[selected_group]["Options"][line_sel - 1]["value"] = not options[selected_group]["Options"][line_sel - 1]["value"]
+				err_msg = ""
+				saved = False
+			elif options[selected_group]["Options"][line_sel - 1]["type"] == "int":
+				ret = input("Please enter a new value of type INT for '" + options[selected_group]["Options"][line_sel - 1]["Name"] + "': ")
+				search = re.search("^[0-9]*$", ret)
+				if search:
+					options[selected_group]["Options"][line_sel - 1]["value"] = int(ret)
+					err_msg = ""
+					saved = False
+				else:
+					err_msg = "'" + ret + "' is no valid value for type INT"
+			elif options[selected_group]["Options"][line_sel - 1]["type"] == "float":
+				ret = input("Please enter a new value of type FLOAT for '" + options[selected_group]["Options"][line_sel - 1]["Name"] + "': ")
+				search = re.search("^[0-9]*\.[0-9]*$|^[0-9]*$", ret)
+				if search:
+					options[selected_group]["Options"][line_sel - 1]["value"] = float(ret)
+					err_msg = ""
+					saved = False
+				else:
+					err_msg = "'" + ret + "' is no valid value for type FLOAT"
+			elif options[selected_group]["Options"][line_sel - 1]["type"] == "str":
+				options[selected_group]["Options"][line_sel - 1]["value"]  = input("Please enter a new value of type STRING for '" + options[selected_group]["Options"][line_sel - 1]["Name"] + "': ")
+				err_msg = ""
+				saved = False
+	elif key == 106: # J
+		if mode == "group-select":
+			if line_sel < len(options):
+				line_sel += 1
+		elif mode == "option-select":
+			if line_sel < len(options[selected_group]["Options"]):
+				line_sel += 1 
+	elif key == 107: # K
+		if line_sel > 1:
+			line_sel -= 1
+	elif key == 104: # H
+		os.system('clear')
+		print(colors.HELP_HIGHLIGHT + "This program is released as part of easy-osm2city.")
+		print("See the LICENSE file for more information." + colors.ENDC)
+		print("\nIn group select mode you can select a group of parameters.")
+		print("The groups are similar as the groups on the official docs site.")
+		print("\nIn option select mode you can edit the parameters value.")
+		print("\nControls:")
+		print(colors.HELP_HIGHLIGHT + "     j: " + colors.ENDC + "Scroll down")
+		print(colors.HELP_HIGHLIGHT + "     k: " + colors.ENDC + "Scroll up")
+		print(colors.HELP_HIGHLIGHT + "     b: " + colors.ENDC + "Go back to group view")
+		print(colors.HELP_HIGHLIGHT + " Enter: " + colors.ENDC + "In group view, select group")
+		print("        On bool value, toggle True/False")
+		print("        On other values, bring up dialog to change value")
+		print(colors.HELP_HIGHLIGHT + "     r: " + colors.ENDC + "Resets the selected parameter to the default value")
+		print(colors.HELP_HIGHLIGHT + "     d: " + colors.ENDC + "Shows parameter description")
+		print(colors.HELP_HIGHLIGHT + "     s: " + colors.ENDC + "Saves the changes to the params.ini file")
+		print(colors.HELP_HIGHLIGHT + " ESC q: " + colors.ENDC + "Exit the program. Ask if should be exited if changes were not saved")
+		print("Press any key to return.")
+		getch()
+	elif key == 100: # D
+		if mode == "option-select":
+			os.system('clear')
+			print(options[selected_group]["Options"][line_sel - 1]["description"])
+			print(colors.HELP_HIGHLIGHT + "\nPress any key to return." + colors.ENDC)
+			getch()
+	elif key == 98: # B
+		if mode == "option-select":
+			mode = "group-select"
+			line_sel = selected_group + 1
+			err_msg = ""
+	elif key == 115: # S
+		ini_file = open("projects/" + project + "/params.ini", "w")
+		for group in options:
+			written = False
+			for option in group["Options"]:
+				# Write only non default values to file.
+				if option["default"] != option["value"]:
+					if option["type"] == "str":
+						ini_file.write(option["Name"] + ' = "' + str(option["value"]) + '"\n')
+					else:
+						ini_file.write(option["Name"] + " = " + str(option["value"]) + "\n")
+					written = True
+			if written:
+				ini_file.write("\n") # make the file more readable by seperating in blocks
+		ini_file.close()
+		saved = True
+	elif key == 114: # R
+		if mode == "option-select":
+			options[selected_group]["Options"][line_sel - 1]["value"] = options[selected_group]["Options"][line_sel - 1]["default"]
