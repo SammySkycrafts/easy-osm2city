@@ -51,7 +51,7 @@ fi
 
 echo "Which database do you want to use?"
 read db_name
-cat .databases | grep $db_name > /dev/null
+cat .databases | grep -e "$db_name" > /dev/null
 if [ $? == 1 ]; then
 	echo "Database doesn't exsist. Please choose a different database or create one by running"
 	echo "./create-db -d $db_name"
