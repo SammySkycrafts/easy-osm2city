@@ -44,6 +44,20 @@ if [ $? == 1 ]; then
         exit 1
 fi
 
+if [ ! -f ".databases" ]; then
+	echo "There are no databases created by easy-osm2city. Please create one by running ./create-db"
+	exit 1
+fi
+
+echo "Which database do you want to use?"
+read db_name
+cat .databases | grep $db_name > /dev/null
+if [ $? == 1 ]; then
+	echo "Database doesn't exsist. Please choose a different database or create one by running"
+	echo "./create-db -d $db_name"
+	exit 1
+fi
+
 mkdir -p "projects/$project/scenery"
 echo "PREFIX = '$project'" > "projects/$project/params.ini"
 echo "PATH_TO_SCENERY = '$fg_scenery'" >> "projects/$project/params.ini"
@@ -55,6 +69,7 @@ echo "FG_ELEV = '$fg_elev'" >> "projects/$project/params.ini"
 echo "" >> "projects/$project/params.ini"
 echo "DB_HOST = '$db_host'" >> "projects/$project/params.ini"
 echo "DB_PORT = '$db_port'" >> "projects/$project/params.ini"
+echo "DB_NAME = '$db_name'" >> "projects/$project/params.ini"
 echo "DB_USER = '$db_user'" >> "projects/$project/params.ini"
 echo "DB_USER_PASSWORD = '$db_passwd'" >> "projects/$project/params.ini"
 echo "" >> "projects/$project/params.ini"
