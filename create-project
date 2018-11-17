@@ -76,13 +76,68 @@ echo "" >> "projects/$project/params.ini"
 echo "POINTS_ON_LINE_DISTANCE_MAX = 20" >> "projects/$project/params.ini"
 echo "HIGHWAY_TYPE_MIN = 3" >> "projects/$project/params.ini"
 
-echo "What is the WESTside boundary of the area?"
-read west
-echo "What is the SOUTHside boundary of the area?"
-read south
-echo "What is the EASTside boundary of the area?"
-read east
-echo "What is the NORTHside boundary of the area?"
-read north
+pass=0
+while [ $pass == 0 ]
+do
+	echo "What is the WESTside boundary of the area?"
+	read west
+	case $west in
+		''|*[!-0-9]*)
+			echo "Value is no number."
+		;;
+		*)
+			pass=1
+		;;
+	esac
+done
 
-# TODO write settings file and check if input is correct
+pass=0
+while [ $pass == 0 ]
+do
+	echo "What is the SOUTHside boundary of the area?"
+	read south
+	case $south in
+		''|*[!-0-9]*)
+			echo "Value is no number."
+		;;
+		*)
+			pass=1
+		;;
+	esac
+done
+
+pass=0
+while [ $pass == 0 ]
+do
+	echo "What is the EASTside boundary of the area?"
+	read east
+	case $east in
+		''|*[!-0-9]*)
+			echo "Value is no number."
+		;;
+		*)
+			pass=1
+		;;
+	esac
+done
+
+pass=0
+while [ $pass == 0 ]
+do
+	echo "What is the NORTHside boundary of the area?"
+	read north
+	case $north in
+		''|*[!-0-9]*)
+			echo "Value is no number."
+		;;
+		*)
+			pass=1
+		;;
+	esac
+done
+
+if [ "$west" -lt "0" ]; then
+	echo "bounds=*${west}_${south}_${east}_${north}" > projects/$project/settings
+else
+	echo "bounds=${west}_${south}_${east}_${north}" > projects/$project/settings
+fi
