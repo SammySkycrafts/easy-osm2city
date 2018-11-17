@@ -19,3 +19,6 @@ general-settings
 
 # Ignore the users projects
 projects/
+
+# Database reminder
+.databases
