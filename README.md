@@ -9,7 +9,7 @@ And wrapper around [osm2city](https://gitlab.com/fg-radi/osm2city) inspired by e
 * Create a database using `./create-db -d <database>`.
 * Download the .pbf file for the area you want to build and put it into the `pbf` directory.  
   I recommend to download from [GeoFabrik](http://download.geofabrik.de/).
-* Read the .pbf file into the database by running `./read-pbf -d <database> -f <pbf-file>
+* Read the .pbf file into the database by running `./read-pbf -d <database> -f <pbf-file>`
 * If you want to speed up further opperation on the database, index it by running `./index-db -d <database>`.  
   I highly recommend to do so.
 * Next step is to create a project by running `./create-project -p <project>` and following the instructions.
