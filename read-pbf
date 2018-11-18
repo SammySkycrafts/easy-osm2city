@@ -17,6 +17,30 @@ case $key in
 		shift # past value
 	;;
 
+	-u|--user)
+		man_user="$2"
+		shift # past argument
+		shift # past value
+	;;
+
+	-s|--secret)
+		secret="$2"
+		shift # past argument
+		shift # past value
+	;;
+
+	--host)
+		host="$2"
+		shift # past argument
+		shift # past value
+	;;
+
+	--port)
+		port="$2"
+		shift # past argument
+		shift # past value
+	;;
+
 	-h|--help)
 		echo "usage: read-pbf -d <database> -f <pbf-file> [OPTIONS]"
 		echo "Reads the .pbf file and writes it to the database."
@@ -25,6 +49,14 @@ case $key in
 		echo "OPTIONS"
 		echo "  -d, --database	Mandatory, database to write to"
 		echo "  -f, --file	Mandatory, the .pbf file to read from"
+		echo "  -u, --user	Database user to login with."
+		echo "                  If not given, the one from the general settings will be used"
+		echo "  -s, --secret	Password to authentificate the user with."
+		echo "                  If not given, the one from the general settings will be used"
+		echo "      --host	Host of the database server"
+		echo "                  If not given, the one from the general settings will be used"
+		echo "      --port	Port of the database server to connect to"
+		echo "                  If not given, the one from the general settings will be used"
 		echo "  -h, --help	Shows this help and exit"
 		exit 0
 	*)
@@ -35,6 +67,21 @@ esac
 done
 
 source general-settings
-# TODO make password and that stuff overwrite able from cmd line
+
+if [ ! -z "$man_user" ]; then
+	db_user="$man_user"
+fi
+
+if [ ! -z "$secret" ]; then
+	db_passwd="$secret"
+fi
+
+if [ ! -z "$host" ]; then
+	db_host="$host"
+fi
+
+if [ ! -z "$port" ]; then
+	db_port="$port"
+fi
 
 time osmosis --read-pbf file="$file" --log-progress --write-pgsql database="$database" host="$db_host:$db_port" user="$db_user" password="$db_passwd"
