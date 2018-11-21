@@ -227,7 +227,10 @@ while True:
 	elif key == 100: # D
 		if mode == "option-select":
 			os.system('clear')
-			print(options[selected_group]["Options"][line_sel - 1]["description"])
+			if options[selected_group]["Options"][line_sel - 1]["description"] != "":
+				print(options[selected_group]["Options"][line_sel - 1]["description"])
+			else:
+				print("No description available")
 			print(colors.HELP_HIGHLIGHT + "\n\n current value: " + colors.ENDC + str(options[selected_group]["Options"][line_sel - 1]["value"]))
 			print(colors.HELP_HIGHLIGHT + " default value: " + colors.ENDC + str(options[selected_group]["Options"][line_sel - 1]["default"]))
 			print(colors.HELP_HIGHLIGHT + "\nPress any key to return." + colors.ENDC)
