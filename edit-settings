@@ -2,6 +2,7 @@
 import os
 import re
 import sys
+import json
 from time import sleep
 
 try:
@@ -62,144 +63,11 @@ def fill_space ( string, aim_length ):
 		length += 1
 	return string
 
-options = [
-	{ "Group_Name": "Basics",
-	"Options": [
-			{ "Name": "PREFIX", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "PATH_TO_SCENERY", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "PATH_TO_SCENERY_OPT", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "PATH_TO_OUTPUT", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "PATH_TO_OSM2CITY_DATA", "default": "", "value": "", "type": "str", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "FG",
-	"Options": [
-			{ "Name": "NO_ELEV", "default": False, "value": False, "type": "bool", "description": "", "changed": False },
-			{ "Name": "FG_ELEV", "default": "", "value": "",  "type": "str", "description": "", "changed": False },
-			{ "Name": "PROBE_FOR_WATER", "default": False, "value": False, "type": "bool", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "Database",
-	"Options": [
-			{ "Name": "DB_HOST", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "DB_PORT", "default": 5432, "value": 5432, "type": "int", "description": "", "changed": False },
-			{ "Name": "DB_NAME", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "DB_USER", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "DB_USER_PASSWORD", "default": "", "value": "", "type": "str", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "Buildings",
-	"Options": [
-			{ "Name": "BUILDING_USE_SHARED_WORSHIP", "default": False, "value": False, "type": "bool", "description": "", "changed": False },
-			{ "Name": "BUILDING_MIN_HEIGHT", "default": 0.0, "value": 0.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILDING_MIN_AREA", "default": "50.0", "value": 50.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILDING_PART_MIN_AREA", "default": 10.0, "value": 10.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILDING_REDUCE_THRESHOLD", "default": 200.0, "value": 200.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILDING_REDUCE_RATE", "default": 0.5, "value": 0.5, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILDING_REDUCE_CHECK_TOUCH", "default": False, "value": False, "type": "bool", "description": "", "changed": False },
-			{ "Name": "BUILDING_NEVER_SKIP_LEVELS", "default": 6, "value": 6, "type": "int"  },
-			{ "Name": "BUILDING_SIMPLIFY_TOLERANCE_LINE", "default": 1.0, "value": 1.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILDING_SIMPLIFY_TOLERANCE_AWAY", "default": 2.5, "value": 2.5, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILDING_FORCE_EUROPEAN_INNER_CITY_STYLE", "default": False, "value": False, "type": "bool", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "LOD",
-	"Options": [
-			{ "Name": "LOD_ALWAYS_DETAIL_BELOW_AREA", "default": 150, "value": 150, "type": "int", "description": "", "changed": False },
-			{ "Name": "LOD_ALWAYS_DETAIL_ABOVE_AREA", "default": 500, "value": 500, "type": "int", "description": "", "changed": False },
-			{ "Name": "LOD_ALWAYS_DETAIL_BELOW_LEVELS", "default": 6, "value": 6, "type": "int", "description": "", "changed": False },
-			{ "Name": "LOD_ALWAYS_DETAIL_ABOVE_LEVELS", "default": 3, "value": 3, "type": "int", "description": "", "changed": False },
-			{ "Name": "LOD_PERCENTAGE_DETAIL", "default": 0.5, "value": 0.5, "type": "float", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "Roofs",
-	"Options": [
-			{ "Name": "BUILDING_COMPLEX_ROOFS", "default": True, "value": True, "type": "bool", "description": "", "changed": False },
-			{ "Name": "BUILDING_COMPLEX_ROOFS_MIN_LEVELS", "default": 1, "value": 1, "type": "int", "description": "", "changed": False },
-			{ "Name": "BUILDING_COMPLEX_ROOFS_MAX_LEVELS", "default": 5, "value": 5, "type": "int", "description": "", "changed": False },
-			{ "Name": "BUILDING_COMPLEX_ROOFS_MAX_AREA", "default": 1600, "value": 1600, "type": "int", "description": "", "changed": False },
-			{ "Name": "BUILDING_COMPLEX_ROOFS_MIN_RATIO_AREA", "default": 600, "value": 600, "type": "int", "description": "", "changed": False },
-			{ "Name": "BUILDING_SKEL_MAX_NODES", "default": 10, "value": 10, "type": "int", "description": "", "changed": False },
-			{ "Name": "BUILDING_ROOF_SHAPE_RATIO", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "BUILDING_ROOF_SIMPLIFY_TOLERANCE", "default": 0.5, "value": 0.5, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILDING_SKEL_ROOFS_MIN_ANGLE", "default": 10, "value": 10, "type": "int", "description": "", "changed": False },
-			{ "Name": "BUILDING_SKEL_ROOFS_MAX_ANGLE", "default": 50, "value": 50, "type": "int", "description": "", "changed": False },
-			{ "Name": "BUILDING_SKILLION_ROOF_MAX_HEIGHT", "default": 2.0, "value": 2.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILDING_SKEL_ROOF_MAX_HEIGHT", "default": 6.0, "value": 6.0, "type": "float", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "Overlap Check",
-	"Options": [
-			{ "Name": "OVERLAP_CHECK_CONVEX_HULL", "default": True, "value": True, "type": "bool", "description": "", "changed": False },
-			{ "Name": "OVERLAP_CHECK_CH_BUFFER_STATIC", "default": 0.0, "value": 0.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "OVERLAP_CHECK_CH_BUFFER_SHARED", "default": 0.0, "value": 0.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "OVERLAP_CHECK_CONSIDER_SHARED", "default": True, "value": True, "type": "bool", "description": "", "changed": False },
-			{ "Name": "OVERLAP_CHECK_BRIDGE_MIN_REMAINING", "default": 10, "value": 10, "type": "int", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "Rectify",
-	"Options": [
-			{ "Name": "RECTIFY_ENABLED", "default": True, "value": True, "type": "bool", "description": "", "changed": False },
-			{ "Name": "RECTIFY_90_TOLERANCE", "default": 0.1, "value": 0.1, "type": "float", "description": "", "changed": False },
-			{ "Name": "RECTIFY_MAX_90_DEVIATION", "default": 7.0, "value": 7.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "RECTIFY_MAX_DRAW_SAMPLE", "default": 20.0, "value": 20.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "RECTIFY_SEED_SAMPLE", "default": True, "value": True, "type": "bool", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "Light Effects",
-	"Options": [
-			{ "Name": "OBSTRUCTION_LIGHT_MIN_LEVELS", "default": 15, "value": 15, "type": "int", "description": "", "changed": False },
-			{ "Name": "BUILDING_FAKE_AMBIENT_OCCLUSION", "default": True, "value": True, "type": "bool", "description": "", "changed": False },
-			{ "Name": "BUILDING_FAKE_AMBIENT_OCCLUSION_HEIGHT", "default": 6.0, "value": 6.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILDING_FAKE_AMBIENT_OCCLUSION_VALUE", "default": 0.6, "value": 0.6, "type": "float", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "Would Be Building",
-	"Options": []
-	},
-	{ "Group_Name": "Linear Objects",
-	"Options": [
-			{ "Name": "BRIDGE_MIN_LENGTH", "default": 20.0, "value": 20.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "MIN_ABOVE_GROUND_LEVEL", "default": 0.01, "value": 0.01, "type": "float", "description": "", "changed": False },
-			{ "Name": "HIGHWAY_TYPE_MIN", "default": 4, "value": 4, "type": "int", "description": "", "changed": False },
-			{ "Name": "POINTS_ON_LINE_DISTANCE_MAX", "default": 1000, "value": 1000, "type": "int", "description": "", "changed": False },
-			{ "Name": "MAX_SLOPE_ROAD", "default": 0.08, "value": 0.08, "type": "float", "description": "", "changed": False },
-			{ "Name": "MAX_SLOPE_*", "default": 0.08, "value": 0.08, "type": "float", "description": "", "changed": False },
-			{ "Name": "USE_TRAM_LINE", "default": False, "value": False, "type": "bool", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "Road Lighting",
-	"Options": [
-			{ "Name": "BUILT_UP_AREA_LIT_BUFFER", "default": 100.0, "value": 100.0, "type": "float", "description": "", "changed": False },
-			{ "Name": "BUILT_UP_AREA_LIT_HOLES_MIN_AREA", "default": 100000.0, "value": 100000.0, "type": "float", "description": "", "changed": False }
-		]
-	},
-	{ "Group_Name": "Textures",
-	"Options": [
-			{ "Name": "ATLAS_SUFFIX", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "TEXTURES_ROOFS_NAME_EXCLUDE", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "TEXTURES_FACADES_NAME_EXCLUDE", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "TEXTURES_ROOFS_PROVIDE_EXCLUDE", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "TEXTURES_FACADES_PROVIDE_EXCLUDE", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "TEXTURES_REGIONS_EXPLICIT", "default": "", "value": "", "type": "str", "description": "", "changed": False },
-			{ "Name": "TEXTURES_EMPTY_LM_RGB_VALUE", "default": 35, "value": 35, "type": "int", "description": "", "changed": False },
-		]
-	},
-	{ "Group_Name": "Details",
-	"Options": [
-			{ "Name": "C2P_PROCESS_POWERLINES", "default": True, "value": True, "type": "bool", "description": "", "changed": False },
-			{ "Name": "C2P_PROCESS_WIND_TURBINES", "default": True, "value": True, "type": "bool", "description": "", "changed": False },
-			{ "Name": "C2P_PROCESS_STORAGE_TANKS", "default": True, "value": True, "type": "bool", "description": "", "changed": False },
-			{ "Name": "C2P_PROCESS_CHIMNEYS", "default": True, "value": True, "type": "bool", "description": "", "changed": False },
-			{ "Name": "C2P_PROCESS_POWERLINES_MINOR", "default": False, "value": False, "type": "bool", "description": "", "changed": False },
-			{ "Name": "C2P_PROCESS_AERIALWAYS", "default": False, "value": False, "type": "bool", "description": "", "changed": False },
-			{ "Name": "C2P_PROCESS_OVERHEAD_LINES", "default": False, "value": False, "type": "bool", "description": "", "changed": False },
-			{ "Name": "C2P_PROCESS_STREETLAMPS", "default": False, "value": False, "type": "bool", "description": "", "changed": False },
-			{ "Name": "DETAILS_PROCESS_PIERS", "default": True, "value": True, "type": "bool", "description": "", "changed": False },
-			{ "Name": "DETAILS_PROCESS_PLATFORMS", "default": True, "value": True, "type": "bool", "description": "", "changed": False }
-		]
-	}
-]
+#try:
+with open("parameters") as json_data:
+	options = json.load(json_data)
+#except:
+#	print("A problem occured while reading the file with all available parameters")
 
 class colors:
 	SELECTED = '\033[30;42m'
@@ -235,27 +103,6 @@ except:
 	sys.exit(1)
 finally:
 	ini_file.close()
-
-try:
-	print("Reading descriptions file...")
-	# lines has to have following structure:
-	# <group-number>;<parameter-number>;description
-	# All lines not matching this format are considered comments and are ignored
-	# Group number is the number it has in the options array
-	# Parameter number is the number it has in the "Options" array
-	desc_file = open("descriptions", "r")
-	for line in desc_file:
-		ret = re.search("^(.*);(.*);(.*)$", line)
-		if ret:
-			options[int(ret.group(1))]["Options"][int(ret.group(2))]["description"] = ret.group(3).replace('\\n', '\n')
-except:
-	print("A problem occured while reading the descriptions file...")
-	ret = input("Do you want to continue without it (descriptions will not be available)? (y/n)")
-	if ret != "y":
-		sys.exit(0)
-finally:
-	desc_file.close()
-
 
 line_sel = 1
 mode = "group-select"
