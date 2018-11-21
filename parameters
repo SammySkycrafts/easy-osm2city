@@ -1,0 +1,138 @@
+[
+	{ "Group_Name": "Basics",
+	"Options": [
+			{ "Name": "PREFIX", "default": "", "value": "", "type": "str", "description": "Name of the scenery project.\nDo not use spaces in the name.", "changed": false },
+			{ "Name": "PATH_TO_SCENERY", "default": "", "value": "", "type": "str", "description": "Full path to the scenery folder without trailing slash.\nThis is where we will probe elevation\nand check for overlap with static objects.\nMost likely you’ll want to use your TerraSync path here.", "changed": false },
+			{ "Name": "PATH_TO_SCENERY_OPT", "default": "", "value": "", "type": "str", "description": "Optional additional paths to scenery folders (e.g. for Project3000).\nSpecified as a list of strings (e.g. [‘/foo/uno’, ‘/foo/due’].\nOnly used for overlap checking for buildings against static and shared objects.", "changed": false },
+			{ "Name": "PATH_TO_OUTPUT", "default": "", "value": "", "type": "str", "description": "The generated scenery (.stg, .ac, .xml) will be written to this path.\nIf empty then the correct location in PATH_TO_SCENERY is used.\nNote that if you use TerraSync for PATH_TO_SCENERY,you MUST choose a different path here.\nOtherwise, TerraSync will overwrite the generated scenery.\nUnless you know what you are doing, there is no reason not to specify a dedicated path here.\nWhile not absolutely needed it is good practice to name the output folder the same as PREFIX.\n\nNOTE: This was set for you by easy-osm2city.\nDon't change it unless your know exactly what you are doing.", "changed": false },
+			{ "Name": "PATH_TO_OSM2CITY_DATA", "default": "", "value": "", "type": "str", "description": "Full path to the folder with osm2city-data.\nSee chapter Installation of osm2city (e.g. “/home/user/osm2city-data”).\n\nNOTE: This way set for oyu by easy-osm2city.\nDon't change it unless you know exactly what you are doing.", "changed": false }
+		]
+	},
+	{ "Group_Name": "FG",
+	"Options": [
+			{ "Name": "NO_ELEV", "default": false, "value": false, "type": "bool", "description": "The only reason to set this to true\nwould be for scenery builders to check generated scenery objects a bit faster\nnot caring about the vertical position in the scenery.", "changed": false },
+			{ "Name": "FG_ELEV", "default": "", "value": "",  "type": "str", "description": "Points to the full path of the fgelev executable.\nOn Linux it could be something like\n.../bin/fgfs_git/next/install/flightgear/bin/fgelev'.\nOn Windows you might have to put\nquotes around the path due to whitespace\ne.g. '\"D:/Program Files/FlightGear/bin/Win64/fgelev.exe\"'.", "changed": false },
+			{ "Name": "PROBE_FOR_WATER", "default": false, "value": false, "type": "bool", "description": "Checks the scenery in PATH_TO_SCENERY\nwhether points are in the water or not.\nThe FlightGear scenery’s water boundaries might be different from OSM.\nE.g. removes buildings if at least one corner is in the water.\nAnd removes or splits (parts of) roads/railways,\nif at least 1 point is in the water.\nOnly possible with FGElev version after 9th of November 2016 / FG 2016.4.1.", "changed": false }
+		]
+	},
+	{ "Group_Name": "Database",
+	"Options": [
+			{ "Name": "DB_HOST", "default": "", "value": "", "type": "str", "description": "The host name of the computer running PostGIS (e.g. localhost).", "changed": false },
+			{ "Name": "DB_PORT", "default": 5432, "value": 5432, "type": "int", "description": "The port used to connect to the host (5433 for Postgres 9,x+)", "changed": false },
+			{ "Name": "DB_NAME", "default": "", "value": "", "type": "str", "description": "The name of the database (e.g osmogis).", "changed": false },
+			{ "Name": "DB_USER", "default": "", "value": "", "type": "str", "description": "The name of the user to be used to read from the database. Can be read-only.", "changed": false },
+			{ "Name": "DB_USER_PASSWORD", "default": "", "value": "", "type": "str", "description": "The password for the DB_USER.", "changed": false }
+		]
+	},
+	{ "Group_Name": "Buildings",
+	"Options": [
+			{ "Name": "BUILDING_USE_SHARED_WORSHIP", "default": false, "value": false, "type": "bool", "description": "", "changed": false },
+			{ "Name": "BUILDING_MIN_HEIGHT", "default": 0.0, "value": 0.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILDING_MIN_AREA", "default": "50.0", "value": 50.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILDING_PART_MIN_AREA", "default": 10.0, "value": 10.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILDING_REDUCE_THRESHOLD", "default": 200.0, "value": 200.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILDING_REDUCE_RATE", "default": 0.5, "value": 0.5, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILDING_REDUCE_CHECK_TOUCH", "default": false, "value": false, "type": "bool", "description": "", "changed": false },
+			{ "Name": "BUILDING_NEVER_SKIP_LEVELS", "default": 6, "value": 6, "type": "int", "changed": false },
+			{ "Name": "BUILDING_SIMPLIFY_TOLERANCE_LINE", "default": 1.0, "value": 1.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILDING_SIMPLIFY_TOLERANCE_AWAY", "default": 2.5, "value": 2.5, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILDING_FORCE_EUROPEAN_INNER_CITY_STYLE", "default": false, "value": false, "type": "bool", "description": "", "changed": false }
+		]
+	},
+	{ "Group_Name": "LOD",
+	"Options": [
+			{ "Name": "LOD_ALWAYS_DETAIL_BELOW_AREA", "default": 150, "value": 150, "type": "int", "description": "", "changed": false },
+			{ "Name": "LOD_ALWAYS_DETAIL_ABOVE_AREA", "default": 500, "value": 500, "type": "int", "description": "", "changed": false },
+			{ "Name": "LOD_ALWAYS_DETAIL_BELOW_LEVELS", "default": 6, "value": 6, "type": "int", "description": "", "changed": false },
+			{ "Name": "LOD_ALWAYS_DETAIL_ABOVE_LEVELS", "default": 3, "value": 3, "type": "int", "description": "", "changed": false },
+			{ "Name": "LOD_PERCENTAGE_DETAIL", "default": 0.5, "value": 0.5, "type": "float", "description": "", "changed": false }
+		]
+	},
+	{ "Group_Name": "Roofs",
+	"Options": [
+			{ "Name": "BUILDING_COMPLEX_ROOFS", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
+			{ "Name": "BUILDING_COMPLEX_ROOFS_MIN_LEVELS", "default": 1, "value": 1, "type": "int", "description": "", "changed": false },
+			{ "Name": "BUILDING_COMPLEX_ROOFS_MAX_LEVELS", "default": 5, "value": 5, "type": "int", "description": "", "changed": false },
+			{ "Name": "BUILDING_COMPLEX_ROOFS_MAX_AREA", "default": 1600, "value": 1600, "type": "int", "description": "", "changed": false },
+			{ "Name": "BUILDING_COMPLEX_ROOFS_MIN_RATIO_AREA", "default": 600, "value": 600, "type": "int", "description": "", "changed": false },
+			{ "Name": "BUILDING_SKEL_MAX_NODES", "default": 10, "value": 10, "type": "int", "description": "", "changed": false },
+			{ "Name": "BUILDING_ROOF_SHAPE_RATIO", "default": "", "value": "", "type": "str", "description": "", "changed": false },
+			{ "Name": "BUILDING_ROOF_SIMPLIFY_TOLERANCE", "default": 0.5, "value": 0.5, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILDING_SKEL_ROOFS_MIN_ANGLE", "default": 10, "value": 10, "type": "int", "description": "", "changed": false },
+			{ "Name": "BUILDING_SKEL_ROOFS_MAX_ANGLE", "default": 50, "value": 50, "type": "int", "description": "", "changed": false },
+			{ "Name": "BUILDING_SKILLION_ROOF_MAX_HEIGHT", "default": 2.0, "value": 2.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILDING_SKEL_ROOF_MAX_HEIGHT", "default": 6.0, "value": 6.0, "type": "float", "description": "", "changed": false }
+		]
+	},
+	{ "Group_Name": "Overlap Check",
+	"Options": [
+			{ "Name": "OVERLAP_CHECK_CONVEX_HULL", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
+			{ "Name": "OVERLAP_CHECK_CH_BUFFER_STATIC", "default": 0.0, "value": 0.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "OVERLAP_CHECK_CH_BUFFER_SHARED", "default": 0.0, "value": 0.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "OVERLAP_CHECK_CONSIDER_SHARED", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
+			{ "Name": "OVERLAP_CHECK_BRIDGE_MIN_REMAINING", "default": 10, "value": 10, "type": "int", "description": "", "changed": false }
+		]
+	},
+	{ "Group_Name": "Rectify",
+	"Options": [
+			{ "Name": "RECTIFY_ENABLED", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
+			{ "Name": "RECTIFY_90_TOLERANCE", "default": 0.1, "value": 0.1, "type": "float", "description": "", "changed": false },
+			{ "Name": "RECTIFY_MAX_90_DEVIATION", "default": 7.0, "value": 7.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "RECTIFY_MAX_DRAW_SAMPLE", "default": 20.0, "value": 20.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "RECTIFY_SEED_SAMPLE", "default": true, "value": true, "type": "bool", "description": "", "changed": false }
+		]
+	},
+	{ "Group_Name": "Light Effects",
+	"Options": [
+			{ "Name": "OBSTRUCTION_LIGHT_MIN_LEVELS", "default": 15, "value": 15, "type": "int", "description": "", "changed": false },
+			{ "Name": "BUILDING_FAKE_AMBIENT_OCCLUSION", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
+			{ "Name": "BUILDING_FAKE_AMBIENT_OCCLUSION_HEIGHT", "default": 6.0, "value": 6.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILDING_FAKE_AMBIENT_OCCLUSION_VALUE", "default": 0.6, "value": 0.6, "type": "float", "description": "", "changed": false }
+		]
+	},
+	{ "Group_Name": "Would Be Building",
+	"Options": []
+	},
+	{ "Group_Name": "Linear Objects",
+	"Options": [
+			{ "Name": "BRIDGE_MIN_LENGTH", "default": 20.0, "value": 20.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "MIN_ABOVE_GROUND_LEVEL", "default": 0.01, "value": 0.01, "type": "float", "description": "", "changed": false },
+			{ "Name": "HIGHWAY_TYPE_MIN", "default": 4, "value": 4, "type": "int", "description": "", "changed": false },
+			{ "Name": "POINTS_ON_LINE_DISTANCE_MAX", "default": 1000, "value": 1000, "type": "int", "description": "", "changed": false },
+			{ "Name": "MAX_SLOPE_ROAD", "default": 0.08, "value": 0.08, "type": "float", "description": "", "changed": false },
+			{ "Name": "MAX_SLOPE_*", "default": 0.08, "value": 0.08, "type": "float", "description": "", "changed": false },
+			{ "Name": "USE_TRAM_LINE", "default": false, "value": false, "type": "bool", "description": "", "changed": false }
+		]
+	},
+	{ "Group_Name": "Road Lighting",
+	"Options": [
+			{ "Name": "BUILT_UP_AREA_LIT_BUFFER", "default": 100.0, "value": 100.0, "type": "float", "description": "", "changed": false },
+			{ "Name": "BUILT_UP_AREA_LIT_HOLES_MIN_AREA", "default": 100000.0, "value": 100000.0, "type": "float", "description": "", "changed": false }
+		]
+	},
+	{ "Group_Name": "Textures",
+	"Options": [
+			{ "Name": "ATLAS_SUFFIX", "default": "", "value": "", "type": "str", "description": "", "changed": false },
+			{ "Name": "TEXTURES_ROOFS_NAME_EXCLUDE", "default": "", "value": "", "type": "str", "description": "", "changed": false },
+			{ "Name": "TEXTURES_FACADES_NAME_EXCLUDE", "default": "", "value": "", "type": "str", "description": "", "changed": false },
+			{ "Name": "TEXTURES_ROOFS_PROVIDE_EXCLUDE", "default": "", "value": "", "type": "str", "description": "", "changed": false },
+			{ "Name": "TEXTURES_FACADES_PROVIDE_EXCLUDE", "default": "", "value": "", "type": "str", "description": "", "changed": false },
+			{ "Name": "TEXTURES_REGIONS_EXPLICIT", "default": "", "value": "", "type": "str", "description": "", "changed": false },
+			{ "Name": "TEXTURES_EMPTY_LM_RGB_VALUE", "default": 35, "value": 35, "type": "int", "description": "", "changed": false }
+		]
+	},
+	{ "Group_Name": "Details",
+	"Options": [
+			{ "Name": "C2P_PROCESS_POWERLINES", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
+			{ "Name": "C2P_PROCESS_WIND_TURBINES", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
+			{ "Name": "C2P_PROCESS_STORAGE_TANKS", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
+			{ "Name": "C2P_PROCESS_CHIMNEYS", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
+			{ "Name": "C2P_PROCESS_POWERLINES_MINOR", "default": false, "value": false, "type": "bool", "description": "", "changed": false },
+			{ "Name": "C2P_PROCESS_AERIALWAYS", "default": false, "value": false, "type": "bool", "description": "", "changed": false },
+			{ "Name": "C2P_PROCESS_OVERHEAD_LINES", "default": false, "value": false, "type": "bool", "description": "", "changed": false },
+			{ "Name": "C2P_PROCESS_STREETLAMPS", "default": false, "value": false, "type": "bool", "description": "", "changed": false },
+			{ "Name": "DETAILS_PROCESS_PIERS", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
+			{ "Name": "DETAILS_PROCESS_PLATFORMS", "default": true, "value": true, "type": "bool", "description": "", "changed": false }
+		]
+	}
+]
