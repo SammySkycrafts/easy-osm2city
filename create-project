@@ -15,30 +15,30 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+first=1
 while [[ $# -gt 0 ]]
 do
 key="$1"
 
 case $key in
-	-p|--project)
-		project="$2"
-		shift # past argument
-		shift # past value
-	;;
-
 	-h|--help)
-		echo "usage: create-project -p <project> [OPTIONS]"
+		echo "usage: create-project <project> [OPTIONS]"
 		echo "Creates a new project with all necesary files."
 		echo ""
 		echo "OPTIONS"
-		echo "  -p, --project   Mandatory, project name which you want to clear of chache files."
 		echo "  -h, --help      Shows this help and exit"
 		exit 0
 	;;
 
 	*)
-		echo "Unknown option $key"
-		exit 1
+		if [ $first == "1" ]; then
+			project="$1"
+			shift # past project
+			first=0
+		else
+			echo "Unknown option $key"
+			exit 1
+		fi
 	;;
 esac
 done

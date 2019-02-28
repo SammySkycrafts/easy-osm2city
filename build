@@ -15,18 +15,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-
+first=1
 while [[ $# -gt 0 ]]
 do
 key="$1"
 
 case $key in
-	-p|--project)
-		project="$2"
-		shift # past argument
-		shift # past value
-	;;
-
 	-t|--threads)
 		man_thread="$2"
 		shift # past argument
@@ -34,11 +28,10 @@ case $key in
 	;;
 
 	-h|--help)
-		echo "usage: build -p <project> [OPTIONS]"
+		echo "usage: build <project> [OPTIONS]"
 		echo "Builds the tiles with osm2city"
 		echo ""
 		echo "OPTIONS"
-		echo "  -p, --project   Mandatory, project name which you want to clear of chache files."
 		echo "  -h, --help      Shows this help and exit"
 		echo "  -t, --threads   Number of threads used for building"
 		echo "                  This will overwrite the value from the general-settings file"
@@ -46,14 +39,20 @@ case $key in
 	;;
 
 	*)
-		echo "Unknown option $key"
-		exit 1
+		if [ $first == "1" ]; then
+			project="$key"
+			shift #past project
+			first=0
+		else
+			echo "Unknown option $key"
+			exit 1
+		fi
 	;;
 esac
 done
 
 if [ -z "$project" ]; then
-	echo "Option -p <project> is mandatory"
+	echo "No project was given. See build -h for details"
 	exit 1
 fi
 
@@ -63,19 +62,19 @@ if [ ! -f "projects/$project/params.ini" ]; then
 fi
 
 
-source venv/bin/activate > /dev/null
+source venv/bin/activate > /dev/null 2>&1
 if [ $? == 1 ]; then
 	echo "Couldn't find the venv. Please run './create-venv' to create one"
 	exit 1
 fi
-source projects/$project/settings > /dev/null
+source projects/$project/settings > /dev/null 2>&1
 if [ $? == 1 ]; then
 	echo "Couldn't find the settings file for the given project."
 	echo "Please check if the project exsists and contains the 'settings' file."
 	echo "To create a new project run './create-project'"
 	exit 1
 fi
-source general-settings > /dev/null
+source general-settings > /dev/null 2>&1
 if [ $? == 1 ]; then
 	echo "Couldn't find the general settings. Please run ./install first."
 fi

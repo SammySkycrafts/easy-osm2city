@@ -15,36 +15,36 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+first=1
 while [[ $# -gt 0 ]]
 do
 key="$1"
 
 case $key in
-        -p|--project)
-	        project="$2"
-		shift # past argument
-		shift # past value
-        ;;
-
 	-h|--help)
-		echo "usage: clear-cache-files -p <project> [OPTIONS]"
+		echo "usage: clear-cache-files <project> [OPTIONS]"
 		echo "Cleares cache files created by osm2city."
 		echo ""
 		echo "OPTIONS"
-		echo "  -p, --project	Mandatory, project name which you want to clear of chache files"
 		echo "  -h, --help	Shows this help and exit"
 		exit 0
 	;;
 
-        *)
-                echo "Unknown option $key"
-                exit 1
+	*)
+		if [ $first == "1" ]; then
+			project="$1"
+			shift # past project
+			first=0
+		else
+                	echo "Unknown option $key"
+                	exit 1
+		fi
         ;;
 esac
 done
 
 if [ -z "$project" ]; then
-	echo "Option -p <project> is mandatory"
+	echo "No project was given. See clear-cache-files -h for details"
 	exit 1
 fi
 

@@ -15,23 +15,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+
 while [[ $# -gt 0 ]]
 do
 key="$1"
 
 case $key in
-	-d|--database)
-		database="$2"
-		shift # past argument
-		shift # past value
-	;;
-
-	-f|--file)
-		file="$2"
-		shift # past argument
-		shift # past value
-	;;
-
 	-u|--user)
 		man_user="$2"
 		shift # past argument
@@ -57,13 +46,11 @@ case $key in
 	;;
 
 	-h|--help)
-		echo "usage: read-pbf -d <database> -f <pbf-file> [OPTIONS]"
+		echo "usage: read-pbf <database> <pbf-file> [OPTIONS]"
 		echo "Reads the .pbf file and writes it to the database."
 		echo "NOTE this uses quite some space in the /tmp directory"
 		echo ""
 		echo "OPTIONS"
-		echo "  -d, --database  Mandatory, database to write to"
-		echo "  -f, --file      Mandatory, the .pbf file to read from"
 		echo "  -u, --user      Database user to login with."
 		echo "                    If not given, the one from the general settings will be used"
 		echo "  -s, --secret    Password to authentificate the user with."
@@ -76,6 +63,15 @@ case $key in
 		exit 0
 	;;
 	*)
+		if [ $first == "1" ]; then
+			database="$1"
+			shift # past database
+			first=2
+		elif [ $first == "2" ]; then
+			file="$2"
+			shift # past file
+			first=0
+		fi
 		echo "Unknown option $key"
 		exit 1
 	;;

@@ -15,17 +15,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+first=1
 while [[ $# -gt 0 ]]
 do
 key="$1"
 
 case $key in
-	-d|--database)
-		database="$2"
-		shift # past argument
-		shift # past value
-	;;
-
 	-u|--user)
 		man_user="$2"
 		shift # past argument
@@ -33,11 +28,10 @@ case $key in
 	;;
 
 	-h|--help)
-		echo "usage: create-db -d <database> [OPTIONS]"
+		echo "usage: create-db <database> [OPTIONS]"
 		echo "Creates and prepares the database for the use with osm2city"
 		echo ""
 		echo "OPTIONS"
-		echo "  -d, --database  Mandatory, database to create"
 		echo "  -u, --user	User the database will be owned by."
 		echo "			NOTE: If not given, the one from the general-settings will be used"
 		echo "  -h, --help      Shows this help and exit"
@@ -45,8 +39,14 @@ case $key in
 	;;
 
 	*)
-		echo "Unknown option $key"
-		exit 1
+		if [ $first == "1" ]; then
+			database="$1"
+			shift # past database
+			first=0
+		else
+			echo "Unknown option $key"
+			exit 1
+		fi
 	;;
 esac
 done

@@ -15,30 +15,30 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+first=1
 while [[ "$#" -gt 0 ]]
 do
 key="$1"
 
 case $key in
-	-d|--database)
-		database="$2"
-		shift # past argument
-		shift # past value
-	;;
-
 	-h|--help)
-		echo "usage: index-db -d <database> [OPTIONS]"
+		echo "usage: index-db <database> [OPTIONS]"
 		echo "Create an index for the database to speed up further operations"
 		echo ""
 		echo "OPTIONS"
-		echo "  -d, --database	Mandatory, the database to index"
 		echo "  -h, --help	Shows this help and exit"
 		exit 0
 	;;
 
 	*)
-		echo "Unknown option $key"
-		exit 1
+		if [ $first == "1" ]; then
+			database="$1"
+			shift # past database
+			first=0
+		else
+			echo "Unknown option $key"
+			exit 1
+		fi
 	;;
 esac
 done

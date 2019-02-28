@@ -43,21 +43,21 @@ else:
 			termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 		return ch
 
-project = ""
 argc = len(sys.argv)
+try:
+	project = sys.argv[1]
+except:
+	print("No project was given. See edit-settings -h for details")
+	sys.exit(1)
 i = 1
 while i < argc:
-	if sys.argv[i] == "-p" or sys.argv[i] == "--project":
-		i += 1
-		project = sys.argv[i]
-	elif sys.argv[i] == "-h" or sys.argv[i] == "--help":
-		print("useage: edit-settings -p <project> [OPTIONS]")
+	if sys.argv[i] == "-h" or sys.argv[i] == "--help":
+		print("useage: edit-settings <project> [OPTIONS]")
 		print("You can edit your project settings\n")
 		print("OPTIONS")
-		print("  -p, --project   Mandatory, project you want to edit")
 		print("  -h, --help      Shows this help and exit")
 		sys.exit(0)
-	else:
+	elif i != 1:
 		print("Unknown option " + sys.argv[i])
 		sys.exit(1)
 	i += 1
