@@ -39,7 +39,7 @@ done
 
 python3 -m venv venv/
 source venv/bin/activate
-pip install descartes matplotlib networkx numpy pillow pyproj scipy shapely psycopg2-binary
+pip install descartes matplotlib networkx numpy requests pillow pyproj scipy shapely psycopg2-binary
 if [ $? == 1 ]; then
 	echo "pip had problems installing some packages"
 	echo "Please make sure that all of the following packages are installed in the venv"
@@ -47,6 +47,7 @@ if [ $? == 1 ]; then
 	echo "matplotlib"
 	echo "networkx"
 	echo "numpy"
+	echo "requests"
 	echo "pillow"
 	echo "pyproj"
 	echo "scipy"
