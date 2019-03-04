@@ -27,6 +27,11 @@ case $key in
 		shift # past value
 	;;
 
+	-z|--zip)
+		create_zip=1
+		shift # past argument
+	;;
+
 	-h|--help)
 		echo "usage: build <project> [OPTIONS]"
 		echo "Builds the tiles with osm2city"
@@ -35,6 +40,7 @@ case $key in
 		echo "  -h, --help      Shows this help and exit"
 		echo "  -t, --threads   Number of threads used for building"
 		echo "                  This will overwrite the value from the general-settings file"
+		echo "  -z, --zip	Create a ready to distribute zip file on success"
 		exit 0
 	;;
 
@@ -85,5 +91,12 @@ fi
 
 # change to the project dir and build
 cd projects/$project
+rm -f osm2city-exceptions.log
 time ( python3 ../../osm2city/build_tiles.py -f params.ini -b "$bounds" -p "$threads" 2>&1 ) 2> exec-time
+
+if [ -z "$create_zip" ]; then
+	echo "Creating zip file..."
+	zip -rq $project.zip scenery/
+fi
+
 cat exec-time | grep "real" | sed "s/real\t\([0-9]*\)m\([0-9]*\).*/Building $project took \1 minutes and \2 seconds./"
