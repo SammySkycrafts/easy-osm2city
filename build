@@ -94,7 +94,7 @@ cd projects/$project
 rm -f osm2city-exceptions.log
 time ( python3 ../../osm2city/build_tiles.py -f params.ini -b "$bounds" -p "$threads" 2>&1 ) 2> exec-time
 
-if [ -z "$create_zip" ]; then
+if [ "$create_zip" == "1" ]; then
 	echo "Creating zip file..."
 	zip -rq $project.zip scenery/
 fi
