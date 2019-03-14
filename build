@@ -28,6 +28,7 @@ create_zip = False
 man_threads = ""
 project = ""
 while i < argc:
+#TODO add arg for continue brken build
 	if sys.argv[i] == "-t" or sys.argv[i] == "--threads":
 		i += 1
 		man_threads = "-t sys.argv[i]"
@@ -113,7 +114,11 @@ if days > 0:
 
 print("Building " + project + "took " + time)
 
-
-if create_zip:
-	print("Creating zip file...")
-	os.system("zip -rq projects/" + project + "/" + project + ".zip projects/" + project + "/scenery/")
+#TODO uncomment line for rebuild hint
+if os.path.isfile("projects/" + project + "/osm2city-exceptions.log"):
+	print("There have been exceptionss in the build.")
+	print("Please check the osm2city-exceptions.log")
+#	print("If you want to rebuild only failed tiles, run with the -c parameter")
+elif create_zip == True:
+		print("Creating zip file...")
+		os.system("zip -rq projects/" + project + "/" + project + ".zip projects/" + project + "/scenery/")
