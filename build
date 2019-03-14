@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/python3
 # Copyright (C) 2018 Merspieler, merspieler _at_ airmail.cc
 #
 # This program is free software; you can redistribute it and/or
@@ -15,88 +15,105 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-first=1
-while [[ $# -gt 0 ]]
-do
-key="$1"
+import sys
+import os
+import re
+from math import ceil
+import time
 
-case $key in
-	-t|--threads)
-		man_thread="$2"
-		shift # past argument
-		shift # past value
-	;;
+argc = len(sys.argv)
+i = 1
+first = 1
+create_zip = False
+man_threads = ""
+project = ""
+while i < argc:
+	if sys.argv[i] == "-t" or sys.argv[i] == "--threads":
+		i += 1
+		man_threads = "-t sys.argv[i]"
+	elif sys.argv[i] == "-z" or sys.argv[i] == "--zip":
+		create_zip = True
+	elif sys.argv[i] == "-h" or sys.argv[i] == "--help":
+		print("usage: build <project> [OPTIONS]")
+		print("Builds the tiles with osm2city")
+		print("")
+		print("OPTIONS")
+		print("  -h, --help      Shows this help and exit")
+		print("  -t, --threads   Number of threads used for building")
+		print("                  This will overwrite the value from the general-settings file")
+		print("  -z, --zip       Create a ready to distribute zip file on success")
+		sys.exit(0)
+	else:
+		if first == 1:
+			first = 0
+			project = sys.argv[i]
+		else:
+			print("Unknown option " + sys.argv[i])
+			sys.exit(1)
+	i += 1
 
-	-z|--zip)
-		create_zip=1
-		shift # past argument
-	;;
+if project == "":
+	print("No project was given. See build -h for details")
+	sys.exit(1)
 
-	-h|--help)
-		echo "usage: build <project> [OPTIONS]"
-		echo "Builds the tiles with osm2city"
-		echo ""
-		echo "OPTIONS"
-		echo "  -h, --help      Shows this help and exit"
-		echo "  -t, --threads   Number of threads used for building"
-		echo "                  This will overwrite the value from the general-settings file"
-		echo "  -z, --zip	Create a ready to distribute zip file on success"
-		exit 0
-	;;
+try:
+	settings_file = open("projects/" + project + "/settings")
+	bounds = settings_file.readline()
+	settings_file.close()
+except:
+	print("Couldn't find the settings file for the given project.")
+	print("Please check if the project exsists and contains the 'settings' file.")
+	print("To create a new project run './create-project'")
+	sys.exit(1)
 
-	*)
-		if [ $first == "1" ]; then
-			project="$key"
-			shift #past project
-			first=0
-		else
-			echo "Unknown option $key"
-			exit 1
-		fi
-	;;
-esac
-done
+match = re.match("^bounds=\*?(-?[0-9]{1,3})_(-?[0-9]{1,2})_(-?[0-9]{1,3})_(-?[0-9]{1,2})$", bounds)
+if match:
+	west = match.group(1)
+	south = match.group(2)
+	east = match.group(3)
+	north = match.group(4)
+else:
+	print("Failed to get bounds")
+	sys.exit(1)
 
-if [ -z "$project" ]; then
-	echo "No project was given. See build -h for details"
-	exit 1
-fi
+width = ceil(east - west)
+height = ceil(north - south)
+start_time = time.time()
 
-if [ ! -f "projects/$project/params.ini" ]; then
-	echo "Project does not exsist. Please run ./create-project to create one"
-	exit 1
-fi
+for w in range(0, width):
+	build_w = west + w
+	build_e = build_w + 1
+	if build_e > east:
+		build_e = east
+
+	if build_w < 0:
+		build_w = "*" + str(build_w)
+
+	for s in range(0, height):
+		build_s = south + s
+		build_n = build_s + 1
+		if build_n > north:
+			build_n = north
+
+		os.system("./build_tile " + project + " " + man_threads + " -b " + str(build_w) + "_" + str(build_s) + "_" + str(build_e) + "_" + str(build_n))
+
+# Get build time
+end_time = time.time()
+elapsed = end_time - start_time
+seconds = elapsed % 60
+elapsed = (elapsed - seconds) / 60
+minutes = elapsed % 60
+elapsed = (elapsed - minutes) / 60
+hours = elapsed % 24
+days = (elapsed - hours) / 24
+
+time = str(hours) + " Hours, " + str(minutes) + " Minutes and " + str(seconds) + " Seconds"
+if days > 0:
+	time = str(days) + " Days, " + time
+
+print("Building " + project + "took " + time)
 
 
-source venv/bin/activate > /dev/null 2>&1
-if [ $? == 1 ]; then
-	echo "Couldn't find the venv. Please run './create-venv' to create one"
-	exit 1
-fi
-source projects/$project/settings > /dev/null 2>&1
-if [ $? == 1 ]; then
-	echo "Couldn't find the settings file for the given project."
-	echo "Please check if the project exsists and contains the 'settings' file."
-	echo "To create a new project run './create-project'"
-	exit 1
-fi
-source general-settings > /dev/null 2>&1
-if [ $? == 1 ]; then
-	echo "Couldn't find the general settings. Please run ./install first."
-fi
-
-if [ ! -z "$man_thread" ]; then
-	threads=$man_thread
-fi
-
-# change to the project dir and build
-cd projects/$project
-rm -f osm2city-exceptions.log
-time ( python3 ../../osm2city/build_tiles.py -f params.ini -b "$bounds" -p "$threads" 2>&1 ) 2> exec-time
-
-if [ -z "$create_zip" ]; then
-	echo "Creating zip file..."
-	zip -rq $project.zip scenery/
-fi
-
-cat exec-time | grep "real" | sed "s/real\t\([0-9]*\)m\([0-9]*\).*/Building $project took \1 minutes and \2 seconds./"
+if create_zip:
+	print("Creating zip file...")
+	os.system("zip -rq projects/" + project + "/" + project + ".zip projects/" + project + "/scenery/")
