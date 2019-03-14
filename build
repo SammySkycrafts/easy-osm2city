@@ -68,10 +68,10 @@ except:
 
 match = re.match("^bounds=\*?(-?[0-9]{1,3}\.[0-9]{0,4})_(-?[0-9]{1,2}\.[0-9]{0,4})_(-?[0-9]{1,3}\.[0-9]{0,4})_(-?[0-9]{1,2}\.[0-9]{0,4})$", bounds)
 if match:
-	west = match.group(1)
-	south = match.group(2)
-	east = match.group(3)
-	north = match.group(4)
+	west = float(match.group(1))
+	south = float(match.group(2))
+	east = float(match.group(3))
+	north = float(match.group(4))
 else:
 	print("Failed to get bounds")
 	sys.exit(1)
