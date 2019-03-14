@@ -1,5 +1,5 @@
 #! /usr/bin/python3
-# Copyright (C) 2018 Merspieler, merspieler _at_ airmail.cc
+# Copyright (C) 2018-2019 Merspieler, merspieler _at_ airmail.cc
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -28,7 +28,7 @@ create_zip = False
 man_threads = ""
 project = ""
 while i < argc:
-#TODO add arg for continue brken build
+#TODO add arg for continue broken build
 	if sys.argv[i] == "-t" or sys.argv[i] == "--threads":
 		i += 1
 		man_threads = "-t sys.argv[i]"
