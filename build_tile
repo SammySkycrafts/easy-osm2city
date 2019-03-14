@@ -98,11 +98,13 @@ fi
 
 if [ ! -z "$man_bounds" ]; then
 	bounds=$man_bounds
+else
+	# Only remove exceptions.log if whole project is build
+	rm -f osm2city-exceptions.log
 fi
 
 # change to the project dir and build
 cd projects/$project
-rm -f osm2city-exceptions.log
 time ( python3 ../../osm2city/build_tiles.py -f params.ini -b "$bounds" -p "$threads" 2>&1 ) 2> exec-time
 
 if [ -z "$create_zip" ]; then
