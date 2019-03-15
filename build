@@ -25,15 +25,23 @@ argc = len(sys.argv)
 i = 1
 first = 1
 create_zip = False
+build_all = True
+build_fix = False
+build_continue = False
 man_threads = ""
 project = ""
 while i < argc:
-#TODO add arg for continue broken build and just fix issues
 	if sys.argv[i] == "-t" or sys.argv[i] == "--threads":
 		i += 1
 		man_threads = "-t sys.argv[i]"
 	elif sys.argv[i] == "-z" or sys.argv[i] == "--zip":
 		create_zip = True
+	elif sys.argv[i] == "-c" or sys.argv[i] == "--continue":
+		build_all = False
+		build_continue == True
+	elif sys.argv[i] == "-f" or sys.argv[i] == "--fix":
+		build_all = False
+		build_fix = True
 	elif sys.argv[i] == "-h" or sys.argv[i] == "--help":
 		print("usage: build <project> [OPTIONS]")
 		print("Builds the tiles with osm2city")
@@ -43,6 +51,9 @@ while i < argc:
 		print("  -t, --threads   Number of threads used for building")
 		print("                  This will overwrite the value from the general-settings file")
 		print("  -z, --zip       Create a ready to distribute zip file on success")
+		print("")
+		print("  -c, --continue  Continue interrupted build")
+		print("  -f, --fix       Try to rebuild tiles wich had exceptions in the previous run")
 		sys.exit(0)
 	else:
 		if first == 1:
