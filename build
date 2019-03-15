@@ -28,7 +28,7 @@ create_zip = False
 man_threads = ""
 project = ""
 while i < argc:
-#TODO add arg for continue broken build
+#TODO add arg for continue broken build and just fix issues
 	if sys.argv[i] == "-t" or sys.argv[i] == "--threads":
 		i += 1
 		man_threads = "-t sys.argv[i]"
@@ -57,25 +57,30 @@ if project == "":
 	print("No project was given. See build -h for details")
 	sys.exit(1)
 
-try:
-	settings_file = open("projects/" + project + "/settings")
-	bounds = settings_file.readline()
-	settings_file.close()
-except:
-	print("Couldn't find the settings file for the given project.")
-	print("Please check if the project exsists and contains the 'settings' file.")
-	print("To create a new project run './create-project'")
-	sys.exit(1)
+#takes a file as input and returns a list of bounds
+def get_bounds(file_path):
+	try:
+		with open(file_path) as f:
+			ret = []
+			lines = f.readlines()
+			for line in lines:
+				match = re.match(".*\*?(-?[0-9]{1,3}\.?[0-9]{0,4})_(-?[0-9]{1,2}\.?[0-9]{0,4})_(-?[0-9]{1,3}\.?[0-9]{0,4})_(-?[0-9]{1,2}\.?[0-9]{0,4}).*", line)
+				if match != None:
+					bounds = { "west": float(match.group(1)), "south": float(match.group(2)), "east": float(match.group(3)), "north": float(match.group(4)) }
+					ret.append(bounds)
+		return ret
+	except:
+		print("WARNING: Getting bounds failed")
 
-match = re.match("^bounds=\*?(-?[0-9]{1,3}\.[0-9]{0,4})_(-?[0-9]{1,2}\.[0-9]{0,4})_(-?[0-9]{1,3}\.[0-9]{0,4})_(-?[0-9]{1,2}\.[0-9]{0,4})$", bounds)
-if match:
-	west = float(match.group(1))
-	south = float(match.group(2))
-	east = float(match.group(3))
-	north = float(match.group(4))
-else:
-	print("Failed to get bounds")
+
+bounds = get_bounds("projects/" + project + "/settings")
+if bounds == []:
+	print("Unable to read project settings")
 	sys.exit(1)
+west = bounds[0].west
+east = bounds[0].east
+north = bounds[0].north
+south = bounds[0].south
 
 width = ceil(east - west)
 height = ceil(north - south)
@@ -108,17 +113,17 @@ elapsed = (elapsed - minutes) / 60
 hours = elapsed % 24
 days = (elapsed - hours) / 24
 
-time = str(hours) + " Hours, " + str(minutes) + " Minutes and " + str(seconds) + " Seconds"
+time = str(int(hours)) + " Hours, " + str(int(minutes)) + " Minutes and " + str(int(seconds)) + " Seconds"
 if days > 0:
-	time = str(days) + " Days, " + time
+	time = str(int(days)) + " Days, " + time
 
-print("Building " + project + "took " + time)
+print("Building " + project + " took " + time)
 
 #TODO uncomment line for rebuild hint
 if os.path.isfile("projects/" + project + "/osm2city-exceptions.log"):
 	print("There have been exceptionss in the build.")
 	print("Please check the osm2city-exceptions.log")
-#	print("If you want to rebuild only failed tiles, run with the -c parameter")
+#	print("If you want to rebuild only failed tiles, run with the -f parameter")
 elif create_zip == True:
 		print("Creating zip file...")
 		os.system("zip -rq projects/" + project + "/" + project + ".zip projects/" + project + "/scenery/")
