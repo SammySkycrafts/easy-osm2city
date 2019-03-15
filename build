@@ -82,9 +82,10 @@ def get_bounds(file_path):
 		return ret
 	except:
 		print("WARNING: Getting bounds failed")
+		return []
 
 
-def run_build(west, south, east, north, start_w=None, start_s=None):
+def run_build(west, south, east, north, log_done=False, start_w=None, start_s=None):
 	width = ceil(east - west)
 	height = ceil(north - south)
 
@@ -103,16 +104,25 @@ def run_build(west, south, east, north, start_w=None, start_s=None):
 			if build_n > north:
 				build_n = north
 
-			os.system("./build_tile " + project + " " + man_threads + " -b " + str(build_w) + "_" + str(build_s) + "_" + str(build_e) + "_" + str(build_n))
+			os.system("bash build_tile " + project + " " + man_threads + " -b " + str(build_w) + "_" + str(build_s) + "_" + str(build_e) + "_" + str(build_n))
+
+			if log_done:
+				try:
+					f = open("projects/" + project + "/done", "w")
+					f.write(str(build_w) + "_" + str(build_s) + "_" + str(build_e) + "_" + str(build_n))
+					f.close()
+				except:
+					print("WARNING: Writing done file failed")
 
 start_time = time.time()
 
+#TODO add handling of exceptions.log (rename, remove)
 if build_all:
 	bounds = get_bounds("projects/" + project + "/settings")
 	if bounds == []:
 		print("Unable to read project settings")
 		sys.exit(1)
-	run_build(bounds[0].west, bounds[0].south, bounds[0].east, bounds[0].north)
+	run_build(bounds[0].west, bounds[0].south, bounds[0].east, bounds[0].north, log_done=True)
 else
 	if build_fix:
 		bounds = get_bounds("projects/" + project + "/osm2city-exceptions.log")
@@ -122,8 +132,22 @@ else
 			for area in bounds:
 				run_build(area.west, area.south, area.east, area.north)
 	if build_continue:
-		project_bounds = get_bounds("projects/" + project + "/settings")
 		start_bounds = get_bounds("projects/" + project + "/done")
+		if start_bounds == []:
+			print("No start bounds found. Please rerun without -c")
+			sys.exit(1)
+		project_bounds = get_bounds("projects/" + project + "/settings")
+		if project_bounds == []:
+			print("Unable to read project settings")
+			sys.exit(1)
+		if start_bounds.north == project_bounds.north and start_bounds.east == project_bounds.east:
+			print("Project has been build completly. Starting from scratch.")
+			start_bounds = project_bounds
+			run_build(start_bounds[0].west, start_bounds[0].south, start_bounds[0].east, start_bounds[0].north, log_done=True)
+
+		else:
+			pass
+			# TODO move start to the next part. take care if hit east end
 
 # Get build time
 end_time = time.time()
