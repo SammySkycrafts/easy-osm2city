@@ -123,7 +123,7 @@ if build_all:
 		print("Unable to read project settings")
 		sys.exit(1)
 	run_build(bounds[0].west, bounds[0].south, bounds[0].east, bounds[0].north, log_done=True)
-else
+else:
 	if build_fix:
 		bounds = get_bounds("projects/" + project + "/osm2city-exceptions.log")
 		if bounds == []:
