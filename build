@@ -127,37 +127,40 @@ def run_build(west, south, east, north, log_done=False, start_w=None, start_s=No
 start_time = time.time()
 
 #TODO add handling of exceptions.log (rename, remove)
-if build_all:
-	bounds = get_bounds("projects/" + project + "/settings")
-	if bounds == []:
-		print("Unable to read project settings")
-		sys.exit(1)
-	run_build(bounds[0]["west"], bounds[0]["south"], bounds[0]["east"], bounds[0]["north"], log_done=True)
-else:
-	if build_fix:
-		bounds = get_bounds("projects/" + project + "/osm2city-exceptions.log")
+try:
+	if build_all:
+		bounds = get_bounds("projects/" + project + "/settings")
 		if bounds == []:
-			print("INFO: Skip fix run: no exceptions found")
-		else:
-			for area in bounds:
-				run_build(area["west"], area["south"], area["east"], area["north"])
-	if build_continue:
-		start_bounds = get_bounds("projects/" + project + "/done")
-		if start_bounds == []:
-			print("No start bounds found. Please rerun without -c")
-			sys.exit(1)
-		project_bounds = get_bounds("projects/" + project + "/settings")
-		if project_bounds == []:
 			print("Unable to read project settings")
 			sys.exit(1)
-		if start_bounds["north"] == project_bounds["north"] and start_bounds["east"] == project_bounds["east"]:
-			print("Project has been build completly. Starting from scratch.")
-			start_bounds = project_bounds
-			run_build(start_bounds[0]["west"], start_bounds[0]["south"], start_bounds[0]["east"], start_bounds[0]["north"], log_done=True)
+		run_build(bounds[0]["west"], bounds[0]["south"], bounds[0]["east"], bounds[0]["north"], log_done=True)
+	else:
+		if build_fix:
+			bounds = get_bounds("projects/" + project + "/osm2city-exceptions.log")
+			if bounds == []:
+				print("INFO: Skip fix run: no exceptions found")
+			else:
+				for area in bounds:
+					run_build(area["west"], area["south"], area["east"], area["north"])
+		if build_continue:
+			start_bounds = get_bounds("projects/" + project + "/done")
+			if start_bounds == []:
+				print("No start bounds found. Please rerun without -c")
+				sys.exit(1)
+			project_bounds = get_bounds("projects/" + project + "/settings")
+			if project_bounds == []:
+				print("Unable to read project settings")
+				sys.exit(1)
+			if start_bounds["north"] == project_bounds["north"] and start_bounds["east"] == project_bounds["east"]:
+				print("Project has been build completly. Starting from scratch.")
+				start_bounds = project_bounds
+				run_build(start_bounds[0]["west"], start_bounds[0]["south"], start_bounds[0]["east"], start_bounds[0]["north"], log_done=True)
 
-		else:
-			pass
-			# TODO move start to the next part. take care if hit east end
+			else:
+				pass
+				# TODO move start to the next part. take care if hit east end
+except KeyboardInterrupt:
+	print("Interrupted by used!")
 
 # Get build time
 end_time = time.time()
