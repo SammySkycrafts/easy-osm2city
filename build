@@ -72,13 +72,23 @@ if project == "":
 def get_bounds(file_path):
 	try:
 		with open(file_path) as f:
-			ret = []
+			hits = []
 			lines = f.readlines()
 			for line in lines:
 				match = re.findall("(-?[0-9]{1,3}\.?[0-9]{0,4})_(-?[0-9]{1,2}\.?[0-9]{0,4})_(-?[0-9]{1,3}\.?[0-9]{0,4})_(-?[0-9]{1,2}\.?[0-9]{0,4})", line)
 				if match != []:
 					bounds = { "west": float(match[0][0]), "south": float(match[0][1]), "east": float(match[0][2]), "north": float(match[0][3]) }
-					ret.append(bounds)
+					hits.append(bounds)
+		# Filter duplicates
+		ret = []
+		ret.append(hits[0])
+		for hit in hits:
+			duplicate = False
+			for coords in ret:
+				if coords == hit:
+					duplicate = True
+			if !duplicate:
+				ret.append(coords)
 		return ret
 	except:
 		print("WARNING: Getting bounds failed")
