@@ -126,13 +126,13 @@ def run_build(west, south, east, north, log_done=False, start_w=None, start_s=No
 
 start_time = time.time()
 
-#TODO add handling of exceptions.log (rename, remove)
 try:
 	if build_all:
 		bounds = get_bounds("projects/" + project + "/settings")
 		if bounds == []:
 			print("Unable to read project settings")
 			sys.exit(1)
+		os.system("rm -f projects/" + project + "/osm2city-exceptions.log"
 		run_build(bounds[0]["west"], bounds[0]["south"], bounds[0]["east"], bounds[0]["north"], log_done=True)
 	else:
 		if build_fix:
