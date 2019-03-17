@@ -5,7 +5,6 @@ And wrapper around [osm2city](https://gitlab.com/fg-radi/osm2city) inspired by e
 ### Getting started
 * Clone the repo (or download the as zip/tar file and unpack it).
 * Then go into the directory, run `./install` and follow the instructions.
-* Run `./create-venv`. This will create a virtual environment and installs all needed python packages.
 * Create a database using `./create-db <database>`.
 * Download the .pbf file for the area you want to build and put it into the `pbf` directory.  
   I recommend to download from [GeoFabrik](http://download.geofabrik.de/).
@@ -20,5 +19,6 @@ And wrapper around [osm2city](https://gitlab.com/fg-radi/osm2city) inspired by e
 Programs that were not covered by `Getting started`:
 * `update-programs`: Will update easy-osm2city, osm2city it self and osm2city-data
 * `clear-cache-files <project>`: Will delete cache files created by osm2city.
+* `./create-venv`. This will create a virtual environment and installs all needed python packages. NOTE: This is run for you by the installer.
 * `edit-settings <project>`: Is a simple way to edit your `params.ini`file (which is used by osm2city to know what and how to generate the scenery).  
   It will make sure, that everything is in the correct format and in the correct datatype.
