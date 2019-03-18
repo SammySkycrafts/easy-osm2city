@@ -71,9 +71,10 @@ case $key in
 			file="$2"
 			shift # past file
 			first=0
+		else
+			echo "Unknown option $key"
+			exit 1
 		fi
-		echo "Unknown option $key"
-		exit 1
 	;;
 esac
 done
