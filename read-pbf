@@ -68,7 +68,7 @@ case $key in
 			shift # past database
 			first=2
 		elif [ "$first" == "2" ]; then
-			file="$2"
+			file="$1"
 			shift # past file
 			first=0
 		else
