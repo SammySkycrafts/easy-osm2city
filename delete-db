@@ -1,0 +1,46 @@
+#! /bin/bash
+# Copyright (C) 2018-2019 Merspieler, merspieler _at_ airmail.cc
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+first=1
+while [[ "$#" -gt 0 ]]
+do
+key="$1"
+
+case $key in
+	-h|--help)
+		echo "usage: delete-db <database> [OPTIONS]"
+		echo "Deletes the database"
+		echo ""
+		echo "OPTIONS"
+		echo "  -h, --help	Shows this help and exit"
+		exit 0
+	;;
+
+	*)
+		if [ $first == "1" ]; then
+			database="$1"
+			shift # past database
+			first=0
+		else
+			echo "Unknown option $key"
+			exit 1
+		fi
+	;;
+esac
+done
+
+time psql --dbname="$database" -c "DROP DATABASE IF EXIST $database"

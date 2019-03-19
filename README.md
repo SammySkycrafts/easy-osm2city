@@ -22,3 +22,4 @@ Programs that were not covered by `Getting started`:
 * `./create-venv`. This will create a virtual environment and installs all needed python packages. NOTE: This is run for you by the installer.
 * `edit-settings <project>`: Is a simple way to edit your `params.ini`file (which is used by osm2city to know what and how to generate the scenery).  
   It will make sure, that everything is in the correct format and in the correct datatype.
+* `./delete-db <database>`: Deletes the database.
