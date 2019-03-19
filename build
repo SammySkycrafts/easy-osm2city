@@ -158,6 +158,7 @@ try:
 	else:
 		if build_fix:
 			bounds = get_bounds("projects/" + project + "/osm2city-exceptions.log")
+			os.system("rm -f projects/" + project + "/osm2city-exceptions.log")
 			if bounds == []:
 				print("INFO: Skip fix run: no exceptions found")
 			else:
