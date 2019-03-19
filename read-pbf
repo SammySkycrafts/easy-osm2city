@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-
+first=1
 while [[ $# -gt 0 ]]
 do
 key="$1"
@@ -63,11 +63,11 @@ case $key in
 		exit 0
 	;;
 	*)
-		if [ $first == "1" ]; then
+		if [ "$first" == "1" ]; then
 			database="$1"
 			shift # past database
 			first=2
-		elif [ $first == "2" ]; then
+		elif [ "$first" == "2" ]; then
 			file="$2"
 			shift # past file
 			first=0
