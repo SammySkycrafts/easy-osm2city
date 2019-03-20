@@ -1,0 +1,11 @@
+{
+	"extracts":
+	[
+		{
+			"output": "test.osm.pbf",
+			"output_format": "pbf",
+			"bbox": [14,45,15,46]
+		}
+	],
+	"directory": "."
+}
