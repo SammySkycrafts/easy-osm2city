@@ -17,7 +17,7 @@
 			"bbox": [-180,0,0,89]
 		},
 		{
-			"output": "sw-hemi.osm.org",
+			"output": "sw-hemi.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [-180,-89,0,0]
 		},
