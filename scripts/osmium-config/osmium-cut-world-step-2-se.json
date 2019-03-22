@@ -1,0 +1,26 @@
+{
+	"extracts":
+	[
+		{
+			"output": "se-ne-hemi.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [90,-40,180,0]
+		},
+		{
+			"output": "se-nw-hemi.osm.pbf",
+			"output-forumat": "pbf",
+			"bbox": [0,-40,90,0]
+		},
+		{
+			"output": "se-se-hemi.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [90,-80,180,-40]
+		},
+		{
+			"output": "se-sw-hemi.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [0,-80,90,-40]
+		},
+	],
+	"directory": "."
+}
