@@ -2,65 +2,15 @@
 	"extracts":
 	[
 		{
-			"output": "e060n80.osm.pbf",
+			"output": "ne-nw-3-s.osm.pbf",
 			"output-format": "pbf",
-			"bbox": [60,70,70,80]
+			"bbox": [60,40,90,60]
 		},
 		{
-			"output": "e070n80.osm.pbf",
+			"output": "ne-nw-3-n.osm.pbf",
 			"output-format": "pbf",
-			"bbox": [70,70,80,80]
-		},
-		{
-			"output": "e080n80.osm.pbf",
-			"output-format": "pbf",
-			"bbox": [80,70,90,80]
-		},
-		{
-			"output": "e060n70.osm.pbf",
-			"output-format": "pbf",
-			"bbox": [60,60,70,70]
-		},
-		{
-			"output": "e070n70.osm.pbf",
-			"output-format": "pbf",
-			"bbox": [70,60,80,70]
-		},
-		{
-			"output": "e080n70.osm.pbf",
-			"output-format": "pbf",
-			"bbox": [80,60,90,70]
-		},
-		{
-			"output": "e060n60.osm.pbf",
-			"output-format": "pbf",
-			"bbox": [60,50,70,60]
-		},
-		{
-			"output": "e070n60.osm.pbf",
-			"output-format": "pbf",
-			"bbox": [70,50,80,60]
-		},
-		{
-			"output": "e080n60.osm.pbf",
-			"output-format": "pbf",
-			"bbox": [80,50,90,60]
-		},
-		{
-			"output": "e060n50.osm.pbf",
-			"output-format": "pbf",
-			"bbox": [60,40,70,50]
-		},
-		{
-			"output": "e070n50.osm.pbf",
-			"output-format": "pbf",
-			"bbox": [70,40,80,50]
-		},
-		{
-			"output": "e080n50.osm.pbf",
-			"output-format": "pbf",
-			"bbox": [80,40,90,50]
+			"bbox": [60,60,90,80]
 		},
 	],
-	"directory": "./output"
+	"directory": "."
 }

@@ -12,5 +12,5 @@
 			"bbox": [0,60,30,80]
 		},
 	],
-	"directory": "./output"
+	"directory": "."
 }
