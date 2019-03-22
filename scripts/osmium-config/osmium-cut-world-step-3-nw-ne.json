@@ -1,0 +1,21 @@
+{
+	"extracts":
+	[
+		{
+			"output": "nw-ne-1-hemi.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-90,40,-60,80]
+		},
+		{
+			"output": "nw-ne-2-hemi.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-60,40,-30,80]
+		},
+		{
+			"output": "nw-ne-3-hemi.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-30,40,0,80]
+		},
+	],
+	"directory": "."
+}
