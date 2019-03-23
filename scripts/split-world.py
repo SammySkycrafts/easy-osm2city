@@ -9,10 +9,11 @@ state4 = ['nw', 'ne', 'sw', 'se']
 state2 = ['s', 'n']
 
 def run_cut(path, name, start_file=None):
+	print("Building: " + name + "...")
 	if start_file != None:
-		os.system("time osmium extract -c " + path + name + ".json " + start_file + " --overwrite")
+		os.system("osmium extract -c " + path + name + ".json " + start_file + " --overwrite")
 	else:
-		os.system("time osmium extract -c " + path + name + ".json " + name + "osm.pbf --overwrite")
+		os.system("osmium extract -c " + path + name + ".json " + name + "osm.pbf --overwrite")
 
 run_cut(config_path + prefix, "1", world_file)
 con_pre = config_path + prefix
