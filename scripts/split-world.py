@@ -10,7 +10,7 @@ state2 = ['s', 'n']
 
 def run_cut(path, step, name, start_file=None):
 	if start_file != None:
-		print("Splitting world in 4..."
+		print("Splitting world in 4...")
 		ret = os.system("osmium extract -c " + path + name + ".json " + start_file + " --overwrite")
 		if ret == 0:
 			os.system("mv n-pole.osm.pbf output/")
