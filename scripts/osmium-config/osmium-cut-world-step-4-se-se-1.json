@@ -1,0 +1,16 @@
+{
+	"extracts":
+	[
+		{
+			"output": "se-se-1-s.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [90,-80,120,-60]
+		},
+		{
+			"output": "se-se-1-n.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [90,-60,120,-40]
+		},
+	],
+	"directory": "."
+}

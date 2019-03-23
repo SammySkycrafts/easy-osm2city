@@ -1,0 +1,16 @@
+{
+	"extracts":
+	[
+		{
+			"output": "ne-sw-1-s.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [0,0,30,20]
+		},
+		{
+			"output": "ne-sw-1-n.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [0,20,30,40]
+		},
+	],
+	"directory": "."
+}
