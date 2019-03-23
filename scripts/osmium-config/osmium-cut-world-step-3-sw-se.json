@@ -2,17 +2,17 @@
 	"extracts":
 	[
 		{
-			"output": "sw-se-1-hemi.osm.pbf",
+			"output": "sw-se-1.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [-90,-80,-60,-40]
 		},
 		{
-			"output": "sw-se-2-hemi.osm.pbf",
+			"output": "sw-se-2.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [-60,-80,-30,-40]
 		},
 		{
-			"output": "sw-se-3-hemi.osm.pbf",
+			"output": "sw-se-3.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [-30,-80,0,-40]
 		},

@@ -2,22 +2,22 @@
 	"extracts":
 	[
 		{
-			"output": "nw-ne-hemi.osm.pbf",
+			"output": "nw-ne.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [-90,40,0,80]
 		},
 		{
-			"output": "nw-nw-hemi.osm.pbf",
+			"output": "nw-nw.osm.pbf",
 			"output-forumat": "pbf",
 			"bbox": [-180,40,-90,80]
 		},
 		{
-			"output": "nw-se-hemi.osm.pbf",
+			"output": "nw-se.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [-90,0,0,40]
 		},
 		{
-			"output": "nw-sw-hemi.osm.pbf",
+			"output": "nw-sw.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [-180,0,-90,40]
 		},

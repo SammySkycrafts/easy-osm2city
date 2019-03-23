@@ -2,17 +2,17 @@
 	"extracts":
 	[
 		{
-			"output": "ne-ne-1-hemi.osm.pbf",
+			"output": "ne-ne-1.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [90,40,120,80]
 		},
 		{
-			"output": "ne-ne-2-hemi.osm.pbf",
+			"output": "ne-ne-2.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [120,40,150,80]
 		},
 		{
-			"output": "ne-ne-3-hemi.osm.pbf",
+			"output": "ne-ne-3.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [150,40,180,80]
 		},
