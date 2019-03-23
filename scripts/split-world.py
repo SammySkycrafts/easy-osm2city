@@ -19,7 +19,7 @@ def run_cut(path, step, name, start_file=None):
 		print("Building: " + name + "...")
 		os.system("osmium extract -c " + path + str(step) + "-" + name + ".json " + name + ".osm.pbf --overwrite")
 
-run_cut(config_path + prefix, 1, "", world_file)
+run_cut(config_path + prefix, 1, "1", world_file)
 con_pre = config_path + prefix
 for i in range(0, len(state4)):
 	run_cut(con_pre, 2, state4[i])
