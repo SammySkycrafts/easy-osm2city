@@ -13,7 +13,7 @@ def run_cut(path, name, start_file=None):
 	if start_file != None:
 		os.system("osmium extract -c " + path + name + ".json " + start_file + " --overwrite")
 	else:
-		os.system("osmium extract -c " + path + name + ".json " + name + "osm.pbf --overwrite")
+		os.system("osmium extract -c " + path + name + ".json " + name + ".osm.pbf --overwrite")
 
 run_cut(config_path + prefix, "1", world_file)
 con_pre = config_path + prefix
