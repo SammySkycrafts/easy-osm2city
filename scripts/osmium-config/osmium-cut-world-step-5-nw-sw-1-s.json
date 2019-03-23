@@ -1,0 +1,36 @@
+{
+	"extracts":
+	[
+		{
+			"output": "w160n20.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-160,10,-150,20]
+		},
+		{
+			"output": "w170n20.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-170,10,-160,20]
+		},
+		{
+			"output": "w180n20.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-180,10,-170,20]
+		},
+		{
+			"output": "w160n10.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-160,0,-150,10]
+		},
+		{
+			"output": "w170n10.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-170,0,-160,10]
+		},
+		{
+			"output": "w180n10.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-180,0,-170,10]
+		},
+	],
+	"directory": "./output"
+}

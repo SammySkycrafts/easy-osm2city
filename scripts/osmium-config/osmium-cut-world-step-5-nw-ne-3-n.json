@@ -1,0 +1,36 @@
+{
+	"extracts":
+	[
+		{
+			"output": "w010n80.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-10,70,-0,80]
+		},
+		{
+			"output": "w020n80.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-20,70,-10,80]
+		},
+		{
+			"output": "w030n80.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-30,70,-20,80]
+		},
+		{
+			"output": "w010n70.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-10,60,-0,70]
+		},
+		{
+			"output": "w020n70.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-20,60,-10,70]
+		},
+		{
+			"output": "w030n70.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [-30,60,-20,70]
+		},
+	],
+	"directory": "./output"
+}

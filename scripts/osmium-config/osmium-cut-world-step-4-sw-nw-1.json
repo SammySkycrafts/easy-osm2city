@@ -4,12 +4,12 @@
 		{
 			"output": "sw-nw-1-s.osm.pbf",
 			"output-format": "pbf",
-			"bbox": [-180,-40,-120,-20]
+			"bbox": [-180,-40,-150,-20]
 		},
 		{
 			"output": "sw-nw-1-n.osm.pbf",
 			"output-format": "pbf",
-			"bbox": [-180,-20,-120,0]
+			"bbox": [-180,-20,-150,0]
 		},
 	],
 	"directory": "."

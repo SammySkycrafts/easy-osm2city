@@ -1,0 +1,36 @@
+{
+	"extracts":
+	[
+		{
+			"output": "e000s20.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [0,-30,10,-20]
+		},
+		{
+			"output": "e010s20.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [10,-30,20,-20]
+		},
+		{
+			"output": "e020s20.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [20,-30,30,-20]
+		},
+		{
+			"output": "e000s30.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [0,-40,10,-30]
+		},
+		{
+			"output": "e010s30.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [10,-40,20,-30]
+		},
+		{
+			"output": "e020s30.osm.pbf",
+			"output-format": "pbf",
+			"bbox": [20,-40,30,-30]
+		},
+	],
+	"directory": "./output"
+}
