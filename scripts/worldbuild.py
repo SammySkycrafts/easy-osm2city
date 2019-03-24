@@ -25,7 +25,8 @@ def after_build(name):
 		os.system("mv projects/worldbuild/osm2city-exceptions.log projects/worldbuild/output/error/" + name + ".exceptions.log")
 	else:
 		os.system("mv projects/worldbuild/worldbuild.zip projects/worldbuild/output/" + name + ".zip")
-	os.system("rm -r projects/worldbuild/scenery/*"
+	os.system("rm -r projects/worldbuild/scenery/*")
+	os.system("./clear-cache-files worldbuild")
 
 def prepare():
 	os.system("./delete-db worldbuild")
