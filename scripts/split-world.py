@@ -29,6 +29,6 @@ for i in range(0, len(state4)):
 			run_cut(con_pre, 4, state4[i] + "-" + state4[j] + "-" + str(k))
 			for l in range(0, len(state2)):
 				run_cut(con_pre, 5, state4[i] + "-" + state4[j] + "-" + str(k) + "-" + state2[l])
-
-print("Removing temporary files...")
-os.systemc("rm n* s*")
+			os.system("rm " + state4[i] + "-" + state4[j] + "-" + str(k) + ".osm.pbf")
+		os.system("rm " + state4[i] + "-" + state4[j] + ".osm.pbf")
+	os.system("rm " + state4[i] + ".osm.pbf")
