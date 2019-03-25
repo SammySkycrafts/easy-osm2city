@@ -37,7 +37,7 @@ while i < argc:
 						wm = w % 10
 						nm = n % 10
 
-						if nm = 0:
+						if nm == 0:
 							wm += 1
 
 						tile = wm * 10 + nm
