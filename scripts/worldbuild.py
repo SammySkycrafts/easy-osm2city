@@ -18,6 +18,7 @@
 import os
 import sys
 import math
+import re
 
 argc = len(sys.argv)
 i = 1
