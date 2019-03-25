@@ -29,11 +29,11 @@ while i < argc:
 			with open("projects/worldbuild/done") as f:
 				lines = f.readlines()
 				for line in lines:
-					match = re.findall("(-?[0-9]{1,3})_-?[0-9]{1,3}_-?[0-9]{1,3}_(-?[0-9]{1,3})", line)
+					match = re.findall("(-?[0-9]{1,3}\.?[0-9]{0,4})_-?[0-9]{1,3}\.?[0-9]{0,4}_-?[0-9]{1,3}\.?[0-9]{0,4}_(-?[0-9]{1,3}\.?[0-9]{0,4})", line)
 					if match != []:
 
-						n = int(match[0][1])
-						w = int(match[0][0])
+						n = float(match[0][1])
+						w = float(match[0][0])
 
 						wm = w % 10
 						nm = n % 10
