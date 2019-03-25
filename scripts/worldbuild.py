@@ -28,7 +28,7 @@ while i < argc:
 			with open("projects/worldbuild/done") as f:
 				lines = f.readlines()
 				for line in lines:
-					match = re.findall("(-?[0-9]{1,3})_-?[0-9]{1,3}_-?[0-9]{1,3}_(-?[0-9]{1,3})", line
+					match = re.findall("(-?[0-9]{1,3})_-?[0-9]{1,3}_-?[0-9]{1,3}_(-?[0-9]{1,3})", line)
 					if match != []:
 
 						n = int(match[0][1])
