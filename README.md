@@ -23,3 +23,6 @@ Programs that were not covered by `Getting started`:
 * `edit-settings <project>`: Is a simple way to edit your `params.ini`file (which is used by osm2city to know what and how to generate the scenery).  
   It will make sure, that everything is in the correct format and in the correct datatype.
 * `./delete-db <database>`: Deletes the database.
+
+## User scripts
+User scripts in the `scripts/` directory are help scripts contributed by users. They Do not belong to the easy-osm2city concept but extend it. Use only if you know what you do.

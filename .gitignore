@@ -22,3 +22,6 @@ projects/
 
 # Database reminder
 .databases
+
+# Ignore scripts/ content
+scripts/*
