@@ -38,12 +38,22 @@ while i < argc:
 						wm = w % 10
 						nm = n % 10
 
+						wM = (int(w) - wm) / 10
+						nM = (int(n) - nm) / 10
+
 						if nm == 0:
 							wm += 1
 
 						tile = wm * 10 + nm
 
-#						print("Worldbuild " + world + "% complete")
+						rows = 0
+						while nM > -8:
+							rows += 1
+							nM -= 1
+
+						world = 2 + 36 * rows + wM + 18
+
+						print("Current worldbuild tile is " + str(int(world)) + "/578")
 						print("Current tile " + str(tile) + "% complete")
 						sys.exit(0)
 					else:
@@ -114,7 +124,7 @@ run_all("s-pole", -180, -90, 180, -80)
 
 for i in range(-8, 8):
 	i *= 10
-	for j in range(-18, 18):
+	for j in range(-18, 17):
 		j *= 10
 		if i >= 0:
 			ns = "n"
