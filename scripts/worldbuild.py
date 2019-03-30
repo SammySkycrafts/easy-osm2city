@@ -46,12 +46,18 @@ while i < argc:
 
 						tile = wm * 10 + nm
 
-						rows = 0
-						while nM > -8:
-							rows += 1
-							nM -= 1
+						if abs(n) > 80:
+							if n > 0:
+								world = 1
+							else:
+								world = 2
+						else:
+							rows = 0
+							while nM > -8:
+								rows += 1
+								nM -= 1
 
-						world = 2 + 36 * rows + wM + 18
+							world = 2 + 36 * rows + wM + 18
 
 						print("Current worldbuild tile is " + str(int(world)) + "/578")
 						print("Current tile " + str(tile) + "% complete")
