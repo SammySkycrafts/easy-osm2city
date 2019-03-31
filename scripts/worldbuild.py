@@ -99,13 +99,14 @@ def build_tile(name, west, south, east, north):
 
 	os.system("./read-pbf worldbuild " + pbf_path + name + ".osm.pbf")
 	os.system('echo "bounds=' + west + "_" + south + "_" + east + "_" + north + '" > projects/settings')
-	os.system("./build worldbuild -z")
+	os.system("./build worldbuild")
 
 def after_build(name):
 	if os.path.isfile("projects/worldbuild/osm2city-exceptions.log"):
 		os.system("mv projects/worldbuild/osm2city-exceptions.log projects/worldbuild/output/error/" + name + ".exceptions.log")
+		os.system("zip -rq projects/worldbuild/output/error/" + name + ".zip projects/worldbuild/scenery/ ")
 	else:
-		os.system("mv projects/worldbuild/worldbuild.zip projects/worldbuild/output/" + name + ".zip")
+		os.system("zip -rq projects/worldbuild/output/" + name + ".zip projects/worldbuild/scenery/ ")
 	os.system("rm -r projects/worldbuild/scenery/*")
 	os.system("./clear-cache-files worldbuild")
 
