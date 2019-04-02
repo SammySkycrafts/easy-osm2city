@@ -33,7 +33,7 @@ project = ""
 while i < argc:
 	if sys.argv[i] == "-t" or sys.argv[i] == "--threads":
 		i += 1
-		man_threads = "-t sys.argv[i]"
+		man_threads = "-t " + sys.argv[i]
 	elif sys.argv[i] == "-z" or sys.argv[i] == "--zip":
 		create_zip = True
 	elif sys.argv[i] == "-c" or sys.argv[i] == "--continue":
