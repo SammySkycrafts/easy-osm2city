@@ -85,8 +85,15 @@ while i < argc:
 			sys.exit(1)
 	i += 1
 
-# Expecting project
-os.system("mkdir -p projects/worldbuild/output/error")
+def run(command):
+	exit_code = os.system(command)
+	if exit_code == 0:
+		return
+	elif exit_code == 130
+		print("Aborted!")
+		sys.exit(130)
+
+run("mkdir -p projects/worldbuild/output/error")
 
 def build_tile(name, west, south, east, north):
 	if west < 0:
@@ -97,22 +104,22 @@ def build_tile(name, west, south, east, north):
 	east = str(east)
 	north = str(north)
 
-	os.system("./read-pbf worldbuild " + pbf_path + name + ".osm.pbf")
-	os.system('echo "bounds=' + west + "_" + south + "_" + east + "_" + north + '" > projects/settings')
-	os.system("./build worldbuild")
+	run("./read-pbf worldbuild " + pbf_path + name + ".osm.pbf")
+	run('echo "bounds=' + west + "_" + south + "_" + east + "_" + north + '" > projects/settings')
+	run("./build worldbuild")
 
 def after_build(name):
 	if os.path.isfile("projects/worldbuild/osm2city-exceptions.log"):
-		os.system("mv projects/worldbuild/osm2city-exceptions.log projects/worldbuild/output/error/" + name + ".exceptions.log")
-		os.system("zip -rq projects/worldbuild/output/error/" + name + ".zip projects/worldbuild/scenery/ ")
+		run("mv projects/worldbuild/osm2city-exceptions.log projects/worldbuild/output/error/" + name + ".exceptions.log")
+		run("zip -rq projects/worldbuild/output/error/" + name + ".zip projects/worldbuild/scenery/ ")
 	else:
-		os.system("zip -rq projects/worldbuild/output/" + name + ".zip projects/worldbuild/scenery/ ")
-	os.system("rm -r projects/worldbuild/scenery/*")
-	os.system("./clear-cache-files worldbuild")
+		run("zip -rq projects/worldbuild/output/" + name + ".zip projects/worldbuild/scenery/ ")
+	run("rm -r projects/worldbuild/scenery/*")
+	run("./clear-cache-files worldbuild")
 
 def prepare():
-	os.system("./delete-db worldbuild")
-	os.system("./create-db worldbuild")
+	run("./delete-db worldbuild")
+	run("./create-db worldbuild")
 
 def run_all(name, w, s, e, n):
 	prepare()
