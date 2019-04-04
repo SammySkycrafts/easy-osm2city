@@ -54,4 +54,5 @@ if [ $? == 1 ]; then
 	echo "shapely"
 	echo "psycopg2-binary"
 	echo "NOTE: use 'source venv/bin/activate' before you install the packages"
+	exit 3
 fi

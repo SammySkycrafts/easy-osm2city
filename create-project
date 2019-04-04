@@ -56,12 +56,12 @@ fi
 source general-settings > /dev/null
 if [ $? == 1 ]; then
         echo "Couldn't find the general settings. Please run ./install first."
-        exit 1
+        exit 2
 fi
 
 if [ ! -f ".databases" ]; then
 	echo "There are no databases created by easy-osm2city. Please create one by running ./create-db"
-	exit 1
+	exit 2
 fi
 
 echo "Which database do you want to use?"
@@ -70,7 +70,7 @@ cat .databases | grep -e "$db_name" > /dev/null
 if [ $? == 1 ]; then
 	echo "Database doesn't exsist. Please choose a different database or create one by running"
 	echo "./create-db -d $db_name"
-	exit 1
+	exit 2
 fi
 
 mkdir -p "projects/$project/scenery"

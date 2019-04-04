@@ -24,5 +24,12 @@ Programs that were not covered by `Getting started`:
   It will make sure, that everything is in the correct format and in the correct datatype.
 * `./delete-db <database>`: Deletes the database.
 
+## Return codes
+* 0: Success
+* 1: Argument error
+* 2: IO error. An error with a file or database
+* 3: Child process failed/can not be called
+* 130: Aborted by user.
+
 ## User scripts
 User scripts in the `scripts/` directory are help scripts contributed by users. They Do not belong to the easy-osm2city concept but extend it. Use only if you know what you do.

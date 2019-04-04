@@ -72,7 +72,7 @@ if [ "$skip_install" != 1 ]; then
 		echo "git"
 		echo "Then rerun this script with skip-install argument"
 		echo "./install --skip-install"
-		exit 1
+		exit 3
 	fi
 	sudo apt-get install -y git osmosis postgis pgadmin3 postgresql-contrib postgresql-client postgresql-postgis postgresql python-pip python3-venv
 	if [ $? == 100 ]; then
@@ -91,7 +91,7 @@ if [ "$skip_install" != 1 ]; then
 		echo "git"
 		echo "Then rerun this script with skip-install argument"
 		echo "./install --skip-install"
-		exit 1
+		exit 3
 	fi
 fi
 
@@ -102,7 +102,7 @@ if [ "$skip_git" != 1 ]; then
 		echo "https://gitlab.com/fg-radi/osm2city"
 		echo "https://gitlab.com/fg-radi/osm2city-data"
 		echo "Unzip them in this directory and make sure, the are named osm2city and osm2city-data"
-		exit 1
+		exit 3
 	fi
 	git clone https://gitlab.com/fg-radi/osm2city.git
 	git clone https://gitlab.com/fg-radi/osm2city-data.git

@@ -68,7 +68,7 @@ if project == "":
 
 if os.path.isfile("projects/" + project + "/params.ini") == False:
 	print("Project '" + project + "' not found")
-	sys.exit(1)
+	sys.exit(2)
 
 console_height, console_width = os.popen('stty size', 'r').read().split()
 
@@ -116,7 +116,7 @@ try:
 						option["value"] = int(value)
 except:
 	print("A problem occured while reading the params.ini file...")
-	sys.exit(1)
+	sys.exit(2)
 finally:
 	ini_file.close()
 
