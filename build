@@ -149,6 +149,9 @@ def run_command(command):
 	exit_code = os.system(command)
 	if exit_code == 0:
 		return
+	elif exit_code == 1:
+		print("An argument problem occured while running '" + command + "'")
+		sys.exit(1)
 	elif exit_code == 130:
 		print("Interrupted by user. Aborting...")
 		sys.exit(130)
