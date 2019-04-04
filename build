@@ -133,7 +133,7 @@ def run_build(west, south, east, north, log_done=False, start_w=None, start_s=No
 			if build_n > north:
 				build_n = north
 
-			os.system("bash build_tile " + project + " " + man_threads + " -b " + str(build_w) + "_" + str(build_s) + "_" + str(build_e) + "_" + str(build_n))
+			run_command("bash build_tile " + project + " " + man_threads + " -b " + str(build_w) + "_" + str(build_s) + "_" + str(build_e) + "_" + str(build_n))
 
 			if log_done:
 				try:
@@ -145,6 +145,14 @@ def run_build(west, south, east, north, log_done=False, start_w=None, start_s=No
 			s += 1
 		w += 1
 
+def run_command(command):
+	exit_code = os.system(command)
+	if exit_code == 0:
+		return
+	elif exit_code == 130:
+		print("Interrupted by user. Aborting...")
+		sys.exit(0)
+
 start_time = time.time()
 
 try:
@@ -153,12 +161,12 @@ try:
 		if bounds == []:
 			print("Unable to read project settings")
 			sys.exit(1)
-		os.system("rm -f projects/" + project + "/osm2city-exceptions.log")
+		run_command("rm -f projects/" + project + "/osm2city-exceptions.log")
 		run_build(bounds[0]["west"], bounds[0]["south"], bounds[0]["east"], bounds[0]["north"], log_done=True)
 	else:
 		if build_fix:
 			bounds = get_bounds("projects/" + project + "/osm2city-exceptions.log")
-			os.system("rm -f projects/" + project + "/osm2city-exceptions.log")
+			run_command("rm -f projects/" + project + "/osm2city-exceptions.log")
 			if bounds == []:
 				print("INFO: Skip fix run: no exceptions found")
 			else:
@@ -207,4 +215,4 @@ if os.path.isfile("projects/" + project + "/osm2city-exceptions.log"):
 	print("If you want to rebuild only failed tiles, run with the -f parameter")
 elif create_zip == True:
 		print("Creating zip file...")
-		os.system("zip -rq projects/" + project + "/" + project + ".zip projects/" + project + "/scenery/")
+		run_command("zip -rq projects/" + project + "/" + project + ".zip projects/" + project + "/scenery/")
