@@ -95,7 +95,7 @@ def get_bounds(file_path):
 		return []
 
 
-def run_build(west, south, east, north, log_done=False, start_w=None, start_s=None):
+def run_build(west, south, east, north, log_done=False, start_w=None, start_s=None, chunk_size=1):
 	width = ceil(east - west)
 	height = ceil(north - south)
 
@@ -115,7 +115,7 @@ def run_build(west, south, east, north, log_done=False, start_w=None, start_s=No
 
 	while w < width:
 		build_w = west + w
-		build_e = build_w + 1
+		build_e = build_w + chunk_size
 		if build_e > east:
 			build_e = east
 
@@ -129,7 +129,7 @@ def run_build(west, south, east, north, log_done=False, start_w=None, start_s=No
 
 		while s < height:
 			build_s = south + s
-			build_n = build_s + 1
+			build_n = build_s + chunk_size
 			if build_n > north:
 				build_n = north
 
@@ -186,13 +186,11 @@ try:
 				sys.exit(2)
 			start_bounds = start_bounds[0]
 			project_bounds = project_bounds[0]
+			chunks = start_bounds[0]["east"] - start_bounds[0]["west"]
 			if start_bounds["north"] == project_bounds["north"] and start_bounds["east"] == project_bounds["east"]:
-				print("Project has been build completly. Starting from scratch.")
-				start_bounds = project_bounds
-				run_build(run_build["west"], start_bounds["south"], start_bounds["east"], start_bounds["north"], log_done=True)
-
+				print("It seems like the project build is complete. If you wish to rerun please do so without -c")
 			else:
-				run_build(run_build["west"], project_bounds["south"], project_bounds["east"], project_bounds["north"], log_done=True, start_w=start_bounds["east"], start_s=start_bounds["south"])
+				run_build(run_build["west"], project_bounds["south"], project_bounds["east"], project_bounds["north"], log_done=True, start_w=start_bounds["east"], start_s=start_bounds["south"], chunk_size=chunks)
 except KeyboardInterrupt:
 	print("Interrupted by user!")
 
