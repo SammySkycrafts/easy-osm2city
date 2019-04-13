@@ -30,6 +30,7 @@ build_fix = False
 build_continue = False
 man_threads = ""
 project = ""
+chunk_size = 1
 while i < argc:
 	if sys.argv[i] == "-t" or sys.argv[i] == "--threads":
 		i += 1
@@ -42,18 +43,23 @@ while i < argc:
 	elif sys.argv[i] == "-f" or sys.argv[i] == "--fix":
 		build_all = False
 		build_fix = True
+	elif sys.argv[i] == "-S" or sys.argv[i] == "--chunk-size":
+		i += 1
+		chunk_size = sys.argv[i]
 	elif sys.argv[i] == "-h" or sys.argv[i] == "--help":
 		print("usage: build <project> [OPTIONS]")
 		print("Builds the tiles with osm2city")
 		print("")
 		print("OPTIONS")
-		print("  -h, --help      Shows this help and exit")
-		print("  -t, --threads   Number of threads used for building")
-		print("                  This will overwrite the value from the general-settings file")
-		print("  -z, --zip       Create a ready to distribute zip file on success")
+		print("  -h, --help        Shows this help and exit")
+		print("  -t, --threads     Number of threads used for building")
+		print("                    This will overwrite the value from the general-settings file")
+		print("  -z, --zip         Create a ready to distribute zip file on success")
+		print("  -S, --chunk-size  Chunks in which the scenery is build.")
+		print("                    Smaller numbers allow better continuation on interruption")
 		print("")
-		print("  -c, --continue  Continue interrupted build")
-		print("  -f, --fix       Try to rebuild tiles wich had exceptions in the previous run")
+		print("  -c, --continue    Continue interrupted build")
+		print("  -f, --fix         Try to rebuild tiles wich had exceptions in the previous run")
 		sys.exit(0)
 	else:
 		if first == 1:
