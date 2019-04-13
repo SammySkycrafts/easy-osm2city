@@ -89,7 +89,7 @@ def run(command):
 	exit_code = os.system(command)
 	if exit_code == 0:
 		return
-	elif exit_code == 130
+	elif exit_code == 130:
 		print("Aborted!")
 		sys.exit(130)
 
