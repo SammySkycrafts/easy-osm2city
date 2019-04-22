@@ -136,9 +136,9 @@ def norm(num, length):
 run_all("n-pole", -180, 80, 180, 90)
 run_all("s-pole", -180, -90, 180, -80)
 
-for i in range(-8, 8):
+for i in range(-7, 9):
 	i *= 10
-	for j in range(-18, 17):
+	for j in range(-18, 18):
 		j *= 10
 		if i >= 0:
 			ns = "n"
@@ -149,7 +149,7 @@ for i in range(-8, 8):
 		else:
 			ew = "w"
 
-		name = ew + norm(j, 3) + ns + norm(i, 2)
+		name = ew + norm(abs(j), 3) + ns + norm(abs(i), 2)
 
 		run_all(name, j, i, j + 10, i + 10)
 
