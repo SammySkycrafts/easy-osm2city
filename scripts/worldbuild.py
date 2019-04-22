@@ -106,7 +106,7 @@ def build_tile(name, west, south, east, north):
 
 	run("./read-pbf worldbuild " + pbf_path + name + ".osm.pbf")
 	run('echo "bounds=' + west + "_" + south + "_" + east + "_" + north + '" > projects/settings')
-	run("./build worldbuild")
+	run("./build worldbuild --chunk-size 5")
 
 def after_build(name):
 	if os.path.isfile("projects/worldbuild/osm2city-exceptions.log"):
