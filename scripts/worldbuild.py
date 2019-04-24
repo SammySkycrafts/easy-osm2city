@@ -112,8 +112,17 @@ def after_build(name):
 	if os.path.isfile("projects/worldbuild/osm2city-exceptions.log"):
 		run("mv projects/worldbuild/osm2city-exceptions.log projects/worldbuild/output/error/" + name + ".exceptions.log")
 		run("zip -rq projects/worldbuild/output/error/" + name + ".zip projects/worldbuild/scenery/ ")
+
+		# Trigger failed after build script
+		if os.path.isfile("./scripts/afterbuild-failed.sh"):
+			os.system("./scripts/afterbuild-failed.sh &")
 	else:
 		run("zip -rq projects/worldbuild/output/" + name + ".zip projects/worldbuild/scenery/ ")
+
+		# Trigger after build script
+		if os.path.isfile("./scripts/afterbuild-success.sh"):
+			os.system("./scripts/afterbuild-success.sh &")
+
 	run("rm -r projects/worldbuild/scenery/*")
 	run("./clear-cache-files worldbuild")
 
