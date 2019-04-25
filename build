@@ -148,8 +148,8 @@ def run_build(west, south, east, north, log_done=False, start_w=None, start_s=No
 					f.close()
 				except:
 					print("WARNING: Writing done file failed")
-			s += 1
-		w += 1
+			s += chunk_size
+		w += chunk_size
 
 def run_command(command):
 	exit_code = os.system(command)
