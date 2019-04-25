@@ -29,6 +29,7 @@ Programs that were not covered by `Getting started`:
 * 1: Argument error
 * 2: IO error. An error with a file or database
 * 3: Child process failed/can not be called
+* 4: Unknown error
 * 130: Aborted by user.
 
 ## User scripts
