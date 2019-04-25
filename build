@@ -39,7 +39,7 @@ while i < argc:
 		create_zip = True
 	elif sys.argv[i] == "-c" or sys.argv[i] == "--continue":
 		build_all = False
-		build_continue == True
+		build_continue = True
 	elif sys.argv[i] == "-f" or sys.argv[i] == "--fix":
 		build_all = False
 		build_fix = True
@@ -181,6 +181,7 @@ try:
 			else:
 				for area in bounds:
 					run_build(area["west"], area["south"], area["east"], area["north"])
+
 		if build_continue:
 			start_bounds = get_bounds("projects/" + project + "/done")
 			if start_bounds == []:
