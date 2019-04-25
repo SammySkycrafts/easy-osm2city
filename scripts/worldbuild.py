@@ -114,14 +114,14 @@ def after_build(name):
 		run("zip -rq projects/worldbuild/output/error/" + name + ".zip projects/worldbuild/scenery/ ")
 
 		# Trigger failed after build script
-		if os.path.isfile("./scripts/afterbuild-failed.sh"):
-			os.system("./scripts/afterbuild-failed.sh &")
+		if os.path.isfile("./scripts/afterbuild-failed"):
+			os.system("./scripts/afterbuild-failed " + name + " &")
 	else:
 		run("zip -rq projects/worldbuild/output/" + name + ".zip projects/worldbuild/scenery/ ")
 
 		# Trigger after build script
-		if os.path.isfile("./scripts/afterbuild-success.sh"):
-			os.system("./scripts/afterbuild-success.sh &")
+		if os.path.isfile("./scripts/afterbuild-success"):
+			os.system("./scripts/afterbuild-success " + name + " &")
 
 	run("rm -r projects/worldbuild/scenery/*")
 	run("./clear-cache-files worldbuild")
