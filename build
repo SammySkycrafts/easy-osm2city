@@ -197,7 +197,7 @@ try:
 			if start_bounds["north"] == project_bounds["north"] and start_bounds["east"] == project_bounds["east"]:
 				print("It seems like the project build is complete. If you wish to rerun please do so without -c")
 			else:
-				run_build(run_build["west"], project_bounds["south"], project_bounds["east"], project_bounds["north"], log_done=True, start_w=start_bounds["east"], start_s=start_bounds["south"], chunk_size=chunks)
+				run_build(project_bounds["west"], project_bounds["south"], project_bounds["east"], project_bounds["north"], log_done=True, start_w=start_bounds["east"], start_s=start_bounds["south"], chunk_size=chunks)
 except KeyboardInterrupt:
 	print("Interrupted by user!")
 	sys.exit(130)
