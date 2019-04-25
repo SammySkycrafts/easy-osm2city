@@ -2,32 +2,32 @@
 	"extracts":
 	[
 		{
-			"output": "e150n00.osm.pbf",
+			"output": "e150s10.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [150,-10,160,0]
 		},
 		{
-			"output": "e160n00.osm.pbf",
+			"output": "e160s10.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [160,-10,170,0]
 		},
 		{
-			"output": "e170n00.osm.pbf",
+			"output": "e170s10.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [170,-10,180,0]
 		},
 		{
-			"output": "e150s10.osm.pbf",
+			"output": "e150s20.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [150,-20,160,-10]
 		},
 		{
-			"output": "e160s10.osm.pbf",
+			"output": "e160s20.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [160,-20,170,-10]
 		},
 		{
-			"output": "e170s10.osm.pbf",
+			"output": "e170s20.osm.pbf",
 			"output-format": "pbf",
 			"bbox": [170,-20,180,-10]
 		},

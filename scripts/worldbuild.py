@@ -142,10 +142,11 @@ def norm(num, length):
 	return num
 
 # Build poles first
+# TODO use chunksize 180 for poles
 run_all("n-pole", -180, 80, 180, 90)
 run_all("s-pole", -180, -90, 180, -80)
 
-for i in range(-7, 9):
+for i in range(-8, 8):
 	i *= 10
 	for j in range(-18, 18):
 		j *= 10
