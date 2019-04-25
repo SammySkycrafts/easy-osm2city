@@ -20,6 +20,8 @@ import sys
 import math
 import re
 
+CHUNK_SIZE = 5
+
 argc = len(sys.argv)
 i = 1
 first = 1
@@ -95,7 +97,7 @@ def run(command):
 
 run("mkdir -p projects/worldbuild/output/error")
 
-def build_tile(name, west, south, east, north):
+def build_tile(name, west, south, east, north, chunk_size):
 	if west < 0:
 		west = "*" + str(west)
 	else:
@@ -106,7 +108,7 @@ def build_tile(name, west, south, east, north):
 
 	run("./read-pbf worldbuild " + pbf_path + name + ".osm.pbf")
 	run('echo "bounds=' + west + "_" + south + "_" + east + "_" + north + '" > projects/settings')
-	run("./build worldbuild --chunk-size 5")
+	run("./build worldbuild --chunk-size " + chunk_size)
 
 def after_build(name):
 	if os.path.isfile("projects/worldbuild/osm2city-exceptions.log"):
@@ -130,9 +132,9 @@ def prepare():
 	run("./delete-db worldbuild")
 	run("./create-db worldbuild")
 
-def run_all(name, w, s, e, n):
+def run_all(name, w, s, e, n, chunk_size):
 	prepare()
-	build_tile(name, w, s, e, n)
+	build_tile(name, w, s, e, n, chunk_size)
 	after_build(name)
 
 def norm(num, length):
@@ -143,8 +145,8 @@ def norm(num, length):
 
 # Build poles first
 # TODO use chunksize 180 for poles
-run_all("n-pole", -180, 80, 180, 90)
-run_all("s-pole", -180, -90, 180, -80)
+run_all("n-pole", -180, 80, 180, 90, 180)
+run_all("s-pole", -180, -90, 180, -80, 180)
 
 for i in range(-8, 8):
 	i *= 10
@@ -161,7 +163,7 @@ for i in range(-8, 8):
 
 		name = ew + norm(abs(j), 3) + ns + norm(abs(i), 2)
 
-		run_all(name, j, i, j + 10, i + 10)
+		run_all(name, j, i, j + 10, i + 10, CHUNK_SIZE)
 
 
 
