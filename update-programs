@@ -37,12 +37,12 @@ esac
 done
 
 echo "Updateing easy-osm2city..."
-git pull
+git pull --rebase
 
 echo "Updateing osm2city..."
 cd osm2city
-git pull
+git pull --rebase
 
 echo "Updating osm2city-data..."
 cd ../osm2city-data
-git pull
+git pull --rebase
