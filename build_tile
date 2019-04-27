@@ -106,6 +106,7 @@ fi
 # change to the project dir and build
 cd projects/$project
 time ( python3 ../../osm2city/build_tiles.py -f params.ini -b "$bounds" -p "$threads" 2>&1 ) 2> exec-time
+ret=$?
 
 if [ "$create_zip" == "1" ]; then
 	echo "Creating zip file..."
@@ -113,3 +114,6 @@ if [ "$create_zip" == "1" ]; then
 fi
 
 cat exec-time | grep "real" | sed "s/real\t\([0-9]*\)m\([0-9]*\).*/Building this tile took \1 minutes and \2 seconds./"
+
+# Forward exit code
+return ret
