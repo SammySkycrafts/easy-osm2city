@@ -19,6 +19,7 @@ import os
 import sys
 import math
 import re
+import json
 
 CHUNK_SIZE = 5
 
@@ -143,8 +144,14 @@ def norm(num, length):
 		num = "0" + num
 	return num
 
+# Get exclude file
+if os.path.isfile("projects/worldbuild/exclude"):
+	with open("projects/worldbuild/exclude") as json_data:
+		exclude = json.load(json_data)
+else:
+	exclude = []
+
 # Build poles first
-# TODO use chunksize 180 for poles
 run_all("n-pole", -180, 80, 180, 90, 180)
 run_all("s-pole", -180, -90, 180, -80, 180)
 
@@ -163,7 +170,14 @@ for i in range(-8, 8):
 
 		name = ew + norm(abs(j), 3) + ns + norm(abs(i), 2)
 
-		run_all(name, j, i, j + 10, i + 10, CHUNK_SIZE)
+		skip = False
+		for area in exclude:
+			if area == name:
+				skip = True
+				break
+
+		if not skip:
+			run_all(name, j, i, j + 10, i + 10, CHUNK_SIZE)
 
 
 
