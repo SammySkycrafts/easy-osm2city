@@ -21,13 +21,16 @@ import math
 import re
 import json
 
-CHUNK_SIZE = 5
+chunk_size = 5
 
 argc = len(sys.argv)
 i = 1
 first = 1
 while i < argc:
-	if sys.argv[i] == "-p" or sys.argv[i] == "--progress":
+	if sys.argv[i] == "-c" or sys.argv[i] == "--chunk-size":
+		i += 1
+		chunk_size = sys.argv[i]
+	elif sys.argv[i] == "-p" or sys.argv[i] == "--progress":
 		try:
 			with open("projects/worldbuild/done") as f:
 				lines = f.readlines()
@@ -76,8 +79,9 @@ while i < argc:
 		print("Builds the tiles with osm2city")
 		print("")
 		print("OPTIONS")
-		print("  -h, --help      Shows this help and exit")
-		print("  -p, --progress  Shows progress and exit")
+		print("  -c, --chunk-size  Sets chunk size,  default 5")
+		print("  -h, --help        Shows this help and exit")
+		print("  -p, --progress    Shows progress and exit")
 		sys.exit(0)
 	else:
 		if first == 1:
@@ -177,7 +181,7 @@ for i in range(-8, 8):
 				break
 
 		if not skip:
-			run_all(name, j, i, j + 10, i + 10, CHUNK_SIZE)
+			run_all(name, j, i, j + 10, i + 10, chunk_size)
 
 
 
