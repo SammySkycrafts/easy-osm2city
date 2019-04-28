@@ -23,6 +23,7 @@ import json
 import time
 
 chunk_size = 5
+threads = 5
 
 argc = len(sys.argv)
 i = 1
@@ -31,6 +32,9 @@ while i < argc:
 	if sys.argv[i] == "-c" or sys.argv[i] == "--chunk-size":
 		i += 1
 		chunk_size = sys.argv[i]
+	elif sys.argv[i] == "-t" or sys.ergv[i] == "--threads":
+		i += 1
+		threads = sys.argv[i]
 	elif sys.argv[i] == "-p" or sys.argv[i] == "--progress":
 		try:
 			with open("projects/worldbuild/done") as f:
@@ -81,6 +85,7 @@ while i < argc:
 		print("")
 		print("OPTIONS")
 		print("  -c, --chunk-size  Sets chunk size,  default 5")
+		print("  -t, --threads     Number of threads to run")
 		print("  -h, --help        Shows this help and exit")
 		print("  -p, --progress    Shows progress and exit")
 		sys.exit(0)
@@ -103,7 +108,7 @@ def run(command):
 
 run("mkdir -p projects/worldbuild/output/error")
 
-def build_tile(name, west, south, east, north, chunk_size):
+def build_tile(name, west, south, east, north, chunk_size, threads):
 	if west < 0:
 		west = "*" + str(west)
 	else:
@@ -114,7 +119,7 @@ def build_tile(name, west, south, east, north, chunk_size):
 
 	run("./read-pbf worldbuild " + pbf_path + name + ".osm.pbf")
 	run('echo "bounds=' + west + "_" + south + "_" + east + "_" + north + '" > projects/settings')
-	run("./build worldbuild --chunk-size " + chunk_size)
+	run("./build worldbuild --chunk-size " + chunk_size + " -t " + threads)
 
 def after_build(name):
 	if os.path.isfile("projects/worldbuild/osm2city-exceptions.log"):
@@ -138,9 +143,9 @@ def prepare():
 	run("./delete-db worldbuild")
 	run("./create-db worldbuild")
 
-def run_all(name, w, s, e, n, chunk_size):
+def run_all(name, w, s, e, n, chunk_size, threads):
 	prepare()
-	build_tile(name, w, s, e, n, chunk_size)
+	build_tile(name, w, s, e, n, chunk_size, threads)
 	after_build(name)
 
 def norm(num, length):
@@ -175,8 +180,8 @@ else:
 start_time = time.time()
 
 # Build poles first
-run_all("n-pole", -180, 80, 180, 90, 180)
-run_all("s-pole", -180, -90, 180, -80, 180)
+run_all("n-pole", -180, 80, 180, 90, 180, threads)
+run_all("s-pole", -180, -90, 180, -80, 180, threads)
 
 for i in range(-8, 8):
 	i *= 10
@@ -200,7 +205,7 @@ for i in range(-8, 8):
 				break
 
 		if not skip:
-			run_all(name, j, i, j + 10, i + 10, chunk_size)
+			run_all(name, j, i, j + 10, i + 10, chunk_size, threads)
 
 print_build_time(start_time)
 
