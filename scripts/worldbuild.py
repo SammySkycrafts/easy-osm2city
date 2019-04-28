@@ -20,6 +20,7 @@ import sys
 import math
 import re
 import json
+import time
 
 chunk_size = 5
 
@@ -148,12 +149,30 @@ def norm(num, length):
 		num = "0" + num
 	return num
 
+def print_build_time(start_time):
+	end_time = time.time()
+	elapsed = end_time - start_time
+	seconds = elapsed % 60
+	elapsed = (elapsed - seconds) / 60
+	minutes = elapsed % 60
+	elapsed = (elapsed - minutes) / 60
+	hours = elapsed % 24
+	days = (elapsed - hours) / 24
+
+	time = str(int(hours)) + " Hours, " + str(int(minutes)) + " Minutes and " + str(int(seconds)) + " Seconds"
+	if days > 0:
+        	time = str(int(days)) + " Days, " + time
+
+	print("Running worldbuild took " + time)
+
 # Get exclude file
 if os.path.isfile("projects/worldbuild/exclude"):
 	with open("projects/worldbuild/exclude") as json_data:
 		exclude = json.load(json_data)
 else:
 	exclude = []
+
+start_time = time.time()
 
 # Build poles first
 run_all("n-pole", -180, 80, 180, 90, 180)
@@ -183,6 +202,6 @@ for i in range(-8, 8):
 		if not skip:
 			run_all(name, j, i, j + 10, i + 10, chunk_size)
 
-
+print_build_time(start_time)
 
 
