@@ -171,7 +171,7 @@ try:
 			print("Unable to read project settings")
 			sys.exit(1)
 		run_command("rm -f projects/" + project + "/osm2city-exceptions.log")
-		run_build(bounds[0]["west"], bounds[0]["south"], bounds[0]["east"], bounds[0]["north"], log_done=True)
+		run_build(bounds[0]["west"], bounds[0]["south"], bounds[0]["east"], bounds[0]["north"], log_done=True, chunk_size=chunk_size)
 	else:
 		if build_fix:
 			bounds = get_bounds("projects/" + project + "/osm2city-exceptions.log")
