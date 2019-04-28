@@ -32,7 +32,7 @@ while i < argc:
 	if sys.argv[i] == "-c" or sys.argv[i] == "--chunk-size":
 		i += 1
 		chunk_size = sys.argv[i]
-	elif sys.argv[i] == "-t" or sys.ergv[i] == "--threads":
+	elif sys.argv[i] == "-t" or sys.argv[i] == "--threads":
 		i += 1
 		threads = sys.argv[i]
 	elif sys.argv[i] == "-p" or sys.argv[i] == "--progress":
