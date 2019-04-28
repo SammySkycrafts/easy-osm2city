@@ -109,6 +109,7 @@ def run(command):
 run("mkdir -p projects/worldbuild/output/error")
 
 def build_tile(name, west, south, east, north, chunk_size, threads):
+	global pbf_path
 	if west < 0:
 		west = "*" + str(west)
 	else:
