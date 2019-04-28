@@ -119,7 +119,7 @@ def build_tile(name, west, south, east, north, chunk_size, threads):
 	north = str(north)
 
 	run("./read-pbf worldbuild " + pbf_path + name + ".osm.pbf")
-	run('echo "bounds=' + west + "_" + south + "_" + east + "_" + north + '" > projects/settings')
+	run('echo "bounds=' + west + "_" + south + "_" + east + "_" + north + '" > projects/worldbuild/settings')
 	run("./build worldbuild --chunk-size " + str(chunk_size) + " -t " + str(threads))
 
 def after_build(name):
