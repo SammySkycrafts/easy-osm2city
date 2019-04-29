@@ -46,7 +46,7 @@ while i < argc:
 		build_fix = True
 	elif sys.argv[i] == "-S" or sys.argv[i] == "--chunk-size":
 		i += 1
-		chunk_size = sys.argv[i]
+		chunk_size = int(sys.argv[i])
 	elif sys.argv[i] == "-h" or sys.argv[i] == "--help":
 		print("usage: build <project> [OPTIONS]")
 		print("Builds the tiles with osm2city")
