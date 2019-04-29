@@ -184,8 +184,8 @@ else:
 start_time = time.time()
 
 # Build poles first
-run_all("n-pole", -180, 80, 180, 90, 180, threads)
-run_all("s-pole", -180, -90, 180, -80, 180, threads)
+run_all("n-pole", -180, 80, 180, 90, 360, threads)
+run_all("s-pole", -180, -90, 180, -80, 360, threads)
 
 for i in range(-8, 8):
 	i *= 10
