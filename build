@@ -20,6 +20,7 @@ import os
 import re
 from math import ceil
 import time
+import traceback
 
 argc = len(sys.argv)
 i = 1
@@ -202,8 +203,9 @@ except KeyboardInterrupt:
 	print("Interrupted by user!")
 	sys.exit(130)
 
-except:
-	print("An unknown error ocurred!")
+except Exception, err:
+	print("An unknown error occurred!")
+	traceback.print_tb(err.__traceback__)
 	sys.exit(4)
 	
 
