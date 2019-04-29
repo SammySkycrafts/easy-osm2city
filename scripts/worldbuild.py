@@ -1,4 +1,4 @@
-#! /usr/bin/python
+u! /usr/bin/python
 # Copyright (C) 2018-2019 Merspieler, merspieler _at_ airmail.cc
 #
 # This program is free software; you can redistribute it and/or
@@ -105,6 +105,9 @@ def run(command):
 	elif exit_code == 130:
 		print("Aborted!")
 		sys.exit(130)
+	else:
+		print("Sub process exited with code " + str(exit_code) + ". Aborting!")
+		sys.exit(4)
 
 run("mkdir -p projects/worldbuild/output/error")
 
