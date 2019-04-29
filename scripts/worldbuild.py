@@ -140,7 +140,7 @@ def after_build(name):
 		if os.path.isfile("./scripts/afterbuild-success"):
 			os.system("./scripts/afterbuild-success " + name + " &")
 
-	run("rm -r projects/worldbuild/scenery/*")
+	run("rm -rf projects/worldbuild/scenery/*")
 	run("./clear-cache-files worldbuild")
 
 def prepare():
