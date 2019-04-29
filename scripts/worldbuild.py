@@ -1,4 +1,4 @@
-u! /usr/bin/python
+#! /usr/bin/python
 # Copyright (C) 2018-2019 Merspieler, merspieler _at_ airmail.cc
 #
 # This program is free software; you can redistribute it and/or
