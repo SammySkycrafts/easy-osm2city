@@ -203,7 +203,7 @@ except KeyboardInterrupt:
 	print("Interrupted by user!")
 	sys.exit(130)
 
-except Exception, err:
+except Exception as err:
 	print("An unknown error occurred!")
 	traceback.print_tb(err.__traceback__)
 	sys.exit(4)
