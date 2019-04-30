@@ -99,7 +99,7 @@ while i < argc:
 	i += 1
 
 def run(command):
-	exit_code = 8 >> os.system(command)
+	exit_code = os.system(command)
 	if exit_code == 0:
 		return
 	elif exit_code == 130:
