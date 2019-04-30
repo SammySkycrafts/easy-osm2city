@@ -116,4 +116,4 @@ fi
 cat exec-time | grep "real" | sed "s/real\t\([0-9]*\)m\([0-9]*\).*/Building this tile took \1 minutes and \2 seconds./"
 
 # Forward exit code
-exit ret
+exit $ret
