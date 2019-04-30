@@ -148,9 +148,13 @@ def prepare():
 	run("./create-db worldbuild")
 
 def run_all(name, w, s, e, n, chunk_size, threads):
-	prepare()
-	build_tile(name, w, s, e, n, chunk_size, threads)
-	after_build(name)
+	global pbf_path
+	if os.system("ls -l " + pbf_path + name + ".osm.pbf | grep ' 73 ' > /dev/null") == 1:
+		prepare()
+		build_tile(name, w, s, e, n, chunk_size, threads)
+		after_build(name)
+	else:
+		print("INFO: Skipping " + name + " because pbf file is empty")
 
 def norm(num, length):
 	num = str(num)
