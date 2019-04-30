@@ -162,8 +162,7 @@ def norm(num, length):
 		num = "0" + num
 	return num
 
-def print_build_time(start_time):
-	end_time = time.time()
+def print_build_time(start_time, end_time):
 	elapsed = end_time - start_time
 	seconds = elapsed % 60
 	elapsed = (elapsed - seconds) / 60
@@ -228,6 +227,6 @@ for i in range(-8, 8):
 		if not skip:
 			run_all(name, j, i, j + 10, i + 10, chunk_size, threads)
 
-print_build_time(start_time)
+print_build_time(start_time, time.time())
 
 
