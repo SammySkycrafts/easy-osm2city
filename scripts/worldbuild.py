@@ -99,7 +99,7 @@ while i < argc:
 	i += 1
 
 def run(command):
-	exit_code = os.system(command)
+	exit_code = 8 >> os.system(command)
 	if exit_code == 0:
 		return
 	elif exit_code == 130:
@@ -149,7 +149,7 @@ def prepare():
 
 def run_all(name, w, s, e, n, chunk_size, threads):
 	global pbf_path
-	if os.system("ls -l " + pbf_path + name + ".osm.pbf | grep ' 73 ' > /dev/null") == 1:
+	if os.system("ls -l " + pbf_path + name + ".osm.pbf | grep ' 73 ' > /dev/null") != 0:
 		prepare()
 		build_tile(name, w, s, e, n, chunk_size, threads)
 		after_build(name)
