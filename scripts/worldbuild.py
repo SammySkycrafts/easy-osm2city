@@ -106,7 +106,7 @@ def run(command):
 		print("Aborted!")
 		sys.exit(130)
 	else:
-		print("Sub process exited with code " + str(exit_code) + ". Aborting!")
+		print("Sub process '" + command + "'exited with code " + str(exit_code) + ". Aborting!")
 		sys.exit(4)
 
 run("mkdir -p projects/worldbuild/output/error")
