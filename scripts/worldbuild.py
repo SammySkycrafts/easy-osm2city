@@ -43,32 +43,31 @@ while i < argc:
 					match = re.findall("(-?[0-9]{1,3}\.?[0-9]{0,4})_-?[0-9]{1,3}\.?[0-9]{0,4}_-?[0-9]{1,3}\.?[0-9]{0,4}_(-?[0-9]{1,3}\.?[0-9]{0,4})", line)
 					if match != []:
 
-						n = float(match[0][1])
+						s = float(match[0][1])
 						w = float(match[0][0])
 
 						wm = w % 10
-						nm = n % 10
+						sm = s % 10
 
 						wM = (int(w) - wm) / 10
-						nM = (int(n) - nm) / 10
+						sM = (int(s) - sm) / 10
 
-						if nm == 0:
+						if sm == 0:
 							wm += 1
 
-						tile = wm * 10 + nm
+						tile = wm * 10 + sm
 
-						if abs(n) > 80:
-							if n > 0:
-								world = 1
-							else:
-								world = 2
+						if s == 80:
+							world = 1
+						elif s == -90:
+							world = 2
 						else:
 							rows = 0
-							while nM > -8:
+							while sM > -8:
 								rows += 1
-								nM -= 1
+								sM -= 1
 
-							world = 2 + 36 * rows + wM + 18
+							world = 3 + 36 * rows + wM + 18
 
 						print("Current worldbuild tile is " + str(int(world)) + "/578")
 						print("Current tile " + str(tile) + "% complete")
@@ -187,20 +186,10 @@ else:
 start_time = time.time()
 
 # Build poles first
-skip = False
-for area in exclude:
-	if area == "n-pole":
-		skip = True
-		break
-if not skip:
+if not "n-pole" in exclude:
 	run_all("n-pole", -180, 80, 180, 90, 360, threads)
 
-skip = False
-for area in exclude:
-	if area == "s-pole":
-		skip = True
-		break
-if not skip:
+if not "s-pole" in exclude:
 	run_all("s-pole", -180, -90, 180, -80, 360, threads)
 
 for i in range(-8, 8):
@@ -218,13 +207,7 @@ for i in range(-8, 8):
 
 		name = ew + norm(abs(j), 3) + ns + norm(abs(i), 2)
 
-		skip = False
-		for area in exclude:
-			if area == name:
-				skip = True
-				break
-
-		if not skip:
+		if not name in exclude:
 			run_all(name, j, i, j + 10, i + 10, chunk_size, threads)
 
 print_build_time(start_time, time.time())
