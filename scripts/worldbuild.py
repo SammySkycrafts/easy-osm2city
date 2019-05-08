@@ -40,28 +40,36 @@ while i < argc:
 			with open("projects/worldbuild/done") as f:
 				lines = f.readlines()
 				for line in lines:
-					match = re.findall("(-?[0-9]{1,3}\.?[0-9]{0,4})_-?[0-9]{1,3}\.?[0-9]{0,4}_-?[0-9]{1,3}\.?[0-9]{0,4}_(-?[0-9]{1,3}\.?[0-9]{0,4})", line)
+					match = re.findall("(-?[0-9]{1,3}\.?[0-9]{0,4})_(-?[0-9]{1,3}\.?[0-9]{0,4})_(-?[0-9]{1,3}\.?[0-9]{0,4})_(-?[0-9]{1,3}\.?[0-9]{0,4})", line)
 					if match != []:
 
-						s = float(match[0][1])
 						w = float(match[0][0])
+						s = float(match[0][1])
+						e = float(match[0][2])
+						n = float(match[0][3])
 
-						wm = w % 10
-						sm = s % 10
-
-						wM = (int(w) - wm) / 10
-						sM = (int(s) - sm) / 10
-
-						if sm == 0:
-							wm += 1
-
-						tile = wm * 10 + sm
-
-						if s == 80:
+						if n == 90:
 							world = 1
-						elif s == -90:
+						elif n == -80:
 							world = 2
 						else:
+							wm = w % 10
+							sm = s % 10
+							em = e % 10
+							nm = n % 10
+
+							wM = (int(w) - wm) / 10
+							sM = (int(s) - sm) / 10
+							eM = (int(e) - em) / 10
+							nM = (int(n) - nm) / 10
+
+							#FIXME wrong in some edge cases
+							if nm == 0:
+								wm += 1
+
+							tile = wm * 10 + nm
+
+							
 							rows = 0
 							while sM > -8:
 								rows += 1
