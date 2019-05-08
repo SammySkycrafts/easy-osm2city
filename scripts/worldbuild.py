@@ -80,8 +80,8 @@ while i < argc:
 			print("Unable to get progress")
 			sys.exit(1)
 	elif sys.argv[i] == "-h" or sys.argv[i] == "--help":
-		print("usage: build <project> [OPTIONS]")
-		print("Builds the tiles with osm2city")
+		print("usage: worldbuild <pbf-path> [OPTIONS]")
+		print("Builds the world")
 		print("")
 		print("OPTIONS")
 		print("  -c, --chunk-size  Sets chunk size,  default 5")
