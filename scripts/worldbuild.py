@@ -63,11 +63,10 @@ while i < argc:
 							eM = (int(e) - em) / 10
 							nM = (int(n) - nm) / 10
 
-							#FIXME wrong in some edge cases
+							cs = n - s
 							if nm == 0:
-								wm += 1
-
-							tile = wm * 10 + nm
+								nm = 10
+							tile = ((10 - wm) % 10) * 10 + cs * cs * (nm / cs)
 
 							
 							rows = 0
