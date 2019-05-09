@@ -158,11 +158,11 @@ def prepare():
 	run("./delete-db worldbuild")
 	run("./create-db worldbuild")
 
-def run_all(name, w, s, e, n, chunk_size, threads):
+def run_all(name, w, s, e, n, chunk_size, threads, cont=False):
 	global pbf_path
 	if os.system("ls -l " + pbf_path + name + ".osm.pbf | grep ' 73 ' > /dev/null") != 0:
 		prepare()
-		build_tile(name, w, s, e, n, chunk_size, threads)
+		build_tile(name, w, s, e, n, chunk_size, threads, cont)
 		after_build(name)
 	else:
 		print("INFO: Skipping " + name + " because pbf file is empty")
@@ -234,7 +234,7 @@ while ii < 8:
 				run_all(name, j, i, j + 10, i + 10, chunk_size, threads, cont=True)
 				cont = 0
 			else:
-				run_all(name, j, i, j + 10, i + 10, chunk_size, threads)
+				run_all(name, j, i, j + 10, i + 10, chunk_size, threads, cont=False)
 		jj += 1
 	ii += 1
 
