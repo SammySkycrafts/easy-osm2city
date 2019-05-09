@@ -24,14 +24,18 @@ import time
 
 chunk_size = 5
 threads = 5
+cont = 0
 
 argc = len(sys.argv)
 i = 1
 first = 1
 while i < argc:
-	if sys.argv[i] == "-c" or sys.argv[i] == "--chunk-size":
+	if sys.argv[i] == "-s" or sys.argv[i] == "--chunk-size":
 		i += 1
 		chunk_size = sys.argv[i]
+	elif sys.argv[i] == "-c" or sys.argv[i] == "--continue":
+		i += 1
+		cont = sys.argv[i]
 	elif sys.argv[i] == "-t" or sys.argv[i] == "--threads":
 		i += 1
 		threads = sys.argv[i]
@@ -90,8 +94,9 @@ while i < argc:
 		print("Builds the world")
 		print("")
 		print("OPTIONS")
-		print("  -c, --chunk-size  Sets chunk size,  default 5")
+		print("  -s, --chunk-size  Sets chunk size,  default 5")
 		print("  -t, --threads     Number of threads to run")
+		print("  -c, --continue    Contine build from tile number <n>")
 		print("  -h, --help        Shows this help and exit")
 		print("  -p, --progress    Shows progress and exit")
 		sys.exit(0)
@@ -117,7 +122,7 @@ def run(command):
 
 run("mkdir -p projects/worldbuild/output/error")
 
-def build_tile(name, west, south, east, north, chunk_size, threads):
+def build_tile(name, west, south, east, north, chunk_size, threads, cont=False):
 	global pbf_path
 	if west < 0:
 		west = "*" + str(west)
@@ -199,10 +204,20 @@ if not "n-pole" in exclude:
 if not "s-pole" in exclude:
 	run_all("s-pole", -180, -90, 180, -80, 360, threads)
 
-for i in range(-8, 8):
-	i *= 10
-	for j in range(-18, 18):
-		j *= 10
+if cont != 0:
+	tile = cont - 2
+	tile_in_row = ((tile - 1) % 36) - 18
+	ii = (tile - tile_in_row - 19) / 36 - 8
+else:
+	ii = -8
+while ii < 8:
+	i = ii * 10
+	if cont != 0:
+		jj = tile_in_row
+	else:
+		jj = -18
+	while jj < 18:
+		j = jj * 10
 		if i >= 0:
 			ns = "n"
 		else:
@@ -215,7 +230,13 @@ for i in range(-8, 8):
 		name = ew + norm(abs(j), 3) + ns + norm(abs(i), 2)
 
 		if not name in exclude:
-			run_all(name, j, i, j + 10, i + 10, chunk_size, threads)
+			if cont != 0:
+				run_all(name, j, i, j + 10, i + 10, chunk_size, threads, cont=True)
+				cont = 0
+			else:
+				run_all(name, j, i, j + 10, i + 10, chunk_size, threads)
+		jj += 1
+	ii += 1
 
 print_build_time(start_time, time.time())
 
