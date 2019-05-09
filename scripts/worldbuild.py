@@ -35,7 +35,7 @@ while i < argc:
 		chunk_size = sys.argv[i]
 	elif sys.argv[i] == "-c" or sys.argv[i] == "--continue":
 		i += 1
-		cont = sys.argv[i]
+		cont = int(sys.argv[i])
 	elif sys.argv[i] == "-t" or sys.argv[i] == "--threads":
 		i += 1
 		threads = sys.argv[i]
