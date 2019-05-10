@@ -151,12 +151,12 @@ def after_build(name):
 		if os.path.isfile("./scripts/afterbuild-success"):
 			os.system("./scripts/afterbuild-success " + name + " &")
 
-	run("rm -rf projects/worldbuild/scenery/*")
-	run("./clear-cache-files worldbuild")
-
 def prepare():
 	run("./delete-db worldbuild")
 	run("./create-db worldbuild")
+
+	run("rm -rf projects/worldbuild/scenery/*")
+	run("./clear-cache-files worldbuild")
 
 def run_all(name, w, s, e, n, chunk_size, threads, cont=False):
 	global pbf_path
