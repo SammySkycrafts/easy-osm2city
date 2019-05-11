@@ -54,8 +54,10 @@ while i < argc:
 
 						if n == 90:
 							world = 1
+							tile = "N/A"
 						elif n == -80:
 							world = 2
+							tile = "N/A"
 						else:
 							wm = w % 10
 							sm = s % 10
