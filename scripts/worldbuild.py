@@ -197,19 +197,19 @@ else:
 
 start_time = time.time()
 
-# Build poles first
-if not "n-pole" in exclude:
-	run_all("n-pole", -180, 80, 180, 90, 360, threads)
-
-if not "s-pole" in exclude:
-	run_all("s-pole", -180, -90, 180, -80, 360, threads)
-
 if cont != 0:
 	tile = cont - 2
 	tile_in_row = ((tile - 1) % 36) - 18
 	ii = (tile - tile_in_row - 19) / 36 - 8
 else:
 	ii = -8
+# Build poles first
+if not "n-pole" in exclude and cont <= 1:
+	run_all("n-pole", -180, 80, 180, 90, 360, threads)
+
+if not "s-pole" in exclude and cont <= 2:
+	run_all("s-pole", -180, -90, 180, -80, 360, threads)
+
 while ii < 8:
 	i = ii * 10
 	if cont != 0:
