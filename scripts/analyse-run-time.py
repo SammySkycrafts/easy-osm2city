@@ -3,7 +3,7 @@ import sys
 from tabulate import tabulate
 import re
 
-sortkey = "max"
+sortkey = []
 ifile = ""
 
 argc = len(sys.argv)
@@ -12,7 +12,10 @@ i = 1
 while i < argc:
 	if sys.argv[i] == "-s" or sys.argv[i] == "--sort-by":
 		i += 1
-		sortkey = sys.argv[i]
+		if len(sortkey) <= 3:
+			sortkey.append(sys.argv[i])
+		else:
+			print("WARNING: Too many sort criteria given! Will ignore last argument.")
 	elif sys.argv[i] == "-h" or sys.argv[i] == "--help":
 		print("usage: analyse-run-time.py <log-path> [OPTIONS]")
 		print("Showing, how long certain tasks took")
@@ -34,6 +37,9 @@ while i < argc:
 			print("Unknown option " + sys.argv[i])
 			sys.exit(1)
 	i += 1
+
+if len(sortkey) == 0:
+	sortkey.append("max")
 
 times = []
 try:
@@ -69,6 +75,9 @@ for task in tasks:
 	task['avg'] = task['sum'] / task['occ']
 
 #sorted(tasks, key=attrgetter('max'))
-tasks.sort(key=lambda tasks: tasks[sortkey], reverse=True)
+i = len(sortkey) - 1
+while i >= 0:
+	tasks.sort(key=lambda tasks: tasks[sortkey[i]], reverse=True)
+	i -= 1
 
 print tabulate(tasks,headers="keys",floatfmt=".2f")

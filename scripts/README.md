@@ -5,3 +5,4 @@
 * `split-world.py`: Splits the world into 10 by 10 degrees areas covering everything from 80 north to 80 south and the poles.
 * `osmium-config`: Config files for osmium, used by the split-world script.
 * `worldbuild.py`: Runs the worldbuild.
+* `analyse-run-time.py` Shows a breakdown of the runtime. Depends on `tabulate`
