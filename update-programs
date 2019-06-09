@@ -46,3 +46,8 @@ git pull --rebase
 echo "Updating osm2city-data..."
 cd ../osm2city-data
 git pull --rebase
+
+echo "Updating venv..."
+cd ../
+source venv/bin/activate
+pip install -r osm2city/requirements.txt
