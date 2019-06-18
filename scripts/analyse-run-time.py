@@ -16,7 +16,11 @@ while i < argc:
 	if sys.argv[i] == "-s" or sys.argv[i] == "--sort-by":
 		i += 1
 		if len(sortkey) <= 3:
-			sortkey.append(sys.argv[i])
+			if sys.argv[i] in ["max", "occ", "avg", "sum"]:
+				sortkey.append(sys.argv[i])
+			else:
+				print("ERROR: Unknown key " + sys.argv[i] + ": Aborting!")
+				sys.exit(1)
 		else:
 			print("WARNING: Too many sort criteria given! Will ignore last argument.")
 	elif sys.argv[i] == "-n" or sys.argv[i] == "--no-cache":
