@@ -61,8 +61,7 @@ if read_src:
 	times = []
 	try:
 		with open(ifile) as f:
-			lines = f.readlines()
-			for line in lines:
+			for line in f:
 				match = re.findall("SpawnPoolWorker-\d+ root INFO +Time used in seconds for (.*): (\d+\.\d+)", line)
 				if match != []:
 					times.append(match[0])
