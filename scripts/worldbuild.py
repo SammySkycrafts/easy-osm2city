@@ -72,7 +72,7 @@ while i < argc:
 							cs = n - s
 							if nm == 0:
 								nm = 10
-							tile = ((10 - wm) % 10) * 10 + cs * cs * (nm / cs)
+							tile = (wm % 10) * 10 + cs * cs * (nm / cs)
 
 							
 							rows = 0
