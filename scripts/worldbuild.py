@@ -25,6 +25,7 @@ import time
 chunk_size = 5
 threads = 5
 cont = 0
+exclude = []
 
 argc = len(sys.argv)
 i = 1
@@ -39,6 +40,18 @@ while i < argc:
 	elif sys.argv[i] == "-t" or sys.argv[i] == "--threads":
 		i += 1
 		threads = sys.argv[i]
+	elif sys.argv[i] == "-e" or sys.argv[i] == "--exclude":
+		i += 1
+		if os.path.isfile(sys.argv[i]):
+			try:
+				with open(sys.argv[i]) as json_data:
+					exclude += json.load(json_data)
+			except ValueError:
+				print("Exclude file '" + sys.argv[i] + "' is no proper JSON file.")
+				sys.exit(1)
+		else:
+			print("File not found: " + sys.argv[i])
+			sys.exit(1)
 	elif sys.argv[i] == "-p" or sys.argv[i] == "--progress":
 		try:
 			with open("projects/worldbuild/done") as f:
@@ -99,6 +112,9 @@ while i < argc:
 		print("  -s, --chunk-size  Sets chunk size,  default 5")
 		print("  -t, --threads     Number of threads to run")
 		print("  -c, --continue    Contine build from tile number <n>")
+		print("  -e, --exclude     Files containing JSON array naming tiles not to be build")
+		print("                    Can be used multiple times.")
+		print("                    If not given projects/worldbuild/exclude will be used")
 		print("  -h, --help        Shows this help and exit")
 		print("  -p, --progress    Shows progress and exit")
 		sys.exit(0)
@@ -191,11 +207,13 @@ def print_build_time(start_time, end_time):
 	print("Running worldbuild took " + time)
 
 # Get exclude file
-if os.path.isfile("projects/worldbuild/exclude"):
-	with open("projects/worldbuild/exclude") as json_data:
-		exclude = json.load(json_data)
-else:
-	exclude = []
+if os.path.isfile("projects/worldbuild/exclude") and exclude == []:
+	try:
+		with open("projects/worldbuild/exclude") as json_data:
+			exclude = json.load(json_data)
+	except ValueError:
+		print("Exclude file 'projects/worldbuild/exclude' is no proper JSON file.")
+		sys.exit(1)
 
 start_time = time.time()
 
