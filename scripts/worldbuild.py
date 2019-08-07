@@ -184,7 +184,8 @@ def prepare():
 def run_all(name, w, s, e, n, chunk_size, threads, cont=False):
 	global pbf_path
 	if os.system("ls -l " + pbf_path + name + ".osm.pbf | grep ' 73 ' > /dev/null") != 0:
-		prepare()
+		if cont == False:
+			prepare()
 		build_tile(name, w, s, e, n, chunk_size, threads, cont)
 		after_build(name)
 	else:
