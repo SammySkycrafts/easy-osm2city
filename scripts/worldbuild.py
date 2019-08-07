@@ -26,6 +26,7 @@ chunk_size = 5
 threads = 5
 cont = 0
 exclude = []
+pbf_path = ""
 
 argc = len(sys.argv)
 i = 1
@@ -126,6 +127,10 @@ while i < argc:
 			print("Unknown option " + sys.argv[i])
 			sys.exit(1)
 	i += 1
+
+if pbf_path == "":
+	print("No pbf-path was given, exiting...")
+	sys.exit(1)
 
 def run(command):
 	exit_code = os.system(command)
