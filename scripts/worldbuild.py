@@ -166,13 +166,13 @@ def after_build(name):
 
 		# Trigger failed after build script
 		if os.path.isfile("./scripts/afterbuild-failed"):
-			os.system("./scripts/afterbuild-failed " + name + " &")
+			os.system("bash -c './scripts/afterbuild-failed " + name + " &'")
 	else:
 		run("bash -c '(cd projects/worldbuild && zip -rq output/" + name + ".zip scenery/ )'")
 
 		# Trigger after build script
 		if os.path.isfile("./scripts/afterbuild-success"):
-			os.system("./scripts/afterbuild-success " + name + " &")
+			os.system("bash -c './scripts/afterbuild-success " + name + " &'")
 
 def prepare():
 	run("./delete-db worldbuild")
