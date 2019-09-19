@@ -162,13 +162,13 @@ def build_tile(name, west, south, east, north, chunk_size, threads, cont=False):
 def after_build(name):
 	if os.path.isfile("projects/worldbuild/osm2city-exceptions.log"):
 		run("mv projects/worldbuild/osm2city-exceptions.log projects/worldbuild/output/error/" + name + ".exceptions.log")
-		run("zip -rq projects/worldbuild/output/error/" + name + ".zip projects/worldbuild/scenery/ ")
+		run("bash -c '(cd projects/worldbuild && zip -rq output/error/" + name + ".zip scenery/ )'")
 
 		# Trigger failed after build script
 		if os.path.isfile("./scripts/afterbuild-failed"):
 			os.system("./scripts/afterbuild-failed " + name + " &")
 	else:
-		run("zip -rq projects/worldbuild/output/" + name + ".zip projects/worldbuild/scenery/ ")
+		run("bash -c '(cd projects/worldbuild && zip -rq output/" + name + ".zip scenery/ )'")
 
 		# Trigger after build script
 		if os.path.isfile("./scripts/afterbuild-success"):
