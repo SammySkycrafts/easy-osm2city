@@ -124,7 +124,7 @@ if [ "$skip_sql" != 1 ]; then
 fi
 
 echo "Creating template database..."
-sudo -u postgres createdb --encoding=UTF8 osm2city_template && psql --dbname="$database" -c "CREATE EXTENSION postgis;" && psql --dbname="$database" -c "CREATE EXTENSION hstore;" && psql -c "ALTER DATABASE osm2city_template OWNER TO $db_user;"
+sudo -u postgres createdb --encoding=UTF8 osm2city_template && psql --dbname="osm2city_template" -c "CREATE EXTENSION postgis;" && psql --dbname="osm2city_template" -c "CREATE EXTENSION hstore;" && psql -d "$database" -f sql/pgsnapshot_schema_0.6.sql && psql -d "$database" -f sql/pgsnapshot_schema_0.6_bbox.sql && psql -c "ALTER DATABASE osm2city_template OWNER TO $db_user;"
 
 if [ ! -f general-settings ]; then
 	echo "# This file must be used with "source general-settings" *from bash*" > general-settings

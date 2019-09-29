@@ -63,8 +63,6 @@ if [ ! -z "$man_user" ]; then
 fi
 
 createdb --encoding=UTF8 --owner=$db_user --template=osm2city_template "$database"
-psql -d "$database" -f sql/pgsnapshot_schema_0.6.sql
-psql -d "$database" -f sql/pgsnapshot_schema_0.6_bbox.sql
 
 if [ ! -f ".databases" ]; then
 	touch .databases
