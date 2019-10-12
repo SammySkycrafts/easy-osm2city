@@ -12,8 +12,7 @@
 	"Options": [
 			{ "Name": "NO_ELEV", "default": false, "value": false, "type": "bool", "description": "The only reason to set this to true\nwould be for scenery builders to check generated scenery objects a bit faster\nnot caring about the vertical position in the scenery.", "changed": false },
 			{ "Name": "FG_ELEV", "default": "", "value": "",  "type": "str", "description": "Points to the full path of the fgelev executable.\nOn Linux it could be something like\n.../bin/fgfs_git/next/install/flightgear/bin/fgelev'.\nOn Windows you might have to put\nquotes around the path due to whitespace\ne.g. '\"D:/Program Files/FlightGear/bin/Win64/fgelev.exe\"'.", "changed": false },
-			{ "Name": "PROBE_FOR_WATER", "default": false, "value": false, "type": "bool", "description": "Checks the scenery in PATH_TO_SCENERY\nwhether points are in the water or not.\nThe FlightGear scenery’s water boundaries might be different from OSM.\nE.g. removes buildings if at least one corner is in the water.\nAnd removes or splits (parts of) roads/railways,\nif at least 1 point is in the water.\nOnly possible with FGElev version after 9th of November 2016 / FG 2016.4.1.", "changed": false },
-			{ "Name": "FLAG_STG_BUILDING_LIST", "default": false, "value": false, "type": "bool", "description": "EXPERIMENTAL!!!", "changed": false }
+			{ "Name": "PROBE_FOR_WATER", "default": false, "value": false, "type": "bool", "description": "Checks the scenery in PATH_TO_SCENERY\nwhether points are in the water or not.\nThe FlightGear scenery’s water boundaries might be different from OSM.\nE.g. removes buildings if at least one corner is in the water.\nAnd removes or splits (parts of) roads/railways,\nif at least 1 point is in the water.\nOnly possible with FGElev version after 9th of November 2016 / FG 2016.4.1.", "changed": false }
 		]
 	},
 	{ "Group_Name": "Database",
@@ -134,6 +133,12 @@
 			{ "Name": "C2P_PROCESS_STREETLAMPS", "default": false, "value": false, "type": "bool", "description": "", "changed": false },
 			{ "Name": "DETAILS_PROCESS_PIERS", "default": true, "value": true, "type": "bool", "description": "", "changed": false },
 			{ "Name": "DETAILS_PROCESS_PLATFORMS", "default": true, "value": true, "type": "bool", "description": "", "changed": false }
+		]
+	},
+	{ "Group_Name": "Experimental",
+	"Options": [
+			{ "Name": "FLAG_STG_BUILDING_LIST", "default": false, "value": false, "type": "bool", "description": "If True then some buildings use the Random Building code in FlightGear instead of a building mesh.", "changed": false },
+			{ "Name": "FLAG_COLOUR_TEX", default: false, "value": false, "type": "bool", "description": "If True then the texture and OSM tags can use colouring. For later versions of FlightGear (2019.x?).", "changed": false}
 		]
 	}
 ]
