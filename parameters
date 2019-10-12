@@ -138,7 +138,7 @@
 	{ "Group_Name": "Experimental",
 	"Options": [
 			{ "Name": "FLAG_STG_BUILDING_LIST", "default": false, "value": false, "type": "bool", "description": "If True then some buildings use the Random Building code in FlightGear instead of a building mesh.", "changed": false },
-			{ "Name": "FLAG_COLOUR_TEX", default: false, "value": false, "type": "bool", "description": "If True then the texture and OSM tags can use colouring. For later versions of FlightGear (2019.x?).", "changed": false}
+			{ "Name": "FLAG_COLOUR_TEX", "default": false, "value": false, "type": "bool", "description": "If True then the texture and OSM tags can use colouring. For later versions of FlightGear (2019.x?).", "changed": false}
 		]
 	}
 ]
