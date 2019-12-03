@@ -62,7 +62,9 @@ if [ ! -z "$man_user" ]; then
 	db_user="$man_user"
 fi
 
-createdb --encoding=UTF8 --owner=$db_user --template=osm2city_template "$database"
+sudo -u postgres createdb --encoding=UTF8 --owner=$db_user "$database"
+sudo -u postgres psql --dbname="$database" -c "CREATE EXTENSION postgis;"
+sudo -u postgres psql --dbname="$database" -c "CREATE EXTENSION hstore;"
 psql -d "$database" -f sql/pgsnapshot_schema_0.6.sql
 psql -d "$database" -f sql/pgsnapshot_schema_0.6_bbox.sql
 

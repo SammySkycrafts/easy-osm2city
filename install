@@ -117,14 +117,11 @@ if [ "$skip_sql" != 1 ]; then
 		read db_user
 		echo "Please enter a password: "
 		read db_passwd
-		sudo -u postgres psql -c "CREATE USER $db_user WITH PASSWORD '$db_passwd'; ALTER USER $db_user CREATEDB;"
+		sudo -u postgres psql -c "CREATE USER $db_user WITH PASSWORD '$db_passwd';"
 		echo "db_user=$db_user" >> general-settings
-		echo "db_passwd=\"$db_passwd\"" >> general-settings
+		echo "db_passwd=$db_passwd" >> general-settings
 	fi
 fi
-
-echo "Creating template database..."
-sudo -u postgres createdb --encoding=UTF8 osm2city_template && psql --dbname="$database" -c "CREATE EXTENSION postgis;" && psql --dbname="$database" -c "CREATE EXTENSION hstore;" && psql -c "ALTER DATABASE osm2city_template OWNER TO $db_user;"
 
 if [ ! -f general-settings ]; then
 	echo "# This file must be used with "source general-settings" *from bash*" > general-settings
