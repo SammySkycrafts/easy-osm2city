@@ -27,6 +27,8 @@ threads = 5
 cont = 0
 exclude = []
 pbf_path = ""
+db_strategy = "demand"
+db_prefix = ""
 
 argc = len(sys.argv)
 i = 1
@@ -53,6 +55,16 @@ while i < argc:
 		else:
 			print("File not found: " + sys.argv[i])
 			sys.exit(1)
+	elif sys.argv[i] == "-D" or sys.argv[i] == "--database-startegy":
+		i += 1
+		if sys.argv[i] == "mono" or sys.argv[i] == "demand" or sys.argv[i] == "chunk":
+			db_strategy = sys.argv[i]
+		else:
+			print("ERROR: Unknown database startegy " + sys.argv[i])
+			sys.exit(1)
+	elif sys.argv[i] == "-P" or sys.argv[i] == "--database-prefix":
+		i += 1
+		db_prefix = sys.argv[i]
 	elif sys.argv[i] == "-p" or sys.argv[i] == "--progress":
 		try:
 			with open("projects/worldbuild/done") as f:
@@ -110,14 +122,22 @@ while i < argc:
 		print("Builds the world")
 		print("")
 		print("OPTIONS")
-		print("  -s, --chunk-size  Sets chunk size,  default 5")
-		print("  -t, --threads     Number of threads to run")
-		print("  -c, --continue    Contine build from tile number <n>")
-		print("  -e, --exclude     Files containing JSON array naming tiles not to be build")
-		print("                    Can be used multiple times.")
-		print("                    If not given projects/worldbuild/exclude will be used")
-		print("  -h, --help        Shows this help and exit")
-		print("  -p, --progress    Shows progress and exit")
+		print("  -s, --chunk-size         Sets chunk size,  default 5")
+		print("  -t, --threads            Number of threads to run")
+		print("  -c, --continue           Contine build from tile number <n>")
+		print("  -e, --exclude            Files containing JSON array naming tiles not to be build")
+		print("                           Can be used multiple times.")
+		print("                           If not given projects/worldbuild/exclude will be used")
+		print("  -D, --database-strategy  Database strategies:")
+		print("                           - demand: Uses database 'worldbuild' and imports tiles on demand")
+                print("                             clears db before next tile. Default behaviour")
+		print("                           - chunk: Expects one database per chunk")
+		print("                             NOT YET IMPLEMENTED")
+		print("                           - mono: Expexcting database 'worldbuild' containing world wide data")
+		print("                             NOT YET IMPLEMENTED")
+		print("  -P, --database-prefix    When db startegy is chunk, prefix tile names with <prefix>")
+		print("  -h, --help               Shows this help and exit")
+		print("  -p, --progress           Shows progress and exit")
 		sys.exit(0)
 	else:
 		if first == 1:
@@ -162,14 +182,10 @@ def build_tile(name, west, south, east, north, chunk_size, threads, cont=False):
 def after_build(name):
 	if os.path.isfile("projects/worldbuild/osm2city-exceptions.log"):
 		run("mv projects/worldbuild/osm2city-exceptions.log projects/worldbuild/output/error/" + name + ".exceptions.log")
-		run("bash -c '(cd projects/worldbuild && zip -rq output/error/" + name + ".zip scenery/ )'")
-
 		# Trigger failed after build script
 		if os.path.isfile("./scripts/afterbuild-failed"):
 			os.system("bash -c './scripts/afterbuild-failed " + name + " &'")
 	else:
-		run("bash -c '(cd projects/worldbuild && zip -rq output/" + name + ".zip scenery/ )'")
-
 		# Trigger after build script
 		if os.path.isfile("./scripts/afterbuild-success"):
 			os.system("bash -c './scripts/afterbuild-success " + name + " &'")
