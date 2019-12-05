@@ -194,7 +194,6 @@ def prepare():
 	run("./delete-db worldbuild")
 	run("./create-db worldbuild")
 
-	run("rm -rf projects/worldbuild/scenery/*")
 	run("./clear-cache-files worldbuild")
 
 def run_all(name, w, s, e, n, chunk_size, threads, cont=False):
