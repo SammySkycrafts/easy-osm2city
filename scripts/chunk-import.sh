@@ -51,7 +51,7 @@ esac
 done
 
 if [ -z "$pbf_path" ]; then
-	echo "No pbf path was given. See clear-cache-files -h for details"
+	echo "No pbf path was given. See chunk-import -h for details"
 	exit 1
 fi
 
