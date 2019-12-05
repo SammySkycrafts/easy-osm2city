@@ -2,7 +2,7 @@
 
 root_path="$( cd "$(dirname "$0")" ; pwd -P )/.."
 
-which parallel
+which parallel > /dev/null
 if [ $? == 1 ]; then
 	echo "Please install parallel"
 	exit 1
@@ -55,4 +55,4 @@ if [ -z "$pbf_path" ]; then
 	exit 1
 fi
 
-ls "$pbf_path/*.osm.pbf" | sed "s/.osm.pbf//" | parallel -j$num_jobs --eta "$root_path/create-db $prefix{} && $root_path/read-pbf $prefix{} {}.osm.pbf"
+ls "$pbf_path"/*.osm.pbf | sed -e "s/.osm.pbf//" -e "s:^.*/::" | parallel -j$num_jobs --eta "$root_path/create-db $prefix{} && $root_path/read-pbf $prefix{} {}.osm.pbf"
