@@ -15,6 +15,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+root_path="$( cd "$(dirname "$0")" ; pwd -P )"
+
 first=1
 while [[ $# -gt 0 ]]
 do
@@ -79,7 +81,7 @@ case $key in
 esac
 done
 
-source general-settings
+source "$root_path"/general-settings
 
 if [ ! -z "$man_user" ]; then
 	db_user="$man_user"
@@ -97,5 +99,5 @@ if [ ! -z "$port" ]; then
 	db_port="$port"
 fi
 
-export JAVACMD_OPTIONS="-Djava.io.tmpdir=$(pwd)/pbf"
+export JAVACMD_OPTIONS="-Djava.io.tmpdir=$root_path/pbf"
 time osmosis --read-pbf file="$file" --log-progress --write-pgsql database="$database" host="$db_host:$db_port" user="$db_user" password="$db_passwd"
