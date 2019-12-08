@@ -124,7 +124,7 @@ while i < argc:
 		print("OPTIONS")
 		print("  -s, --chunk-size         Sets chunk size,  default 5")
 		print("  -t, --threads            Number of threads to run")
-		print("  -c, --continue           Contine build from tile number <n>")
+		print("  -c, --continue           Contine build from tile number <n> when building with 'demand' strategy")
 		print("  -e, --exclude            Files containing JSON array naming tiles not to be build")
 		print("                           Can be used multiple times.")
 		print("                           If not given projects/worldbuild/exclude will be used")
@@ -148,7 +148,7 @@ while i < argc:
 			sys.exit(1)
 	i += 1
 
-if pbf_path == "":
+if pbf_path == "" and db_strategy == "demand":
 	print("No pbf-path was given, exiting...")
 	sys.exit(1)
 
@@ -238,46 +238,108 @@ if os.path.isfile("projects/worldbuild/exclude") and exclude == []:
 
 start_time = time.time()
 
-if cont != 0:
-	tile = cont - 2
-	tile_in_row = ((tile - 1) % 36) - 18
-	ii = (tile - tile_in_row - 19) / 36 - 8
-else:
-	ii = -8
-# Build poles first
-if not "n-pole" in exclude and cont <= 1:
-	run_all("n-pole", -180, 80, 180, 90, 360, threads)
-
-if not "s-pole" in exclude and cont <= 2:
-	run_all("s-pole", -180, -90, 180, -80, 360, threads)
-
-while ii < 8:
-	i = ii * 10
+if db_strategy == "demand":
 	if cont != 0:
-		jj = tile_in_row
+		tile = cont - 2
+		tile_in_row = ((tile - 1) % 36) - 18
+		ii = (tile - tile_in_row - 19) / 36 - 8
 	else:
-		jj = -18
-	while jj < 18:
-		j = jj * 10
-		if i >= 0:
-			ns = "n"
+		ii = -8
+	# Build poles first
+	if not "n-pole" in exclude and cont <= 1:
+		run_all("n-pole", -180, 80, 180, 90, 360, threads)
+	
+	if not "s-pole" in exclude and cont <= 2:
+		run_all("s-pole", -180, -90, 180, -80, 360, threads)
+	
+	while ii < 8:
+		i = ii * 10
+		if cont != 0:
+			jj = tile_in_row
 		else:
-			ns = "s"
-		if j >= 0:
-			ew = "e"
-		else:
-			ew = "w"
-
-		name = ew + norm(abs(j), 3) + ns + norm(abs(i), 2)
-
-		if not name in exclude:
-			if cont != 0:
-				run_all(name, j, i, j + 10, i + 10, chunk_size, threads, cont=True)
-				cont = 0
+			jj = -18
+		while jj < 18:
+			j = jj * 10
+			if i >= 0:
+				ns = "n"
 			else:
-				run_all(name, j, i, j + 10, i + 10, chunk_size, threads, cont=False)
-		jj += 1
-	ii += 1
+				ns = "s"
+			if j >= 0:
+				ew = "e"
+			else:
+				ew = "w"
+	
+			name = ew + norm(abs(j), 3) + ns + norm(abs(i), 2)
+	
+			if not name in exclude:
+				if cont != 0:
+					run_all(name, j, i, j + 10, i + 10, chunk_size, threads, cont=True)
+					cont = 0
+				else:
+					run_all(name, j, i, j + 10, i + 10, chunk_size, threads, cont=False)
+			jj += 1
+		ii += 1
+elif db_strategy == "chunk":
+	if os.path.isfile("projects/worldbuild/status"):
+		try:
+			with open("projects/worldbuild/status") as json_data:
+				status = json.load(json_data)
+		except ValueError:
+			print("ERROR: Invalid status file")
+			sys.exit(1)
+	else:
+		status = {}
+
+	tile_list = ""
+
+	# Build poles first
+	if not "n-pole" in exclude and cont <= 1:
+		tile_list += "n-pole\n"
+	if not "s-pole" in exclude and cont <= 2:
+		tile_list += "s-pole\n"
+
+	ii = -8
+	
+	while ii < 8:
+		i = ii * 10
+		jj = -18
+		while jj < 18:
+			j = jj * 10
+			if i >= 0:
+				ns = "n"
+			else:
+				ns = "s"
+			if j >= 0:
+				ew = "e"
+			else:
+				ew = "w"
+	
+			name = ew + norm(abs(j), 3) + ns + norm(abs(i), 2)
+	
+			if not name in exclude and (not name in status or (name in status and status[name]["status"] != "done")):
+				if ns == "s":
+					ns_step = -1
+				else:
+					ns_step = 1
+				if ew == "w":
+					ew_step = -1
+				else:
+					ew_step = 1
+				j = abs(j)
+				for k in range(0, 10):
+					iii = abs(i)
+					for l in range(0, 10):
+						name_minor = ew + norm(j, 3) + ns + norm(iii, 2)
+						if not name_minor in exclude and (not name in status or (not name_minor in status[name] or (name_minor in status[name] and status[name][name_minor]["status"] != "done"))):
+							tile_list = tile_list + name_minor + "\n"
+						iii += ns_step
+					j += ew_step
+			jj += 1
+		ii += 1
+
+	os.system("echo '" + tile_list + "' | parallel --eta -j " + str(threads) + " ./scripts/build_chunck.py {} " + str(db_prefix))
+elif db_startegy == "mono":
+	pass
 
 print_build_time(start_time, time.time())
 
