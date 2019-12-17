@@ -293,9 +293,9 @@ elif db_strategy == "chunk":
 	tile_list = ""
 
 	# Build poles first
-	if not "n-pole" in exclude and cont <= 1:
+	if not "n-pole" in exclude and (not "n-pole" in status or (name in status and status["n-pole"]["status"] != "done")):
 		tile_list += "n-pole\n"
-	if not "s-pole" in exclude and cont <= 2:
+	if not "s-pole" in exclude and (not "s-pole" in status or (name in status and status["s-pole"]["status"] != "done")):
 		tile_list += "s-pole\n"
 
 	ii = -8
