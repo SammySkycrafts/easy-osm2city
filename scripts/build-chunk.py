@@ -101,10 +101,12 @@ else:
 
 os.system("echo '" + bounds + "' > projects/worldbuild-" + name + "/settings")
 
-os.system("./build " + name)
+os.system("./build worldbuild-" + name)
 
 if os.path.isfile("projects/worldbuild-" + name + "/osm2city-exceptions.log"):
 	os.system("mv projects/worldbuild-" + name + "/osm2city-exceptions.log projects/worldbuild/output/error/" + name + ".exceptions.log")
+
+os.system("sleep 60")
 
 os.system("rm -rf projects/worldbuild-" + name)
 
