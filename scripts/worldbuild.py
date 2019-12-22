@@ -337,9 +337,10 @@ elif db_strategy == "chunk":
 		ii += 1
 
 	db_prefix = "-p " + db_prefix
-	os.system("echo '" + tile_list + "' | parallel --eta -j " + str(threads) + " ./scripts/build-chunck.py {} " + str(db_prefix))
+	os.system("echo '" + tile_list + "' | parallel --eta -j " + str(threads) + " ./scripts/build-chunk.py {} " + str(db_prefix))
 elif db_startegy == "mono":
-	pass
+	print("ERROR: NOT YET IMPLEMENTED")
+	sys.exit(1)
 
 print_build_time(start_time, time.time())
 

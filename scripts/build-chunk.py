@@ -44,6 +44,7 @@ while i < argc:
 		print("      --host        Logger host")
 		print("      --port        Logger port")
 		print("  -h, --help        Shows this help and exit")
+	i += 1
 
 def send_status(name, status):
 	try:
