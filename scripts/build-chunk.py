@@ -101,7 +101,7 @@ else:
 
 os.system("echo '" + bounds + "' > projects/worldbuild-" + name + "/settings")
 
-os.system("./build worldbuild-" + name)
+os.system("./build -t 1 worldbuild-" + name)
 
 if os.path.isfile("projects/worldbuild-" + name + "/osm2city-exceptions.log"):
 	os.system("mv projects/worldbuild-" + name + "/osm2city-exceptions.log projects/worldbuild/output/error/" + name + ".exceptions.log")
