@@ -26,6 +26,7 @@ prefix = ""
 
 argc = len(sys.argv)
 i = 1
+first = 1
 while i < argc:
 	if sys.argv[i] == "--port":
 		i += 1
@@ -44,6 +45,13 @@ while i < argc:
 		print("      --host        Logger host")
 		print("      --port        Logger port")
 		print("  -h, --help        Shows this help and exit")
+	else:
+		if first == 1:
+			first = 0
+			name = sys.argv[i]
+		else:
+			print("Unknown option " + sys.argv[i])
+			sys.exit(1)
 	i += 1
 
 def send_status(name, status):
