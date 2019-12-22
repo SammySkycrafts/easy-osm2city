@@ -132,7 +132,6 @@ while i < argc:
 		print("                           - demand: Uses database 'worldbuild' and imports tiles on demand")
                 print("                             clears db before next tile. Default behaviour")
 		print("                           - chunk: Expects one database per chunk")
-		print("                             NOT YET IMPLEMENTED")
 		print("                           - mono: Expexcting database 'worldbuild' containing world wide data")
 		print("                             NOT YET IMPLEMENTED")
 		print("  -P, --database-prefix    When db startegy is chunk, prefix tile names with <prefix>")
@@ -337,7 +336,8 @@ elif db_strategy == "chunk":
 			jj += 1
 		ii += 1
 
-	os.system("echo '" + tile_list + "' | parallel --eta -j " + str(threads) + " ./scripts/build_chunck.py {} " + str(db_prefix))
+	db_prefix = "-p " + db_prefix
+	os.system("echo '" + tile_list + "' | parallel --eta -j " + str(threads) + " ./scripts/build-chunck.py {} " + str(db_prefix))
 elif db_startegy == "mono":
 	pass
 
