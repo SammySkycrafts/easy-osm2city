@@ -58,7 +58,7 @@ def send_status(name, status):
 	try:
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		sock.connect((host, port))
-		sock.send(name + " " + status)
+		sock.send((name + " " + status).encode())
 		sock.close()
 	except IOError:
 		print("Unable to send status. Aborting...")
