@@ -79,66 +79,69 @@ sock.listen(5)
 print("Up and running...")
 try:
 	while True:
-		c, addr = sock.accept()
-		msg = c.recv(128)
-		c.close()
-		name, status = msg.decode().split()
-		if verbose:
-			print(name + " set status to " + status)
+		try:
+			c, addr = sock.accept()
+			msg = c.recv(128)
+			c.close()
+			name, status = msg.decode().split()
+			if verbose:
+				print(name + " set status to " + status)
 
-		if status == "started" or status == "done":
-			if name == "n-pole" or name == "s-pole":
-				if not name in state:
-					state[name] = {}
-				state[name]["status"] = status
-			else:
-				match = re.match(r"([ew])(\d{3})([ns])(\d{2})", name)
-				if match == None:
-					print("WARNING: Recived status " + status + " from invalid tile '" + name + "'")
+			if status == "started" or status == "done":
+				if name == "n-pole" or name == "s-pole":
+					if not name in state:
+						state[name] = {}
+					state[name]["status"] = status
 				else:
-					ew = match.group(1)
-					ew_val = int(match.group(2))
-					ns = match.group(3)
-					ns_val = int(match.group(4))
-
-					ew_val_major = int(ew_val / 10) * 10
-					if ew == "w":
-						if ew_val_major != ew_val:
-							ew_val_major += 10
-
-					ns_val_major = int(ns_val / 10) * 10
-					if ns == "s":
-						if ns_val_major != ns_val:
-							ns_val_major += 10
-
-					name_major = ew + norm(ew_val_major, 3) + ns + norm(ns_val_major, 2)
-					if not name_major in state:
-						state[name_major] = {}
-					if not name in state[name_major]:
-						state[name_major][name] = {}
-					state[name_major][name]["status"] = status
-					if not "status" in state[name_major]:
-						state[name_major]["status"] = "progress"
-						if status == "started":
-							state[name_major]["started"] = 1
-							state[name_major]["done"] = 0
-						else:
-							state[name_major]["started"] = 0
-							state[name_major]["done"] = 1
+					match = re.match(r"([ew])(\d{3})([ns])(\d{2})", name)
+					if match == None:
+						print("WARNING: Recived status " + status + " from invalid tile '" + name + "'")
 					else:
-						state[name_major][status] += 1
-						if status == "done":
-							state[name_major]["started"] -= 1
-						if state[name_major]["done"] == 100:
-							state[name_major]["status"] = "done"
+						ew = match.group(1)
+						ew_val = int(match.group(2))
+						ns = match.group(3)
+						ns_val = int(match.group(4))
 
-			try:
-				with open(sfile, 'w') as f:
-					json.dump(state, f, indent=4)
-			except IOError:
-				print("WARNING: Failed to write to file")
-		else:
-			print("WARNING: Invalid status '" + status + "' recived from " + name)
+						ew_val_major = int(ew_val / 10) * 10
+						if ew == "w":
+							if ew_val_major != ew_val:
+								ew_val_major += 10
+
+						ns_val_major = int(ns_val / 10) * 10
+						if ns == "s":
+							if ns_val_major != ns_val:
+								ns_val_major += 10
+
+						name_major = ew + norm(ew_val_major, 3) + ns + norm(ns_val_major, 2)
+						if not name_major in state:
+							state[name_major] = {}
+						if not name in state[name_major]:
+							state[name_major][name] = {}
+						state[name_major][name]["status"] = status
+						if not "status" in state[name_major]:
+							state[name_major]["status"] = "progress"
+							if status == "started":
+								state[name_major]["started"] = 1
+								state[name_major]["done"] = 0
+							else:
+								state[name_major]["started"] = 0
+								state[name_major]["done"] = 1
+						else:
+							state[name_major][status] += 1
+							if status == "done":
+								state[name_major]["started"] -= 1
+							if state[name_major]["done"] == 100:
+								state[name_major]["status"] = "done"
+
+				try:
+					with open(sfile, 'w') as f:
+						json.dump(state, f, indent=4)
+				except IOError:
+					print("WARNING: Failed to write to file")
+			else:
+				print("WARNING: Invalid status '" + status + "' recived from " + name)
+		except IOError:
+			print("WARNING: Recived invalid package")
 
 except KeyboardInterrupt:
 	try:
