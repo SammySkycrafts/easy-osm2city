@@ -88,7 +88,9 @@ try:
 
 		if status == "started" or status == "done":
 			if name == "n-pole" or name == "s-pole":
-				state[name] = status
+				if not name in state:
+					state[name] = {}
+				state[name]["status"] = status
 			else:
 				match = re.match(r"([ew])(\d{3})([ns])(\d{2})", name)
 				if match == None:
