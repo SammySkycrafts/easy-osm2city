@@ -29,6 +29,7 @@ exclude = []
 pbf_path = ""
 db_strategy = "demand"
 db_prefix = ""
+skip_started = False
 
 argc = len(sys.argv)
 i = 1
@@ -65,6 +66,8 @@ while i < argc:
 	elif sys.argv[i] == "-P" or sys.argv[i] == "--database-prefix":
 		i += 1
 		db_prefix = sys.argv[i]
+	elif sys.argv[i] == "--skip-started":
+		skip_started = True
 	elif sys.argv[i] == "-p" or sys.argv[i] == "--progress":
 		try:
 			with open("projects/worldbuild/done") as f:
@@ -135,6 +138,7 @@ while i < argc:
 		print("                           - mono: Expexcting database 'worldbuild' containing world wide data")
 		print("                             NOT YET IMPLEMENTED")
 		print("  -P, --database-prefix    When db startegy is chunk, prefix tile names with <prefix>")
+		print("      --skip-started       Skip tiles flaged as started when running with 'chunk' or 'mono' strategy")
 		print("  -h, --help               Shows this help and exit")
 		print("  -p, --progress           Shows progress and exit")
 		sys.exit(0)
@@ -329,7 +333,7 @@ elif db_strategy == "chunk":
 					iii = abs(i)
 					for l in range(0, 10):
 						name_minor = ew + norm(j, 3) + ns + norm(iii, 2)
-						if not name_minor in exclude and (not name in status or (not name_minor in status[name] or (name_minor in status[name] and status[name][name_minor]["status"] != "done"))):
+						if not name_minor in exclude and (not name in status or (not name_minor in status[name] or (name_minor in status[name] and (status[name][name_minor]["status"] != "done" and (status[name][name_minor]["status"] == "started" and not skip_started))))):
 							tile_list = tile_list + name_minor + "\n"
 						iii += ns_step
 					j += ew_step
