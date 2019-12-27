@@ -42,9 +42,9 @@ while i < argc:
 		print("Runs a single chunk build. Mainly handles status logging")
 		print("")
 		print("  -p, --prefix      Database prefix to use")
-		print("      --host        Logger host")
-		print("      --port        Logger port")
-		print("  -h, --help        Shows this help and exit")
+		print("      --host	Logger host")
+		print("      --port	Logger port")
+		print("  -h, --help	Shows this help and exit")
 	else:
 		if first == 1:
 			first = 0
@@ -70,12 +70,12 @@ os.system("mkdir -p projects/worldbuild-" + name)
 
 os.system("cp projects/worldbuild/params.ini projects/worldbuild-" + name + "/")
 
-os.system("sed -i 's/DB_NAME.*/DB_NAME = \"" + prefix + name + "\"/' projects/worldbuild-" + name + "/params.ini")
-
 if name == "n-pole":
 	bounds = "bounds=*-180_80_180_90"
+	db_name = prefix + "n-pole"
 elif name == "s-pole":
 	bounds = "bounds=*-180_-90_180_-80"
+	db_name = prefix + "s-pole"
 else:
 	match = re.match(r"([ew])(\d{3})([ns])(\d{2})", name)
 	if match == None:
@@ -98,6 +98,15 @@ else:
 			bounds = "bounds="
 
 		bounds += str(ew_val) + "_" + str(ns_val) + "_" + str(ew_val + 10) + "_" + str(ns_val + 10)
+		if ew_val % 10 != 0:
+		    ew_val = ew_val - (ew_val % 10)
+
+		if ns_val % 10 != 0:
+		    ns_val = ns_val - (ns_val % 10)
+
+		db_name = prefix + ew + str(abs(ew_val)) + ns + str(abs(ns_val))
+
+os.system("sed -i 's/DB_NAME.*/DB_NAME = \"" + db_name + "\"/' projects/worldbuild-" + name + "/params.ini")
 
 os.system("echo '" + bounds + "' > projects/worldbuild-" + name + "/settings")
 
