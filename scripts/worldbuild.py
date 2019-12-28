@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # Copyright (C) 2018-2019 Merspieler, merspieler _at_ airmail.cc
 #
 # This program is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@ import math
 import re
 import json
 import time
+import subprocess
 
 chunk_size = 5
 threads = 5
@@ -296,9 +297,9 @@ elif db_strategy == "chunk":
 	tile_list = ""
 
 	# Build poles first
-	if not "n-pole" in exclude and (not "n-pole" in status or ("n-pole" in status and status["n-pole"]["status"] != "done")):
+	if not "n-pole" in exclude and (not "n-pole" in status or ("n-pole" in status and status["n-pole"]["status"] != "done" and (status["n-pole"]["status"] == "started" and not skip_started))):
 		tile_list += "n-pole\n"
-	if not "s-pole" in exclude and (not "s-pole" in status or ("s-pole" in status and status["s-pole"]["status"] != "done")):
+	if not "s-pole" in exclude and (not "s-pole" in status or ("s-pole" in status and status["s-pole"]["status"] != "done" and (status["s-pole"]["status"] == "started" and not skip_started))):
 		tile_list += "s-pole\n"
 
 	ii = -8
@@ -340,8 +341,9 @@ elif db_strategy == "chunk":
 			jj += 1
 		ii += 1
 
-	db_prefix = "-p " + db_prefix
-	os.system("echo '" + tile_list + "' | parallel --eta -j " + str(threads) + " ./scripts/build-chunk.py {} " + str(db_prefix))
+	if db_prefix != "":
+		db_prefix = "-p " + db_prefix
+	subprocess.run(["parallel", "--eta", "-j", str(threads), "./scripts/build-chunk.py {} " + db_prefix], input=tile_list.encode())
 elif db_startegy == "mono":
 	print("ERROR: NOT YET IMPLEMENTED")
 	sys.exit(1)
