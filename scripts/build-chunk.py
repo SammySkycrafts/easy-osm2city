@@ -110,12 +110,10 @@ os.system("sed -i 's/DB_NAME.*/DB_NAME = \"" + db_name + "\"/' projects/worldbui
 
 os.system("echo '" + bounds + "' > projects/worldbuild-" + name + "/settings")
 
-os.system("./build -t 1 worldbuild-" + name)
+os.system("./build -S 10 -t 1 worldbuild-" + name)
 
 if os.path.isfile("projects/worldbuild-" + name + "/osm2city-exceptions.log"):
 	os.system("mv projects/worldbuild-" + name + "/osm2city-exceptions.log projects/worldbuild/output/error/" + name + ".exceptions.log")
-
-os.system("sleep 60")
 
 os.system("rm -rf projects/worldbuild-" + name)
 
