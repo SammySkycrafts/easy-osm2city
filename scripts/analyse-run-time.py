@@ -69,6 +69,9 @@ if read_src:
 				match = re.findall("SpawnPoolWorker-\d+ root INFO +Time used in seconds for (.*): (\d+\.\d+)", line)
 				if match != []:
 					times.append(match[0])
+                                match = re.findall("SpawnPoolWorker-\d+ root INFO +(Reading OSM .* data for \['.*'\]) from db took (\d+\.\d+) seconds.", line)
+                                if match != []:
+                                        times.append(match[0])
 	except:
 		print("err")
 		sys.exit(1)
