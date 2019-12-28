@@ -118,20 +118,18 @@ try:
 						if not name in state[name_major]:
 							state[name_major][name] = {}
 						state[name_major][name]["status"] = status
-						if not "status" in state[name_major]:
-							state[name_major]["status"] = "progress"
-							if status == "started":
-								state[name_major]["started"] = 1
-								state[name_major]["done"] = 0
-							else:
-								state[name_major]["started"] = 0
-								state[name_major]["done"] = 1
+						state[name_major]["done"] = 0
+						state[name_major]["started"] = 0
+						for tile in state[name_major]:
+							# Filter status of name_major
+							if tile != "done" and tile != "started" and tile != "pending" and tile != "status" and tile != "rebuild":
+								state[name_major][state[name_major][tile]["status"]] += 1
+						if state[name_major]["done"] == 100:
+							state[name_major]["status"] = "done"
+						elif state[name_major]["started"] > 0:
+							state[name_major]["status"] = "started"
 						else:
-							state[name_major][status] += 1
-							if status == "done":
-								state[name_major]["started"] -= 1
-							if state[name_major]["done"] == 100:
-								state[name_major]["status"] = "done"
+							state[name_major]["status"] = "pending"
 
 				try:
 					with open(sfile, 'w') as f:
