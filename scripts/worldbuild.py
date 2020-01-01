@@ -134,7 +134,7 @@ while i < argc:
 		print("                           If not given projects/worldbuild/exclude will be used")
 		print("  -D, --database-strategy  Database strategies:")
 		print("                           - demand: Uses database 'worldbuild' and imports tiles on demand")
-                print("                             clears db before next tile. Default behaviour")
+		print("                             clears db before next tile. Default behaviour")
 		print("                           - chunk: Expects one database per chunk")
 		print("                           - mono: Expexcting database 'worldbuild' containing world wide data")
 		print("                             NOT YET IMPLEMENTED")
@@ -227,7 +227,7 @@ def print_build_time(start_time, end_time):
 
 	time = str(int(hours)) + " Hours, " + str(int(minutes)) + " Minutes and " + str(int(seconds)) + " Seconds"
 	if days > 0:
-        	time = str(int(days)) + " Days, " + time
+		time = str(int(days)) + " Days, " + time
 
 	print("Running worldbuild took " + time)
 
