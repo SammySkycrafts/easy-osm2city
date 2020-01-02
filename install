@@ -100,13 +100,13 @@ if [ "$skip_git" != 1 ]; then
 	which git > /dev/null
 	if [ $? == 1 ]; then
 		echo "Unable to find git. Please manually download the following two repositories:"
-		echo "https://gitlab.com/fg-radi/osm2city"
-		echo "https://gitlab.com/fg-radi/osm2city-data"
+		echo "https://gitlab.com/osm2city/osm2city"
+		echo "https://gitlab.com/osm2city/osm2city-data"
 		echo "Unzip them in this directory and make sure, the are named osm2city and osm2city-data"
 		exit 3
 	fi
-	git clone https://gitlab.com/fg-radi/osm2city.git
-	git clone https://gitlab.com/fg-radi/osm2city-data.git
+	git clone https://gitlab.com/osm2city/osm2city.git
+	git clone https://gitlab.com/osm2city/osm2city-data.git
 fi
 
 if [ "$skip_sql" != 1 ]; then
