@@ -105,7 +105,7 @@ fi
 
 # change to the project dir and build
 cd projects/$project
-time ( python3 ../../osm2city/build_tiles.py -f params.ini -b "$bounds" -p "$threads" -m 1 2>&1 ) 2> exec-time
+time ( python3 ../../osm2city/build_tiles.py -f params.ini -b "$bounds" -p "$threads" 2>&1 ) 2> exec-time
 ret=$?
 
 if [ "$create_zip" == "1" ]; then
