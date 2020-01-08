@@ -54,6 +54,12 @@ while i < argc:
 			sys.exit(1)
 	i += 1
 
+def norm(num, length):
+	num = str(abs(num))
+	while len(num) < length:
+		num = "0" + num
+	return num
+
 def send_status(name, status):
 	try:
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -104,7 +110,7 @@ else:
 		if ns_val % 10 != 0:
 		    ns_val = ns_val - (ns_val % 10)
 
-		db_name = prefix + ew + str(abs(ew_val)) + ns + str(abs(ns_val))
+		db_name = prefix + ew + norm(ew_val, 3) + ns + norm(ns_val, 2)
 
 os.system("sed -i 's/DB_NAME.*/DB_NAME = \"" + db_name + "\"/' projects/worldbuild-" + name + "/params.ini")
 
