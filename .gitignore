@@ -25,3 +25,10 @@ projects/
 
 # Ignore scripts/ content
 scripts/*
+
+# log files and cached values
+*.log
+*.log.cache
+
+# backup files
+*.bak
