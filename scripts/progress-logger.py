@@ -62,6 +62,13 @@ def norm(num, length):
 		num = "0" + num
 	return num
 
+def save_state(state)
+	try:
+		with open(sfile, 'w') as f:
+			json.dump(state, f, indent=4)
+	except IOError:
+		print("WARNING: Failed to write to file")
+
 if os.path.isfile(sfile):
 	try:
 		with open(sfile) as json_data:
@@ -87,7 +94,7 @@ try:
 			if verbose:
 				print(name + " set status to " + status)
 
-			if status == "started" or status == "done":
+			if status == "started" or status == "done" or status == "rebuild" or status == "skip":
 				if name == "n-pole" or name == "s-pole":
 					if not name in state:
 						state[name] = {}
@@ -120,33 +127,31 @@ try:
 						state[name_major][name]["status"] = status
 						state[name_major]["done"] = 0
 						state[name_major]["started"] = 0
+						state[name_major]["rebuild"] = 0
+						state[name_major]["skip"] = 0
 						for tile in state[name_major]:
 							# Filter status of name_major
-							if tile != "done" and tile != "started" and tile != "pending" and tile != "status" and tile != "rebuild":
+							if tile != "done" and tile != "started" and tile != "pending" and tile != "status" and tile != "rebuild" and tile != "skip":
 								state[name_major][state[name_major][tile]["status"]] += 1
 						if state[name_major]["done"] == 100:
 							state[name_major]["status"] = "done"
 						elif state[name_major]["started"] > 0:
 							state[name_major]["status"] = "started"
+						elif state[name_major]["rebuild"] > 0:
+							state[name_major]["status"] = "rebuild"
+						elif state[name_major]["skip"] > 0:
+							state[name_major]["status"] = "skip"
 						else:
 							state[name_major]["status"] = "pending"
 
-				try:
-					with open(sfile, 'w') as f:
-						json.dump(state, f, indent=4)
-				except IOError:
-					print("WARNING: Failed to write to file")
+				save_state(state)
 			else:
 				print("WARNING: Invalid status '" + status + "' recived from " + name)
 		except IOError:
 			print("WARNING: Recived invalid package")
 
 except KeyboardInterrupt:
-	try:
-		with open(sfile, 'w') as f:
-			json.dump(state, f, indent=4)
-	except IOError:
-		print("WARNING: Failed to write to file")
+	save_state(state)
 	sock.close()
 	print("Exiting...")
 	sys.exit(0)
