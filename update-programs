@@ -39,8 +39,14 @@ done
 echo "Updateing easy-osm2city..."
 git pull --rebase
 
+if [ ! -f scripts/README.md ]; then
+	echo "Updating scripts..."
+	cd scripts
+	git pull --rebase
+fi
+
 echo "Updateing osm2city..."
-cd osm2city
+cd ../osm2city
 git pull --rebase
 
 echo "Updating osm2city-data..."
