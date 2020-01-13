@@ -23,8 +23,8 @@ projects/
 # Database reminder
 .databases
 
-# Ignore scripts/ content
-scripts/*
+# Ignore scripts directory
+scripts*
 
 # log files and cached values
 *.log

@@ -187,4 +187,8 @@ fi
 mkdir -p pbf
 mkdir -p projects
 
+echo "User scripts are no longer shipped with easy-osm2city"
+echo "You can clone them with:"
+echo "git clone https://gitlab.com/merspieler/osm2city-scripts.git scripts"
+
 ./create-venv
