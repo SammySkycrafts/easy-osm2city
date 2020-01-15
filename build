@@ -98,8 +98,8 @@ def get_bounds(file_path):
 				ret.append(coords)
 		return ret
 	except:
-		print("WARNING: Getting bounds failed")
-		return []
+		print("WARNING: Getting bounds from '" + file_path + "' failed")
+		sys.exit(1)
 
 
 def run_build(west, south, east, north, log_done=False, start_w=None, start_s=None, chunk_size=1):
@@ -168,9 +168,6 @@ start_time = time.time()
 try:
 	if build_all:
 		bounds = get_bounds("projects/" + project + "/settings")
-		if bounds == []:
-			print("Unable to read project settings")
-			sys.exit(1)
 		run_command("rm -f projects/" + project + "/osm2city-exceptions.log")
 		run_build(bounds[0]["west"], bounds[0]["south"], bounds[0]["east"], bounds[0]["north"], log_done=True, chunk_size=chunk_size)
 	else:
