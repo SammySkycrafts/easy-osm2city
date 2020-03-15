@@ -100,4 +100,4 @@ if [ ! -z "$port" ]; then
 fi
 
 export JAVACMD_OPTIONS="-Djava.io.tmpdir=$root_path/pbf"
-time osmosis --read-pbf file="$file" --log-progress --write-pgsql database="$database" host="$db_host:$db_port" user="$db_user" password="$db_passwd"
+time osmosis --read-pbf-fast file="$file" --log-progress --write-pgsql database="$database" host="$db_host:$db_port" user="$db_user" password="$db_passwd"
