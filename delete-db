@@ -43,5 +43,5 @@ case $key in
 esac
 done
 
-psql --dbname="postgres" -c "DROP DATABASE IF EXISTS $database"
+psql --dbname="postgres" -c "DROP DATABASE IF EXISTS \"$database\""
 sed -ri "s/^$key$//" .databases
