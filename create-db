@@ -71,7 +71,7 @@ psql -d "$database" -f "$root_path"/sql/pgsnapshot_schema_0.6.sql
 psql -d "$database" -f "$root_path"/sql/pgsnapshot_schema_0.6_bbox.sql
 
 if [ ! -f ".databases" ]; then
-	touch .databases
+	touch "$root_path"/.databases
 fi
 
-echo "$database" >> .databases
+echo "$database" >> "$root_path"/.databases
