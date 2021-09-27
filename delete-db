@@ -16,6 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 root_path="$( cd "$(dirname "$0")" ; pwd -P )"
+hostname=localhost
 
 first=1
 while [[ "$#" -gt 0 ]]
@@ -23,11 +24,18 @@ do
 key="$1"
 
 case $key in
+	-H|--host)
+		hostname="$2"
+		shift # past argument
+		shift # past value
+	;;
+
 	-h|--help)
 		echo "usage: delete-db <database> [OPTIONS]"
 		echo "Deletes the database"
 		echo ""
 		echo "OPTIONS"
+		echo "  -H, --host      Database host name"
 		echo "  -h, --help	Shows this help and exit"
 		exit 0
 	;;
@@ -45,5 +53,8 @@ case $key in
 esac
 done
 
-psql --dbname="postgres" -c "DROP DATABASE IF EXISTS \"$database\""
+source "$root_path"/general-settings > /dev/null
+export PGPASSWORD="$db_passwd"
+
+psql --host="$hostname" --username="$db_user" --dbname="postgres" -c "DROP DATABASE IF EXISTS \"$database\""
 sed -ri "s/^$key$//" "$root_path"/.databases
