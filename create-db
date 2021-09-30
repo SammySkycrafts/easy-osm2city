@@ -55,9 +55,10 @@ case $key in
 		echo "OPTIONS"
 		echo "  -u, --user	User the database will be owned by."
 		echo "			NOTE: If not given, the one from the general-settings will be used"
-		echo "  -H, --host      Database host name"
+		echo "  -H, --host      Database host name. Default: localhost"
+		echo "  -p, --password  Authenticate via password, default. Password for the postgres user"
+		echo "			NOTE: If not given, the one from the general-settings will be used"
 		echo "  -s, --sudo      Authenticate via sudo, databases on localhost only"
-		echo "  -p, --password  Authenticate via password. Password for the postgres user"
 		echo "  -h, --help      Shows this help and exit"
 		exit 0
 	;;
@@ -86,11 +87,8 @@ if [ ! -z "$man_user" ]; then
 	db_user="$man_user"
 fi
 
-if [ "$auth" = "pw" ]; then
-	if [ -z "$pw" ]; then
-		echo "ERROR: No password or --sudo flag given"
-		exit 1
-	fi
+if [ -z "$pw" ]; then
+		export PGPASSWORD="$db_passwd"
 fi
 
 if [ "$auth" = "sudo" ]; then
