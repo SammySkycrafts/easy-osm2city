@@ -17,7 +17,7 @@
 
 root_path="$( cd "$(dirname "$0")" ; pwd -P )"
 auth=pw
-hostname=localhost
+db_host=localhost
 
 first=1
 while [[ $# -gt 0 ]]
@@ -32,7 +32,7 @@ case $key in
 	;;
 
 	-H|--host)
-		hostname="$2"
+		db_host="$2"
 		shift # past argument
 		shift # past value
 	;;
@@ -98,11 +98,11 @@ if [ "$auth" = "sudo" ]; then
 	psql -d "$database" -f "$root_path"/sql/pgsnapshot_schema_0.6.sql
 	psql -d "$database" -f "$root_path"/sql/pgsnapshot_schema_0.6_bbox.sql
 else
-	createdb --host="$hostname" --username=postgres --encoding=UTF8 --owner=$db_user "$database"
-	psql --host="$hostname" --username=postgres --dbname="$database" -c "CREATE EXTENSION postgis;"
-	psql --host="$hostname" --username=postgres --dbname="$database" -c "CREATE EXTENSION hstore;"
-	psql --host="$hostname" --username=postgres -d "$database" -f "$root_path"/sql/pgsnapshot_schema_0.6.sql
-	psql --host="$hostname" --username=postgres -d "$database" -f "$root_path"/sql/pgsnapshot_schema_0.6_bbox.sql
+	createdb --host="$db_host" --username=postgres --encoding=UTF8 --owner=$db_user "$database"
+	psql --host="$db_host" --username=postgres --dbname="$database" -c "CREATE EXTENSION postgis;"
+	psql --host="$db_host" --username=postgres --dbname="$database" -c "CREATE EXTENSION hstore;"
+	psql --host="$db_host" --username=postgres -d "$database" -f "$root_path"/sql/pgsnapshot_schema_0.6.sql
+	psql --host="$db_host" --username=postgres -d "$database" -f "$root_path"/sql/pgsnapshot_schema_0.6_bbox.sql
 fi
 
 
