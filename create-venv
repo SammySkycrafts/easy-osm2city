@@ -39,6 +39,7 @@ done
 
 python3 -m venv venv/
 source venv/bin/activate
+pip install git+https://bitbucket.org/taucgl/cgal-python-bindings/src/master/
 pip install --no-binary ":all:" -r osm2city/requirements.txt
 if [ $? == 1 ]; then
 	echo "pip had problems installing some packages"
